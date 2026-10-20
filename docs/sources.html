@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sources — GEMSDOE71</title>
+<style>
+:root {
+  --paper: #f3efe6;
+  --ink: #1b1914;
+  --muted: #5c564c;
+  --line: #d9d0c1;
+  --brown: #7a4e24;
+  --no: #8d1d1d;
+  --no-bg: #f6e4e1;
+  --yes: #1d4d34;
+  --yes-bg: #e5f0e8;
+  --card: #fffdf8;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.55 "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+}
+a { color: var(--brown); }
+a:hover { color: var(--ink); }
+header.site {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.6rem 1rem; align-items: baseline;
+  padding: 0.8rem 1.4rem; border-bottom: 1px solid var(--line); background: #ebe4d6;
+  font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.02em;
+}
+header.site strong { font-family: Georgia, serif; font-size: 1rem; letter-spacing: 0; }
+nav a { margin-left: 0.9rem; text-decoration: none; color: var(--ink); }
+main { max-width: 860px; margin: 0 auto; padding: 1.4rem 1.2rem 4rem; overflow-x: auto; }
+h1 { font-size: 1.85rem; line-height: 1.2; font-weight: 600; margin: 0.2rem 0 0.6rem; }
+h2 { font-size: 1.25rem; margin: 2rem 0 0.5rem; }
+h3 { font-size: 1.05rem; margin: 1.3rem 0 0.3rem; }
+p, li { color: var(--ink); }
+.muted { color: var(--muted); }
+.plate {
+  border: 2px solid var(--no); background: var(--no-bg); padding: 1.1rem 1.2rem 1.2rem;
+  margin: 0 0 1.2rem;
+}
+.plate.ok { border-color: var(--yes); background: var(--yes-bg); }
+.plate .kicker {
+  font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em;
+  text-transform: uppercase; margin: 0 0 0.3rem;
+}
+.plate h1 { font-size: 2rem; margin: 0 0 0.4rem; }
+.plate p { margin: 0.35rem 0; }
+.row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
+.btn {
+  display: inline-block; background: var(--ink); color: #fff; text-decoration: none;
+  padding: 0.7rem 1rem; font-family: var(--mono); font-size: 0.85rem;
+}
+.btn.secondary { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+.btn:hover { background: var(--brown); color: #fff; }
+.card {
+  background: var(--card); border: 1px solid var(--line); padding: 0.9rem 1rem; margin: 0.8rem 0;
+}
+label { display: block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted); margin-top: 0.7rem; }
+code, .mono { font-family: var(--mono); font-size: 0.86rem; }
+.copyline {
+  display: flex; gap: 0.4rem; align-items: center; background: #f7f3ea;
+  border: 1px solid var(--line); padding: 0.45rem 0.55rem; margin-top: 0.2rem;
+}
+.copyline code { flex: 1; word-break: break-all; }
+button.copy {
+  font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--ink);
+  background: #fff; padding: 0.25rem 0.45rem; cursor: pointer;
+}
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin: 0.6rem 0 1rem; }
+th, td { text-align: left; vertical-align: top; padding: 0.35rem 0.4rem; border-bottom: 1px solid var(--line); }
+th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.tag { font-family: var(--mono); font-size: 0.72rem; border: 1px solid var(--line); padding: 0.05rem 0.35rem; }
+footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; margin-top: 2rem; padding-top: 0.8rem; }
+ol.steps li { margin: 0.45rem 0; }
+</style>
+</head>
+<body>
+<header class="site">
+  <strong>GEMSDOE71</strong>
+  <nav><a href="index.html">Status</a> <a href="executive-summary.html">How to submit</a> <a href="method.html">Why 0.2778</a> <a href="hypotheses.html">Hypotheses</a> <a href="sources.html"><strong>Sources</strong></a> <a href="irregularities.html">Irregularities</a></nav>
+</header>
+<main>
+
+<h1>Sources for manual review</h1>
+<p>Official pages were fetched in this session unless the row says otherwise. Owner mirrors are integrity-pinned, not organizer-authenticated.</p>
+<table>
+<thead><tr><th>What</th><th>Link</th><th>How it was used</th></tr></thead>
+<tbody>
+<tr><td>Problem, metric, submission format</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">page 967</a></td><td>Fetched 2026-10-20. Source of alpha, beta, 300 m kernel, and the worked example.</td></tr>
+<tr><td>Competition home, deadline, prizes</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition home</a></td><td>Fetched 2026-10-20. Deadline 3 December 2026, 23:59 UTC. Prize pool $300,000.</td></tr>
+<tr><td>Public leaderboard</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a></td><td>Fetched 2026-10-20. Rank 1 is 0.4413. Transcription in <code>docs/data/feed.json</code>.</td></tr>
+<tr><td>About page</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/">page 968</a></td><td>Linked by the organizers. Not re-fetched this session.</td></tr>
+<tr><td>Data download</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">data tab</a></td><td>Login-walled. Not downloaded. Owner mirrors used instead. See irregularities.</td></tr>
+<tr><td>Rules</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/rules/">DrivenData rules page</a>, <a href="https://www.herox.com/GEMSPrize/resource/2274">HeroX 2274</a>, <a href="https://www.nlr.gov/docs/fy26osti/96647.pdf">NLR PDF</a></td><td>Rules page and HeroX resource fetched 2026-10-20. HeroX links the PDF. The PDF bytes were not read.</td></tr>
+<tr><td>Forum</td><td><a href="https://community.drivendata.org/c/gems-prize-challenge/111">competition forum</a></td><td>The home page names this forum, and gemsprize@nlr.gov, as the place to ask the organizers.</td></tr>
+<tr><td>Reference solution</td><td><a href="https://github.com/drivendataorg/gems-prize-reference-solution">GitHub</a></td><td>Repository listing confirmed. The notebook was not executed here.</td></tr>
+<tr><td>GeoDAWN</td><td><a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS data release</a></td><td>Official description of the magnetic and radiometric survey. The TMI grid used here is an owner uint8 mirror of that family, band description <code>TMI_up150</code>.</td></tr>
+<tr><td>INGENIOUS</td><td><a href="https://gbcge.org/current-projects/ingenious/">GBCGE project page</a></td><td>Project that compiled the regional geothermal datasets.</td></tr>
+<tr><td>GDR 1391</td><td><a href="https://gdr.openei.org/submissions/1391">submission 1391</a>, DOI <a href="https://doi.org/10.15121/1881483">10.15121/1881483</a></td><td>Fetched 2026-10-20. CC BY 4.0. Springs, paleo deposits, 2 m probes, vents. The label-derived distance column was present and was not used.</td></tr>
+<tr><td>CRS</td><td><a href="https://epsg.io/32611">EPSG:32611</a></td><td>UTM zone 11N. The pinned transform is (100, 0, 243350, 0, −100, 4508550).</td></tr>
+<tr><td>Tversky index</td><td><a href="https://en.wikipedia.org/wiki/Tversky_index">background</a></td><td>The competition metric is the distance-weighted form on page 967, not the Wikipedia formula alone.</td></tr>
+<tr><td>Lake Lahontan highstand</td><td><a href="https://pubs.usgs.gov/circ/2004/1267/">USGS Circular 1267</a>; <a href="https://pubs.geoscienceworld.org/gsa/gsabulletin/article/110/10/1318/183306/shoreline-processes-and-the-age-of-the-lake">GSA Bulletin 110:1318</a></td><td>Highstand near 1335 m (circular) and 1338.5 m (Jessup embayment). Used only to name the tufa-shoreline mimic and to set an exclusion, not as a fitted score.</td></tr>
+<tr><td>Shared evaluator</td><td><a href="https://github.com/buffedlizard55-lab/60GEMSDOE">60GEMSDOE</a> commit <code>b99591ee</code></td><td>Vendored unchanged into <code>src/gems57</code>. <code>evaluate_holdout.py</code> version gems57-pooled-hide-v2.</td></tr>
+</tbody>
+</table>
+
+<footer>
+DOE GEMS Prize, DrivenData 306. Numbers on this site are either measured in this repository
+or copied from a named official page. A projection is never written as a score.
+No weekly submission slot was used.
+</footer>
+</main>
+<script>
+document.querySelectorAll('button.copy').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const text = btn.parentElement.querySelector('code').textContent;
+    navigator.clipboard.writeText(text).then(() => { btn.textContent = 'copied'; });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# Restored competition mirrors are large and are not the submission.
+# Pins and the fetch script are the reproducible record.
+/data/
+registry/rasters/
+__pycache__/
+*.pyc
+.venv/
+*.partial
+.DS_Store

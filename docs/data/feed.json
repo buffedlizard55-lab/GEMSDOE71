@@ -1,0 +1,40 @@
+{
+  "generated_utc": "2026-10-20",
+  "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+  "evidence_class": "ORGANIZER-CONFIRMED public leaderboard rows, transcribed from a fetch of the official page on 2026-10-20",
+  "not_our_scores": true,
+  "page_was_truncated": true,
+  "truncation_note": "The fetch returned ranks 1-23 in full and the start of rank 24. Lower rows were not transcribed. Relative 'ago' timestamps on the page were not copied, because they are not absolute times.",
+  "competition_end": "2026-12-03 23:59 UTC",
+  "competition_end_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
+  "rows": [
+    {"rank": 1, "participant": "xiaofanhu", "public_dw_tversky": 0.4413, "submissions_displayed": 25},
+    {"rank": 2, "participant": "Batik Shirt Brothers", "public_dw_tversky": 0.3811, "submissions_displayed": 43},
+    {"rank": 3, "participant": "cfld__", "public_dw_tversky": 0.3788, "submissions_displayed": 13},
+    {"rank": 4, "participant": "BrandenKMurray", "public_dw_tversky": 0.3713, "submissions_displayed": 26},
+    {"rank": 5, "participant": "No Fault of Our Own", "public_dw_tversky": 0.3539, "submissions_displayed": 36},
+    {"rank": 6, "participant": "JerryDataWorks", "public_dw_tversky": 0.3418, "submissions_displayed": 22},
+    {"rank": 7, "participant": "alexoktaba", "public_dw_tversky": 0.3416, "submissions_displayed": 34},
+    {"rank": 8, "participant": "joeyfezster", "public_dw_tversky": 0.3375, "submissions_displayed": 33},
+    {"rank": 9, "participant": "yifanxu", "public_dw_tversky": 0.3330, "submissions_displayed": 8},
+    {"rank": 10, "participant": "newway", "public_dw_tversky": 0.3328, "submissions_displayed": 12},
+    {"rank": 11, "participant": "ohyeah", "public_dw_tversky": 0.3318, "submissions_displayed": 11},
+    {"rank": 12, "participant": "notmyfault", "public_dw_tversky": 0.3316, "submissions_displayed": 34},
+    {"rank": 13, "participant": "ruping", "public_dw_tversky": 0.3314, "submissions_displayed": 12},
+    {"rank": 14, "participant": "giles", "public_dw_tversky": 0.3313, "submissions_displayed": 11},
+    {"rank": 15, "participant": "baobao", "public_dw_tversky": 0.3308, "submissions_displayed": 12},
+    {"rank": 16, "participant": "mzoorob", "public_dw_tversky": 0.3304, "submissions_displayed": 39},
+    {"rank": 17, "participant": "DARD", "public_dw_tversky": 0.3289, "submissions_displayed": 23},
+    {"rank": 18, "participant": "Azazel", "public_dw_tversky": 0.3279, "submissions_displayed": 6},
+    {"rank": 19, "participant": "shixing", "public_dw_tversky": 0.3273, "submissions_displayed": 10},
+    {"rank": 20, "participant": "nchuzhoy", "public_dw_tversky": 0.3262, "submissions_displayed": 7},
+    {"rank": 21, "participant": "kinghorton42", "public_dw_tversky": 0.3261, "submissions_displayed": 11},
+    {"rank": 22, "participant": "li002666", "public_dw_tversky": 0.3183, "submissions_displayed": 9},
+    {"rank": 23, "participant": "ndavis7", "public_dw_tversky": 0.3093, "submissions_displayed": 17}
+  ],
+  "stale_figures_in_the_session_prompt": {
+    "0.3195": "Not the current public #1. On this fetch, 0.3183 is rank 22 and 0.3093 is rank 23. A group snapshot from 2026-10-04 called 0.3195 a then-current rank-3 row (DARD). That historical rank was not re-verified in this session.",
+    "0.3774": "Not present in the transcribed rows. The current rank 3 is 0.3788. Do not treat 0.3774 as the board top.",
+    "0.4413": "Matches rank 1 on this fetch. ORGANIZER-CONFIRMED as a public leaderboard row, not as a score of any file in this repository."
+  }
+}

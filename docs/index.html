@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEMSDOE71 — not cleared for submission</title>
+<style>
+:root {
+  --paper: #f3efe6;
+  --ink: #1b1914;
+  --muted: #5c564c;
+  --line: #d9d0c1;
+  --brown: #7a4e24;
+  --no: #8d1d1d;
+  --no-bg: #f6e4e1;
+  --yes: #1d4d34;
+  --yes-bg: #e5f0e8;
+  --card: #fffdf8;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.55 "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+}
+a { color: var(--brown); }
+a:hover { color: var(--ink); }
+header.site {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.6rem 1rem; align-items: baseline;
+  padding: 0.8rem 1.4rem; border-bottom: 1px solid var(--line); background: #ebe4d6;
+  font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.02em;
+}
+header.site strong { font-family: Georgia, serif; font-size: 1rem; letter-spacing: 0; }
+nav a { margin-left: 0.9rem; text-decoration: none; color: var(--ink); }
+main { max-width: 860px; margin: 0 auto; padding: 1.4rem 1.2rem 4rem; overflow-x: auto; }
+h1 { font-size: 1.85rem; line-height: 1.2; font-weight: 600; margin: 0.2rem 0 0.6rem; }
+h2 { font-size: 1.25rem; margin: 2rem 0 0.5rem; }
+h3 { font-size: 1.05rem; margin: 1.3rem 0 0.3rem; }
+p, li { color: var(--ink); }
+.muted { color: var(--muted); }
+.plate {
+  border: 2px solid var(--no); background: var(--no-bg); padding: 1.1rem 1.2rem 1.2rem;
+  margin: 0 0 1.2rem;
+}
+.plate.ok { border-color: var(--yes); background: var(--yes-bg); }
+.plate .kicker {
+  font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em;
+  text-transform: uppercase; margin: 0 0 0.3rem;
+}
+.plate h1 { font-size: 2rem; margin: 0 0 0.4rem; }
+.plate p { margin: 0.35rem 0; }
+.row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
+.btn {
+  display: inline-block; background: var(--ink); color: #fff; text-decoration: none;
+  padding: 0.7rem 1rem; font-family: var(--mono); font-size: 0.85rem;
+}
+.btn.secondary { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+.btn:hover { background: var(--brown); color: #fff; }
+.card {
+  background: var(--card); border: 1px solid var(--line); padding: 0.9rem 1rem; margin: 0.8rem 0;
+}
+label { display: block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted); margin-top: 0.7rem; }
+code, .mono { font-family: var(--mono); font-size: 0.86rem; }
+.copyline {
+  display: flex; gap: 0.4rem; align-items: center; background: #f7f3ea;
+  border: 1px solid var(--line); padding: 0.45rem 0.55rem; margin-top: 0.2rem;
+}
+.copyline code { flex: 1; word-break: break-all; }
+button.copy {
+  font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--ink);
+  background: #fff; padding: 0.25rem 0.45rem; cursor: pointer;
+}
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin: 0.6rem 0 1rem; }
+th, td { text-align: left; vertical-align: top; padding: 0.35rem 0.4rem; border-bottom: 1px solid var(--line); }
+th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.tag { font-family: var(--mono); font-size: 0.72rem; border: 1px solid var(--line); padding: 0.05rem 0.35rem; }
+footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; margin-top: 2rem; padding-top: 0.8rem; }
+ol.steps li { margin: 0.45rem 0; }
+</style>
+</head>
+<body>
+<header class="site">
+  <strong>GEMSDOE71</strong>
+  <nav><a href="index.html"><strong>Status</strong></a> <a href="executive-summary.html">How to submit</a> <a href="method.html">Why 0.2778</a> <a href="hypotheses.html">Hypotheses</a> <a href="sources.html">Sources</a> <a href="irregularities.html">Irregularities</a></nav>
+</header>
+<main>
+
+<section class="plate">
+  <p class="kicker">Submission status — read this before anything else</p>
+  <h1>NOT OK TO SUBMIT</h1>
+  <p><strong>Do not upload this file to DrivenData.</strong> It is format-valid and unique against the methods it was compared with, and it failed the preregistered holdout gate. Spending a weekly slot on it would not raise the chance of winning.</p>
+  <p>OK to download for inspection: <strong>yes</strong>. OK to submit to the competition: <strong>no</strong>.</p>
+  <div class="row">
+    <a class="btn" href="downloads/gemsdoe71-h71-ventconduit-20261020T200548Z-9dc1668b-zeros.tif">Download audit GeoTIFF — do not submit</a>
+    <a class="btn secondary" href="downloads/gemsdoe71-h71-ventconduit-20261020T200548Z-9dc1668b-zeros.zip">Download the zip</a>
+    <a class="btn secondary" href="executive-summary.html">How a real submission works</a>
+  </div>
+</section>
+
+<div class="card">
+  <label>Unique submission name</label>
+  <div class="copyline"><code>GEMSDOE71-H71-vent-conduit</code><button class="copy" type="button">copy</button></div>
+  <label>Note to paste — 116 / 140 characters — only if a future file is cleared</label>
+  <div class="copyline"><code>GEMSDOE71 H71 vent-conduit; sinter/spring axes x mag-edge; NMS3 off-catalogue; local checks only; no organiser score</code><button class="copy" type="button">copy</button></div>
+  <label>SHA-256 of the zeros GeoTIFF</label>
+  <div class="copyline"><code>c5c63e82a1f788fe2c30463a08b4e72d8c477ce3154d9727033bb40efa01a4d2</code><button class="copy" type="button">copy</button></div>
+  <p class="muted">Single band, float32, EPSG:32611, 3730×3292, 100 m, nodata tag null,
+  735 dots at 1.0, every cell finite, min 0.0, max 1.0,
+  0 NaN, 0 dots on the mapped catalogue.
+  Independent re-read of the bytes in <code>docs/downloads/</code>.</p>
+</div>
+
+<h2>Why this file is not cleared</h2>
+<p>The preregistration (<code>GEMSDOE71-PREREG-H71</code>) required four things before a file could be offered for a slot. Three passed. The one that matters for a score did not.</p>
+<table>
+<thead><tr><th>Gate</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>Leakage canary, each used feature alone, AUC ≤ 0.90</td><td>PASS. Worst used AUC is about 0.53. No feature is a leaked label.</td></tr>
+<tr><td>Uniqueness versus other methods (Spearman ≤ 0.90, and 3 px overlap ≤ 0.70 on rasters a random map does not also hit)</td><td>PASS against discriminating rasters. Worst Spearman 0.0024. Overlap with the 0.2778 file is 0.140. Four space-filling rasters fire on this file and on a random draw alike. See irregularities.</td></tr>
+<tr><td>Format: no NaN, values in [0, 1], CRS / shape / transform match</td><td>PASS. 15 / 15 local checks. This is what stops the portal error &quot;Predicted values must be in range [0, 1]&quot; for this file. It is not permission to submit.</td></tr>
+<tr><td>HOLDOUT-DTI beats mass-matched random (95% CI above 0) and beats the registry incumbent</td><td><strong>FAIL.</strong> HOLDOUT-DTI 0.001538, 95% CI [0.0002, 0.0033], evaluator gems57-pooled-hide-v2, 11321 withheld positives. Paired delta versus random 0.000808, CI [-0.0007, 0.0025] crosses zero.</td></tr>
+</tbody>
+</table>
+<p>Verdict in the run card: <strong>negative</strong>. Slots used: 0. Selector promotion was not requested and is not justified.</p>
+
+<h2>The three experiments</h2>
+<table><thead><tr><th>Arm</th><th>Dots</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>Paired delta vs mass-matched random</th></tr></thead><tbody><tr><td>E1</td><td>735</td><td>0.001538</td><td>[0.0002, 0.0033]</td><td>0.000808 [-0.0007, 0.0025]</td></tr>
+<tr><td>E2</td><td>248</td><td>0.000800</td><td>[0.0000, 0.0021]</td><td>0.000385 [-0.0006, 0.0016]</td></tr>
+<tr><td>E3</td><td>337</td><td>0.000798</td><td>[0.0000, 0.0021]</td><td>0.000384 [-0.0005, 0.0016]</td></tr></tbody></table><p class='muted'>Evidence class HOLDOUT-DTI. Evaluator gems57-pooled-hide-v2. 11,321 withheld positive pixels. Alpha 0.2, beta 0.8, 300 m triangular kernel. Not a leaderboard score.</p>
+<p>E1 is discharge-axis traces only. E2 keeps a trace pixel only where the upward-continued magnetic horizontal gradient is in the top 40 percent of the footprint. E3 extends those corroborated axes up to 4 km while the gradient stays elevated. All three are at or below a mass-matched random map, within uncertainty.</p>
+
+<h2>What 0.2778 is, and why this file does not beat it</h2>
+<p>The file <code>GEMSDOE32__h33-2-b2-zeros.tif</code> has sha256 <code>c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9</code>, remeasured here. It has 37654 dots, 0 of them on the catalogue, minimum distance to the catalogue 223.6 m, median 1964.7 m, and 5.8% of dots within 300 m. The figure 0.2778 is <strong>owner-reported</strong>, not an organizer receipt in this checkout. On this session's holdout the same bytes score 0.003699.</p>
+<p>This file scores 0.001538 on that same instrument. The best off-catalogue registry raster on the same folds scores 0.0943 (gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-zeros.tif, 46090 dots, also HOLDOUT-DTI, not a leaderboard score). The public leaderboard top, read 2026-10-20, is <strong>0.4413</strong> (xiaofanhu). None of those numbers is a prediction of what this 735-dot file would score if uploaded.</p>
+<p><a href="method.html">The full argument, with the algebra and the links</a>. The machine-readable card is <a href="data/run-card.json">data/run-card.json</a>.</p>
+
+<h2>Public leaderboard, fetched 2026-10-20</h2>
+<p>These are organizer public-board rows, not scores of files in this repository. The prompt's 0.3195 and 0.3774 are not the current top. Refresh from this sandbox fails closed (<code>scripts/refresh_leaderboard.py</code>); the last successful transcription is <a href="data/feed.json">data/feed.json</a>.</p>
+<table>
+<thead><tr><th>Rank</th><th>Participant</th><th>Public DW-Tversky</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>xiaofanhu</td><td>0.4413</td></tr><tr><td>2</td><td>Batik Shirt Brothers</td><td>0.3811</td></tr><tr><td>3</td><td>cfld__</td><td>0.3788</td></tr><tr><td>4</td><td>BrandenKMurray</td><td>0.3713</td></tr><tr><td>5</td><td>No Fault of Our Own</td><td>0.3539</td></tr><tr><td>6</td><td>JerryDataWorks</td><td>0.3418</td></tr><tr><td>7</td><td>alexoktaba</td><td>0.3416</td></tr><tr><td>8</td><td>joeyfezster</td><td>0.3375</td></tr>
+</tbody>
+</table>
+<p class="muted">Ranks 9–23 are in the feed file. Lower rows were not transcribed from that fetch.</p>
+
+<h2>Format receipt</h2>
+<p>Re-opened from disk after the writer finished. The portal message &quot;Predicted values must be in range [0, 1]&quot; is produced by values outside that range and by a nodata sentinel such as −3.4×10<sup>38</sup>. This zeros file has neither.</p>
+<table><thead><tr><th>Check</th><th>Result</th></tr></thead><tbody><tr><td><code>single_band</code></td><td>PASS</td></tr>
+<tr><td><code>dtype_float32</code></td><td>PASS</td></tr>
+<tr><td><code>dimensions_3730x3292</code></td><td>PASS</td></tr>
+<tr><td><code>crs_epsg_32611</code></td><td>PASS</td></tr>
+<tr><td><code>transform_matches_sample_submission</code></td><td>PASS</td></tr>
+<tr><td><code>no_nan_anywhere</code></td><td>PASS</td></tr>
+<tr><td><code>no_inf_anywhere</code></td><td>PASS</td></tr>
+<tr><td><code>no_sentinel_values</code></td><td>PASS</td></tr>
+<tr><td><code>range_0_1_guaranteed</code></td><td>PASS</td></tr>
+<tr><td><code>min_ge_0</code></td><td>PASS</td></tr>
+<tr><td><code>max_le_1</code></td><td>PASS</td></tr>
+<tr><td><code>in_footprint_all_finite</code></td><td>PASS</td></tr>
+<tr><td><code>in_footprint_range_0_1</code></td><td>PASS</td></tr>
+<tr><td><code>outside_footprint_zero</code></td><td>PASS</td></tr>
+<tr><td><code>zero_dots_on_mapped_catalogue</code></td><td>PASS</td></tr></tbody></table>
+<p class="muted">A NaN-outside twin exists at <code>downloads/gemsdoe71-h71-ventconduit-20261020T200548Z-9dc1668b-nan.tif</code> because the problem page says cells outside the bounds should be null. Do not upload it. It is not cleared, and a previous family upload that carried non-[0, 1] nodata was rejected with the same portal message. sha256 <code>4ff38f8e132bc34648522526988244eb1f9a9fab8a92c7eb48e21ec376cb8418</code>.</p>
+
+<footer>
+DOE GEMS Prize, DrivenData 306. Numbers on this site are either measured in this repository
+or copied from a named official page. A projection is never written as a score.
+No weekly submission slot was used.
+</footer>
+</main>
+<script>
+document.querySelectorAll('button.copy').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const text = btn.parentElement.querySelector('code').textContent;
+    navigator.clipboard.writeText(text).then(() => { btn.textContent = 'copied'; });
+  });
+});
+</script>
+</body>
+</html>
