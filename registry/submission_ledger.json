@@ -1,0 +1,167 @@
+{
+  "lane_id": "H71",
+  "generated_at_utc": "2026-10-20T12:00:00Z",
+  "primary_submission": {
+    "submission_id": "gems71-hydro-conduit-38800-20261020T120000Z",
+    "filename": "gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif",
+    "path": "submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif",
+    "zip_path": "submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif.zip",
+    "nan_twin_path": "submissions/gems71-hydro-conduit-38800-20261020T120000Z-nan.tif",
+    "surface_path": "submissions/gems71-hydro-conduit-38800-20261020T120000Z-surface-zeros.tif",
+    "sha256_zeros_tif": "0b08a50224d7ac16d8514fd7af99f90e9f179ebd0d3d6291d97c649cca88d8ad",
+    "sha256_zeros_zip": "8a4d7f7cce1b95eb315a17952225fca3f843ba73e09713fd292a31d0857743c7",
+    "sha256_nan_tif": "5f5047180a53e5ebbe4f4ab53cc24663b1a130a3d6ea8b2c1323c2172af1c10e",
+    "sha256_surface_zeros_tif": "abdd5764aab9431f0a4a230b3702780dce1bbcd41662631973dcd82e6ffbd369",
+    "submission_note": "H71 hydrothermal-structural conduit: GDR1391 2m-probe+paleo-sinter+demag+crossgrad+scarplet; k=38800 d>=3px; holdout DTI 0.0730",
+    "submission_note_chars": 127,
+    "verdict": "promote",
+    "ok_to_download_and_submit": true,
+    "holdout_dti": {
+      "evidence_class": "HOLDOUT-DTI",
+      "evaluator_version": "gems57-pooled-hide-v3-se",
+      "withheld_positive_pixels": 11321,
+      "dti": 0.073036,
+      "ci95": [
+        0.058155,
+        0.088277
+      ],
+      "off_range_front_domain": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems57-pooled-hide-v3-se",
+        "withheld_positive_pixels": 8717,
+        "dti": 0.048586,
+        "ci95": [
+          0.038186,
+          0.059101
+        ]
+      },
+      "geothermal_vent_corridor_domain": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems57-pooled-hide-v3-se",
+        "withheld_positive_pixels": 7610,
+        "dti": 0.084445,
+        "ci95": [
+          0.065359,
+          0.10474
+        ]
+      },
+      "usgs_sgmc_off_catalogue_diagnostic": {
+        "dti_at_k38800": 0.096616,
+        "dti_at_k37654_equal_budget": 0.094553,
+        "tpw": 5608.128,
+        "fpw": 36131.121,
+        "fnw": 56513.872,
+        "n_truth": 62122,
+        "n_emitted": 38800,
+        "evidence_class": "HOLDOUT-DTI (USGS-SGMC-OFF-CATALOGUE-DIAGNOSTIC)"
+      },
+      "paired_differences_vs_controls": {
+        "random_control": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v3-se",
+          "control_dti": 0.046595,
+          "delta_dti": 0.026442,
+          "bootstrap_se": 0.007676,
+          "ci95": [
+            0.011236,
+            0.041923
+          ],
+          "beats_two_se": true
+        },
+        "baseline_100m_topogeophys": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v3-se",
+          "control_dti": 0.026602,
+          "delta_dti": 0.046434,
+          "bootstrap_se": 0.006994,
+          "ci95": [
+            0.03235,
+            0.06031
+          ],
+          "beats_two_se": true
+        },
+        "h71b_crossgrad_ablation": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v3-se",
+          "control_dti": 0.05796,
+          "delta_dti": 0.015076,
+          "bootstrap_se": 0.007537,
+          "ci95": [
+            0.000508,
+            0.029608
+          ],
+          "beats_two_se": true
+        },
+        "h71c_strain_seis_ablation": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v3-se",
+          "control_dti": 0.047954,
+          "delta_dti": 0.025082,
+          "bootstrap_se": 0.009392,
+          "ci95": [
+            0.007708,
+            0.044342
+          ],
+          "beats_two_se": true
+        },
+        "h71d_hydro_alteration_ablation": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v3-se",
+          "control_dti": 0.04423,
+          "delta_dti": 0.028807,
+          "bootstrap_se": 0.006851,
+          "ci95": [
+            0.014494,
+            0.04155
+          ],
+          "beats_two_se": true
+        },
+        "h71a_phys_only_ablation": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v3-se",
+          "control_dti": 0.060341,
+          "delta_dti": 0.012696,
+          "bootstrap_se": 0.002469,
+          "ci95": [
+            0.008172,
+            0.017589
+          ],
+          "beats_two_se": true
+        },
+        "h33_2_b2_champion": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v3-se",
+          "control_dti": 0.003699,
+          "delta_dti": 0.069338,
+          "bootstrap_se": 0.007911,
+          "ci95": [
+            0.054366,
+            0.084962
+          ],
+          "beats_two_se": true
+        }
+      }
+    },
+    "registry_uniqueness": {
+      "n_registry_rasters_checked": 108,
+      "n_discrete_fault_detectors": 103,
+      "max_abs_spearman_pre_placement_surface": 0.1046,
+      "max_abs_spearman_pre_placement_surface_match": "gems68-autoctx-40000-20261012T014104Z-surface-zeros.tif",
+      "max_abs_spearman_final_dots": 0.0524,
+      "max_abs_spearman_final_dots_match": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+      "max_3px_overlap_symmetric_discrete": 0.4687,
+      "max_3px_overlap_symmetric_discrete_match": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+      "max_3px_overlap_directed_discrete": 0.557,
+      "max_3px_overlap_symmetric_all_including_lattices": 0.56,
+      "passed": true
+    }
+  },
+  "organizer_confirmed_reference_benchmark": {
+    "submission_id": "h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros",
+    "source_repo": "buffedlizard55-lab/GEMSDOE32",
+    "evidence_class": "ORGANIZER-CONFIRMED",
+    "organizer_score_dti": 0.2778,
+    "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+    "emitted_positive_dots": 37654
+  }
+}

@@ -1,409 +1,477 @@
-"""Feature engineering and physical hypothesis surfaces for GEMSDOE71.
-
-Every fold-invariant physical transform reads strictly from the cached sanitized bands in
-``.cache/bands/`` (prepared by ``scripts/prepare_data.py``). Every catalogue-derived feature
-(crack-tip stress concentration, relay corridor, and catalogue-flank distance collar) is
-computed strictly from the ``visible_faults`` mask supplied by the caller so that withheld
-holdout segments are never leaked.
-"""
+"""Feature construction, GDR 1391 geothermal vent enrichment audit, and single-feature leakage canary for Lane H71."""
 from __future__ import annotations
 
 import csv
+import gc
+import io
+import json
+import struct
+import zipfile
 from pathlib import Path
+from typing import Any
 
 import numpy as np
-from scipy.ndimage import (
-    binary_closing,
-    distance_transform_edt,
-    gaussian_filter,
-    laplace,
-)
-from scipy.spatial import cKDTree
+from numpy.lib.format import open_memmap
+import rasterio
+from rasterio.warp import transform
+from scipy import ndimage as ndi
+from scipy.stats import rankdata
+from sklearn.metrics import roc_auc_score
 
-ROOT = Path(__file__).resolve().parents[2]
-BANDS_DIR = ROOT / ".cache" / "bands"
-EXT_DIR = ROOT / ".cache" / "external"
-
-OFFICIAL_BAND_MAP = {
-    "mag_anom": "01_mag_anom.npy",
-    "rtp": "02_rtp.npy",
-    "tmi_hg": "03_tmi_hg.npy",
-    "geod_2ndinv": "04_geod_2ndinv.npy",
-    "iso_grav_anom_slope": "05_iso_grav_anom_slope.npy",
-    "tc": "06_tc.npy",
-    "geod_shearrate": "07_geod_shearrate.npy",
-    "geod_dilaterate": "08_geod_dilaterate.npy",
-    "tmi_vg": "09_tmi_vg.npy",
-    "deq_n100a15": "10_deq_n100a15.npy",
-    "iso_grav_anom_vg": "11_iso_grav_anom_vg.npy",
-    "det_elev": "12_det_elev.npy",
-    "iso_grav_anom": "13_iso_grav_anom.npy",
-    "tmi": "14_tmi.npy",
-    "depth_to_base_surf": "15_depth_to_base_surf.npy",
-    "ieq_n100a15": "16_ieq_n100a15.npy",
-    "cond_surf": "17_cond_surf.npy",
-    "iso_grav_anom_hg": "18_iso_grav_anom_hg.npy",
-    "det_elev_slope": "19_det_elev_slope.npy",
-}
-
-
-def load_footprint() -> np.ndarray:
-    return np.load(BANDS_DIR / "_footprint.npy")
+FEATURE_SPECS: list[dict[str, str]] = [
+    {"name": "det_elev", "family": "topo_100m", "source": "training_features.tif:band12", "mechanism": "Detrended regional elevation highlighting horst-graben structural relief"},
+    {"name": "det_slope", "family": "topo_100m", "source": "training_features.tif:band19", "mechanism": "100 m topographic slope along range-front and intrabasin fault scarps"},
+    {"name": "slope_p90", "family": "topo_10m", "source": "topo_10m_derived_100m_u8.tif:band1", "mechanism": "90th-percentile 10 m sub-grid slope capturing narrow bedrock and piedmont scarps"},
+    {"name": "relief_10m", "family": "topo_10m", "source": "topo_10m_derived_100m_u8.tif:band5", "mechanism": "Local 10 m sub-grid relief within 100 m cell"},
+    {"name": "grav_iso", "family": "gravity_base", "source": "training_features.tif:band13", "mechanism": "Isostatic gravity anomaly delineating dense bedrock blocks vs basin fill"},
+    {"name": "grav_slope", "family": "gravity_base", "source": "training_features.tif:band5", "mechanism": "Isostatic gravity slope across basin-bounding normal fault steps"},
+    {"name": "grav_hg", "family": "gravity_base", "source": "training_features.tif:band18", "mechanism": "Horizontal gravity gradient magnitude at subsurface density contacts"},
+    {"name": "grav_vg", "family": "gravity_base", "source": "training_features.tif:band11", "mechanism": "Absolute vertical gravity gradient over shallow structural ledges"},
+    {"name": "depth_base_inv", "family": "gravity_base", "source": "training_features.tif:band15", "mechanism": "Inverted depth-to-pre-Tertiary-basement surface marking shallow structural highs and margins"},
+    {"name": "tc_abs", "family": "gravity_base", "source": "training_features.tif:band6", "mechanism": "Terrain correction magnitude tracking steep structural range fronts"},
+    {"name": "tmi_hg", "family": "magnetic", "source": "training_features.tif:band3", "mechanism": "Horizontal gradient of total magnetic intensity across juxtaposed volcanic/basement blocks"},
+    {"name": "crossgrad_grav_mag", "family": "h71b_crossgrad", "source": "training_features.tif:bands2,13", "mechanism": "Gallardo-Meju (2003) collinear gradient concordance of isostatic gravity and RTP magnetics"},
+    {"name": "crossgrad_grav_base", "family": "h71b_crossgrad", "source": "training_features.tif:bands13,15", "mechanism": "Collinear gradient concordance of isostatic gravity and depth-to-basement detachment steps"},
+    {"name": "hydro_demag_trough", "family": "h71d_hydrothermal", "source": "training_features.tif:bands2,6,9 + geodawn_extensions_u8.tif:TMI_up150", "mechanism": "Jacobsen (1987) shallow upward-continuation differential demagnetization trough (magnetite->pyrite/hematite)"},
+    {"name": "rad_alteration_edge", "family": "h71d_hydrothermal", "source": "geodawn_rad_u8.tif:K,Th,TC + geodawn_extensions_u8.tif:UTh", "mechanism": "GeoDAWN potassium-to-thorium (K/Th) adularia-illite metasomatic gradient and U/Th enrichment"},
+    {"name": "clay_cap_cond_edge", "family": "h71d_hydrothermal", "source": "training_features.tif:band17 + GDR1391 vents", "mechanism": "Lateral gradient of surface electrical conductivity (smectite/illite clay cap boundary)"},
+    {"name": "vent_comp", "family": "h71d_hydrothermal", "source": "GDR 1391 thermal springs + geothermometers + paleo-sinter + 2m probes + volcanic vents", "mechanism": "Composite hydrothermal upflow proximity field (purely thermal/chemical/mineralogical, zero catalogue input)"},
+    {"name": "vent_spring", "family": "h71d_hydrothermal", "source": "gdr_wellspring_in_footprint.csv (T>=25C & quartz/chalc>=80C)", "mechanism": "Thermal spring/well (>=25 C) and solute geothermometer (>=80 C) upflow plume kernel"},
+    {"name": "vent_paleo", "family": "h71d_hydrothermal", "source": "paleo_geothermal_regional.zip (sinter/travertine/tufa)", "mechanism": "Quaternary/Tertiary siliceous sinter and travertine fault-seal deposit kernel"},
+    {"name": "vent_2m", "family": "h71d_hydrothermal", "source": "2m_temperature_probe_INGENIOUS_regional_data.zip (T2m)", "mechanism": "Shallow 2 m temperature probe conductive thermal anomaly kernel across blind basin playas"},
+    {"name": "transtensional_idx", "family": "h71c_strain_seis", "source": "training_features.tif:bands4,7,8,16", "mechanism": "Geodetic 2nd invariant + shear + dilatation strain rate coupled to microseismicity spatial gradient"},
+    {"name": "scarp_amp_snr", "family": "lidar_scarplet", "source": "lidar_scarp_features_u8.tif:bands1,2,3 + h52_scarp3m_100m.tif:band2", "mechanism": "Multi-scale 1-3 m LiDAR scarplet step amplitude and multi-scale exceedance SNR"},
+    {"name": "scarp_dipole", "family": "lidar_scarplet", "source": "lidar_scarp_features_u8.tif:bands4,5,6,7", "mechanism": "Paired crest/toe Laplacian curvature dipole weighted by synthetic/antithetic facing"},
+    {"name": "scarp_facing_net", "family": "lidar_scarplet", "source": "lidar_scarp_features_u8.tif:bands6,7,8", "mechanism": "Synthetic + antithetic scarp facing minus cross-slope fluvial channel bank penalty"},
+    {"name": "local_contrast_scarp", "family": "lidar_scarplet", "source": "lidar_scarp_features_u8.tif + 1.5km background filter", "mechanism": "Locally standardized scarplet contrast isolating subtle 0.2-1.0 m intrabasin scarplets on flat basin floors"},
+    {"name": "topo_curv_ridge", "family": "topo_10m", "source": "topo_10m_derived_100m_u8.tif:bands1,4,6,8", "mechanism": "10 m profile curvature, slope dispersion, and hillshade lineament ridge detector"},
+]
 
 
-def load_catalogue() -> np.ndarray:
-    return np.load(BANDS_DIR / "_labels.npy")
+def _grad_mag(a: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    gy, gx = np.gradient(a.astype(np.float32))
+    return np.hypot(gx, gy).astype(np.float32), gx.astype(np.float32), gy.astype(np.float32)
 
 
-def load_sgmc() -> np.ndarray:
-    return np.load(BANDS_DIR / "_sgmc.npy")
+def extract_gdr1391_geothermal_layers(data_dir: Path, fp: np.ndarray, aff: Any, crs: Any) -> dict[str, Any]:
+    """Parse GDR 1391 point datasets (thermal wells/springs, paleo-sinter/travertine, 2m probes, volcanic vents)."""
+    ext = data_dir / "external"
+    H, W = fp.shape
 
+    # 1. 2m temperature probes (INGENIOUS regional DBF)
+    mask_2m = np.zeros((H, W), dtype=np.float32)
+    n_2m_records = 0
+    with zipfile.ZipFile(ext / "2m_temperature_probe_INGENIOUS_regional_data.zip") as z:
+        dbf = z.read("2m_temperature_probe_INGENIOUS_regional_data/2m_temperature_probe_n83geo/2m_temperature_probe_n83geo.dbf")
+    numrec, lenheader, lenrec = struct.unpack("<4xIHH20x", dbf[:32])
+    fields = []
+    pos = 32
+    while dbf[pos] != 0x0D:
+        name = dbf[pos : pos + 11].split(b"\x00")[0].decode("ascii", errors="ignore")
+        fields.append((name, chr(dbf[pos + 11]), dbf[pos + 16]))
+        pos += 32
+    offset = lenheader
+    for i in range(numrec):
+        rec = dbf[offset + i * lenrec : offset + (i + 1) * lenrec]
+        if rec[0] == 0x2A:
+            continue
+        p = 1
+        vals = {}
+        for name, _, flen in fields:
+            vals[name] = rec[p : p + flen].decode("ascii", errors="ignore").strip()
+            p += flen
+        try:
+            x, y, t2 = float(vals["UTM_E"]), float(vals["UTM_N"]), float(vals["T2m"])
+            col, row = ~aff * (x, y)
+            ir, ic = int(round(row)), int(round(col))
+            if 0 <= ir < H and 0 <= ic < W and fp[ir, ic]:
+                n_2m_records += 1
+                mask_2m[ir, ic] = max(mask_2m[ir, ic], max(t2 - 15.0, 1.0))
+        except Exception:
+            pass
 
-def load_band(name: str, fill_median: bool = True) -> np.ndarray:
-    """Load a sanitized float32 band from .cache/bands/."""
-    fname = OFFICIAL_BAND_MAP.get(name, f"{name}.npy")
-    path = BANDS_DIR / fname
-    if not path.exists():
-        raise FileNotFoundError(f"Cached band not found: {path}. Run `python scripts/prepare_data.py`.")
-    arr = np.load(path).astype(np.float32)
-    if fill_median:
-        finite = np.isfinite(arr)
-        med = float(np.median(arr[finite])) if finite.any() else 0.0
-        arr = np.where(finite, arr, med).astype(np.float32)
-    return arr
+    # 2. Paleo-geothermal sinter / travertine / tufa deposits
+    mask_paleo = np.zeros((H, W), dtype=np.float32)
+    n_paleo_records = 0
+    with zipfile.ZipFile(ext / "paleo_geothermal_regional.zip") as z:
+        txt = z.read("Paleo_geothermal_final.csv").decode("utf-8", errors="replace")
+        rows = list(csv.DictReader(io.StringIO(txt)))
+    lons = [float(r["Long_deg_NAD83"]) for r in rows if r["Long_deg_NAD83"]]
+    lats = [float(r["Lat_deg_NAD83"]) for r in rows if r["Lat_deg_NAD83"]]
+    xs, ys_u = transform("EPSG:4269", crs, lons, lats)
+    for x, y in zip(xs, ys_u):
+        col, row = ~aff * (x, y)
+        ir, ic = int(round(row)), int(round(col))
+        if 0 <= ir < H and 0 <= ic < W and fp[ir, ic]:
+            n_paleo_records += 1
+            mask_paleo[ir, ic] = 1.0
 
-
-def robust_zpos(arr: np.ndarray, foot: np.ndarray, clip_max: float = 6.0) -> np.ndarray:
-    """Robust positive z-score normalized to [0, 1] inside ``foot`` using median and MAD."""
-    vals = arr[foot & np.isfinite(arr)]
-    if vals.size == 0:
-        return np.zeros(arr.shape, dtype=np.float32)
-    med = float(np.median(vals))
-    mad = float(np.median(np.abs(vals - med))) * 1.4826
-    if mad < 1e-9:
-        mad = float(np.std(vals)) or 1.0
-    z = np.clip((np.nan_to_num(arr, nan=med) - med) / mad, 0.0, clip_max) / clip_max
-    z[~foot] = 0.0
-    return z.astype(np.float32)
-
-
-def hessian_ridge(arr: np.ndarray, sigma: float = 2.0) -> np.ndarray:
-    """Frangi/Sato-style largest negative principal curvature (ridge crest response)."""
-    axx = gaussian_filter(arr, sigma=sigma, order=(0, 2), mode="nearest")
-    ayy = gaussian_filter(arr, sigma=sigma, order=(2, 0), mode="nearest")
-    axy = gaussian_filter(arr, sigma=sigma, order=(1, 1), mode="nearest")
-    rad = np.sqrt(np.maximum(((axx - ayy) * 0.5) ** 2 + axy * axy, 0.0))
-    l1 = (axx + ayy) * 0.5 + rad
-    l2 = (axx + ayy) * 0.5 - rad
-    big = np.where(np.abs(l1) >= np.abs(l2), l1, l2)
-    return np.maximum(-big, 0.0).astype(np.float32)
-
-
-def structure_tensor_coherence(arr: np.ndarray, sigma_grad: float = 1.5,
-                               sigma_int: float = 3.0) -> tuple[np.ndarray, np.ndarray]:
-    """Return (coherence in [0, 1], dominant strike angle in radians) of ``arr``."""
-    sm = gaussian_filter(arr, sigma=sigma_grad, mode="nearest")
-    gy, gx = np.gradient(sm)
-    jxx = gaussian_filter(gx * gx, sigma=sigma_int, mode="nearest")
-    jyy = gaussian_filter(gy * gy, sigma=sigma_int, mode="nearest")
-    jxy = gaussian_filter(gx * gy, sigma=sigma_int, mode="nearest")
-    tr = jxx + jyy + 1e-12
-    diff = np.sqrt(np.maximum((jxx - jyy) ** 2 + 4.0 * jxy * jxy, 0.0))
-    coh = np.clip(diff / tr, 0.0, 1.0).astype(np.float32)
-    # Strike is perpendicular to gradient eigenvector
-    grad_angle = 0.5 * np.arctan2(2.0 * jxy, jxx - jyy)
-    strike = (grad_angle + 0.5 * np.pi) % np.pi
-    return coh, strike.astype(np.float32)
-
-
-def compute_gdr_geothermometer_idw(foot: np.ndarray) -> np.ndarray:
-    """IDW surface of GDR 1391 spring-chemistry reservoir geothermometer temperature (>110 C).
-
-    Uses ONLY the measured chemical geothermometer columns (geothermquartz_c,
-    geothermchalc_c, geothermcat_c) and temp_c from gdr_wellspring_in_footprint.csv.
-    Never reads dist_known_fault_px (which is label-derived).
-    """
-    csv_path = EXT_DIR / "gdr_wellspring_in_footprint.csv"
-    shape = foot.shape
-    if not csv_path.exists():
-        return np.zeros(shape, dtype=np.float32)
-
-    pts_rc = []
-    temps = []
-    with csv_path.open("r", encoding="utf-8") as fh:
-        for row in csv.DictReader(fh):
+    # 3. Thermal springs/wells (>=25C) and quartz/chalcedony geothermometers (>=80C)
+    mask_spring = np.zeros((H, W), dtype=np.float32)
+    mask_geotherm = np.zeros((H, W), dtype=np.float32)
+    n_spring_records = 0
+    n_geotherm_records = 0
+    with open(ext / "gdr_wellspring_in_footprint.csv") as f:
+        for r in csv.DictReader(f):
             try:
-                r = float(row.get("row", ""))
-                c = float(row.get("col", ""))
-            except ValueError:
-                continue
-            if not (0 <= r < shape[0] and 0 <= c < shape[1]):
-                continue
-            vals = []
-            for col_name in ("geothermquartz_c", "geothermchalc_c", "geothermcat_c", "temp_c"):
-                raw = row.get(col_name, "")
-                try:
-                    v = float(raw)
-                    if np.isfinite(v) and 20.0 <= v <= 380.0:
-                        vals.append(v)
-                except ValueError:
-                    pass
-            if vals:
-                t_max = max(vals)
-                if t_max >= 90.0:
-                    pts_rc.append((r, c))
-                    temps.append(t_max - 70.0)
-    if not pts_rc:
-        return np.zeros(shape, dtype=np.float32)
+                ir, ic = int(float(r["row"])), int(float(r["col"]))
+                if 0 <= ir < H and 0 <= ic < W and fp[ir, ic]:
+                    tc_v = float(r["temp_c"]) if r["temp_c"] else 0.0
+                    gq = float(r["geothermquartz_c"]) if r["geothermquartz_c"] else 0.0
+                    gc_v = float(r["geothermchalc_c"]) if r["geothermchalc_c"] else 0.0
+                    if tc_v >= 25.0:
+                        n_spring_records += 1
+                        mask_spring[ir, ic] = max(mask_spring[ir, ic], min((tc_v - 20.0) / 80.0, 2.0))
+                    if max(gq, gc_v) >= 80.0:
+                        n_geotherm_records += 1
+                        mask_geotherm[ir, ic] = max(mask_geotherm[ir, ic], min((max(gq, gc_v) - 60.0) / 140.0, 2.0))
+            except Exception:
+                pass
 
-    pts = np.asarray(pts_rc, dtype=np.float64)
-    vals = np.asarray(temps, dtype=np.float64)
-    tree = cKDTree(pts)
-    yy, xx = np.mgrid[0:shape[0], 0:shape[1]]
-    grid_pts = np.column_stack([yy.ravel(), xx.ravel()]).astype(np.float64)
-    out_flat = np.zeros(grid_pts.shape[0], dtype=np.float32)
-    step = 500_000
-    k = min(6, len(pts))
-    for s in range(0, grid_pts.shape[0], step):
-        d, idx = tree.query(grid_pts[s:s + step], k=k)
-        if d.ndim == 1:
-            d = d[:, None]
-            idx = idx[:, None]
-        w = 1.0 / (1.0 + (d / 18.0) ** 2)
-        out_flat[s:s + step] = ((w * vals[idx]).sum(axis=1) / (w.sum(axis=1) + 1e-12)).astype(np.float32)
-    surf = gaussian_filter(out_flat.reshape(shape), sigma=2.5)
-    return robust_zpos(surf, foot)
+    # 4. Quaternary volcanic vents
+    mask_volc = np.zeros((H, W), dtype=np.float32)
+    n_volc_records = 0
+    with open(ext / "gdr_volcanic_vents_in_footprint.csv") as f:
+        for r in csv.DictReader(f):
+            try:
+                ir, ic = int(float(r["row"])), int(float(r["col"]))
+                if 0 <= ir < H and 0 <= ic < W and fp[ir, ic]:
+                    n_volc_records += 1
+                    mask_volc[ir, ic] = 1.0
+            except Exception:
+                pass
 
+    d_2m = ndi.distance_transform_edt(mask_2m == 0).astype(np.float32)
+    d_paleo = ndi.distance_transform_edt(mask_paleo == 0).astype(np.float32)
+    d_spring = ndi.distance_transform_edt(mask_spring == 0).astype(np.float32)
+    d_geoth = ndi.distance_transform_edt(mask_geotherm == 0).astype(np.float32)
+    d_volc = ndi.distance_transform_edt(mask_volc == 0).astype(np.float32)
 
-def compute_fold_invariant_components(foot: np.ndarray) -> dict[str, np.ndarray]:
-    """Compute the fold-invariant physical components for H71-A, H71-B, H71-C, and baselines."""
-    # 1. Load required bands
-    rtp = load_band("rtp")
-    tmi_hg = load_band("tmi_hg")
-    tmi_vg = load_band("tmi_vg")
-    tc = load_band("tc")
-    iso_grav_hg = load_band("iso_grav_anom_hg")
-    iso_grav_vg = load_band("iso_grav_anom_vg")
-    iso_grav_slope = load_band("iso_grav_anom_slope")
-    depth_base = load_band("depth_to_base_surf")
-    cond_surf = load_band("cond_surf")
-    det_elev = load_band("det_elev")
-    det_elev_slope = load_band("det_elev_slope")
-    geod_2ndinv = load_band("geod_2ndinv")
-    geod_shear = load_band("geod_shearrate")
-    geod_dilat = load_band("geod_dilaterate")
-    ieq = load_band("ieq_n100a15")
-    deq = load_band("deq_n100a15")
+    vent_2m = np.exp(-d_2m / 25.0).astype(np.float32)
+    vent_paleo = np.exp(-d_paleo / 30.0).astype(np.float32)
+    vent_spring = (0.6 * np.exp(-d_spring / 25.0) + 0.4 * np.exp(-d_geoth / 30.0)).astype(np.float32)
+    vent_comp = (0.40 * vent_spring + 0.30 * vent_paleo + 0.20 * vent_2m + 0.10 * np.exp(-d_volc / 40.0)).astype(np.float32)
+    vent_corridor = fp & ((d_spring <= 80.0) | (d_paleo <= 80.0) | (d_2m <= 80.0))
 
-    tmi_up150 = load_band("ext_TMI_up150")
-    ext_thk = load_band("ext_ThK")
-    rad_k = load_band("rad_K")
-    rad_th = load_band("rad_Th")
-
-    lidar_step = load_band("lidar_step_max", fill_median=False)
-    lidar_cross = load_band("lidar_cross_max", fill_median=False)
-    lidar_coh = load_band("lidar_coh100", fill_median=False)
-    lidar_valid = load_band("lidar_valid", fill_median=False) > 0.5
-
-    # --- Component 1: Upward-Continued Potential-Field Depth-Persistence (P_persist) ---
-    # Gradient of 150 m upward-continued TMI vs surface tmi_hg + gravity HG + basement inflection
-    gy_u150, gx_u150 = np.gradient(gaussian_filter(tmi_up150, sigma=1.5))
-    grad_u150 = np.hypot(gy_u150, gx_u150)
-    z_u150 = robust_zpos(grad_u150, foot)
-    z_tmi_hg = robust_zpos(tmi_hg, foot)
-    # Cross-altitude persistence: geometric mean rewards structures present at surface AND +150m
-    mag_persist = np.sqrt(z_u150 * z_tmi_hg)
-
-    gy_db, gx_db = np.gradient(gaussian_filter(depth_base, sigma=1.8))
-    z_db_grad = robust_zpos(np.hypot(gy_db, gx_db), foot)
-    z_grav_hg = robust_zpos(iso_grav_hg, foot)
-    z_grav_slope = robust_zpos(iso_grav_slope, foot)
-    grav_ridge = robust_zpos(hessian_ridge(iso_grav_hg, sigma=2.0), foot)
-
-    P_persist = (
-        0.34 * mag_persist
-        + 0.28 * z_grav_hg
-        + 0.20 * grav_ridge
-        + 0.18 * np.sqrt(z_grav_slope * z_db_grad)
-    ).astype(np.float32)
-    P_persist[~foot] = 0.0
-
-    # --- Component 2: Hydrothermal Magnetite-Destruction & K-Metasomatism Conduit (H_vent) ---
-    # Magnetite destruction creates a positive Laplacian trough (d2(rtp) > 0) inside low RTP
-    rtp_smooth = gaussian_filter(rtp, sigma=2.0)
-    mag_trough = robust_zpos(laplace(rtp_smooth), foot)
-    # Electrical conductivity gradient & high-conductivity clay-cap margin
-    gy_c, gx_c = np.gradient(gaussian_filter(cond_surf, sigma=1.5))
-    z_cond_edge = robust_zpos(np.hypot(gy_c, gx_c), foot)
-    z_cond_high = robust_zpos(cond_surf, foot)
-    # Radiometric K/Th enrichment (illite/adularia alteration halo)
-    k_over_th = np.clip(rad_k / (rad_th + 0.08), 0.0, 10.0)
-    inv_thk = 1.0 - np.clip(ext_thk, 0.0, 1.0)
-    z_k_enrich = 0.55 * robust_zpos(k_over_th, foot) + 0.45 * robust_zpos(inv_thk, foot)
-    # GDR 1391 geothermometer reservoir temperature prior
-    z_geotherm = compute_gdr_geothermometer_idw(foot)
-
-    H_vent = (
-        0.32 * mag_trough
-        + 0.26 * (0.6 * z_cond_edge + 0.4 * z_cond_high)
-        + 0.24 * z_k_enrich
-        + 0.18 * z_geotherm
-    ).astype(np.float32)
-    H_vent[~foot] = 0.0
-
-    # --- Component 3: Shoreline-Decoupled Multi-Scale Scarp Crest (S_scarp) ---
-    # Multi-scale Hessian ridge on det_elev + det_elev_slope + 1m LiDAR scarp where valid
-    ridge_s15 = robust_zpos(hessian_ridge(det_elev, sigma=1.5), foot)
-    ridge_s30 = robust_zpos(hessian_ridge(det_elev, sigma=3.0), foot)
-    z_slope = robust_zpos(det_elev_slope, foot)
-    coh_elev, strike_elev = structure_tensor_coherence(det_elev_slope, sigma_grad=1.2, sigma_int=2.8)
-
-    lidar_comp = np.zeros(foot.shape, dtype=np.float32)
-    if lidar_valid.any():
-        l_raw = (
-            0.45 * np.nan_to_num(lidar_step, nan=0.0)
-            + 0.35 * np.nan_to_num(lidar_cross, nan=0.0)
-            + 0.20 * np.nan_to_num(lidar_coh, nan=0.0)
-        )
-        lidar_comp = robust_zpos(l_raw, foot & lidar_valid)
-
-    raw_scarp = (
-        0.35 * ridge_s15
-        + 0.25 * ridge_s30
-        + 0.22 * (z_slope * coh_elev)
-        + 0.18 * np.where(lidar_valid, lidar_comp, 0.5 * (ridge_s15 + z_slope))
-    )
-    # Pluvial Lake Lahontan Shoreline Suppressor:
-    # Low-relief basin-margin contour lines with near-zero potential-field basement support
-    # are penalized by up to 45% unless backed by P_persist or H_vent.
-    low_elev_basin = (det_elev < np.percentile(det_elev[foot], 35)) & (P_persist < 0.18) & (H_vent < 0.18)
-    shoreline_gate = np.where(low_elev_basin, 0.55, 1.0).astype(np.float32)
-    S_scarp = (raw_scarp * shoreline_gate).astype(np.float32)
-    S_scarp[~foot] = 0.0
-
-    # --- H71-B Comparator: Salem Analytic-Signal Tilt-Contact Ratio (ASTR-Tilt) ---
-    # Tilt derivative zero-crossing sharpness + horizontal gradient of tilt + gravity contact ratio
-    gy_tc, gx_tc = np.gradient(gaussian_filter(tc, sigma=1.5))
-    z_tilt_grad = robust_zpos(np.hypot(gy_tc, gx_tc), foot)
-    tc_med = float(np.median(tc[foot]))
-    tc_zero_prox = np.exp(-((tc - tc_med) / 6.5) ** 2).astype(np.float32)
-    grav_as = np.hypot(iso_grav_hg, iso_grav_vg) + 1e-6
-    grav_contact = robust_zpos(iso_grav_hg / grav_as, foot)
-    mag_as = np.hypot(tmi_hg, tmi_vg) + 1e-6
-    mag_contact = robust_zpos(tmi_hg / mag_as, foot)
-    H71_B_surface = (
-        0.38 * (z_tilt_grad * tc_zero_prox)
-        + 0.32 * grav_contact * z_grav_hg
-        + 0.30 * mag_contact * z_u150
-    ).astype(np.float32)
-    H71_B_surface[~foot] = 0.0
-
-    # --- H71-C Comparator: Kostrov Transtensional Strain-Rate & Microseismic Riedel (Kostrov-Riedel) ---
-    kostrov_ratio = robust_zpos(geod_dilat / (geod_2ndinv + 1.0), foot)
-    z_shear = robust_zpos(geod_shear, foot)
-    z_2ndinv = robust_zpos(geod_2ndinv, foot)
-    seismic_rate = robust_zpos(ieq / (deq + 5.0), foot)
-    H71_C_surface = (
-        0.35 * np.sqrt(z_shear * kostrov_ratio)
-        + 0.30 * seismic_rate
-        + 0.20 * z_2ndinv
-        + 0.15 * S_scarp
-    ).astype(np.float32)
-    H71_C_surface[~foot] = 0.0
-
-    # --- Baseline Comparator: Single-Layer Topographic Scarp Ridge ---
-    Baseline_topo = (0.55 * ridge_s15 + 0.45 * z_slope).astype(np.float32)
-    Baseline_topo[~foot] = 0.0
-
+    stats = {
+        "n_2m_probe_stations_in_footprint": int(n_2m_records),
+        "n_2m_probe_unique_cells": int((mask_2m > 0).sum()),
+        "n_paleo_sinter_travertine_in_footprint": int(n_paleo_records),
+        "n_paleo_unique_cells": int((mask_paleo > 0).sum()),
+        "n_thermal_wells_springs_ge25C_records": int(n_spring_records),
+        "n_thermal_wells_springs_unique_cells": int((mask_spring > 0).sum()),
+        "n_geothermometer_ge80C_records": int(n_geotherm_records),
+        "n_geothermometer_unique_cells": int((mask_geotherm > 0).sum()),
+        "n_volcanic_vents_in_footprint": int(n_volc_records),
+        "n_vent_corridor_8km_pixels": int(vent_corridor.sum()),
+        "vent_corridor_8km_fraction": float(vent_corridor.sum() / fp.sum()),
+    }
     return {
-        "P_persist": P_persist,
-        "H_vent": H_vent,
-        "S_scarp": S_scarp,
-        "H71_B_surface": H71_B_surface,
-        "H71_C_surface": H71_C_surface,
-        "Baseline_topo": Baseline_topo,
-        "strike_elev": strike_elev,
-        "z_shear": z_shear,
-        "kostrov_ratio": kostrov_ratio,
-        "seismic_rate": seismic_rate,
+        "vent_comp": vent_comp,
+        "vent_spring": vent_spring,
+        "vent_paleo": vent_paleo,
+        "vent_2m": vent_2m,
+        "vent_corridor": vent_corridor,
+        "stats": stats,
     }
 
 
-def compute_visible_tip_stress(visible_faults: np.ndarray, foot: np.ndarray,
-                               z_shear: np.ndarray, kostrov_ratio: np.ndarray,
-                               seismic_rate: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Compute (K_tip, d_visible) strictly from the ``visible_faults`` mask.
+def ensure_feature_cache(data_dir: Path) -> tuple[np.ndarray, dict[str, np.ndarray], list[str], dict[str, Any]]:
+    """Load or build the 26-feature rank-normalized cache on valid footprint pixels."""
+    npy_path = data_dir / "h71_X_fp.npy"
+    masks_path = data_dir / "h71_masks.npz"
+    names_path = data_dir / "h71_feature_names.json"
+    vent_stats_path = data_dir / "h71_vent_stats.json"
 
-    1. Finds 8-connected fault terminations (1 neighbour) and branch junctions (>=3 neighbours)
-       of ``visible_faults`` (morphologically closed by 1 px to heal 1-px raster gaps).
-    2. Propagates a fracture-mechanics crack-tip process-zone field (decaying as (1 + d/8)^(-0.5)
-       outside the 2-px catalogue collar, peaking in the 3..18 px step-over / splay zone),
-       modulated by local transtensional geodetic strain and microseismic density.
-    3. Returns (K_tip, d_visible) where d_visible is the Euclidean distance transform to
-       ``visible_faults``.
-    """
-    vis = np.asarray(visible_faults, dtype=bool) & foot
-    d_vis = distance_transform_edt(~vis).astype(np.float32)
+    with rasterio.open(data_dir / "sample_submission.tif") as ds:
+        fp = np.isfinite(ds.read(1))
+        aff = ds.transform
+        crs = ds.crs
+        H, W = ds.height, ds.width
 
-    closed = binary_closing(vis, structure=np.ones((3, 3), dtype=bool), iterations=1)
-    nbrs = np.zeros(closed.shape, dtype=np.int16)
-    for dr in (-1, 0, 1):
-        for dc in (-1, 0, 1):
-            if dr == 0 and dc == 0:
-                continue
-            nbrs += np.roll(np.roll(closed, dr, axis=0), dc, axis=1)
-    tips = closed & (nbrs == 1)
-    junctions = closed & (nbrs >= 3)
+    if npy_path.exists() and masks_path.exists() and names_path.exists():
+        X_fp = np.load(npy_path, mmap_mode="r")
+        masks_npz = np.load(masks_path)
+        masks = {k: masks_npz[k] for k in masks_npz.files}
+        fnames = json.loads(names_path.read_text())
+        if vent_stats_path.exists():
+            vent_stats = json.loads(vent_stats_path.read_text())
+        else:
+            gdr = extract_gdr1391_geothermal_layers(data_dir, fp, aff, crs)
+            vent_stats = gdr["stats"]
+            vent_stats_path.write_text(json.dumps(vent_stats, indent=2))
+        return X_fp, masks, fnames, vent_stats
 
-    if tips.any():
-        d_tip = distance_transform_edt(~tips).astype(np.float32)
-        tip_field = np.power(1.0 + d_tip / 8.0, -0.65).astype(np.float32)
-    else:
-        tip_field = np.zeros(foot.shape, dtype=np.float32)
+    ext = data_dir / "external"
+    n_fp = int(fp.sum())
+    feature_names = [s["name"] for s in FEATURE_SPECS]
+    X_fp = open_memmap(npy_path, mode="w+", dtype=np.float32, shape=(n_fp, len(feature_names)))
 
-    if junctions.any():
-        d_jnc = distance_transform_edt(~junctions).astype(np.float32)
-        jnc_field = np.power(1.0 + d_jnc / 10.0, -0.65).astype(np.float32)
-    else:
-        jnc_field = np.zeros(foot.shape, dtype=np.float32)
+    def write_col(idx: int, arr: np.ndarray) -> None:
+        v = arr[fp]
+        r = rankdata(v, method="average").astype(np.float32)
+        X_fp[:, idx] = (r - 1.0) / max(len(r) - 1.0, 1.0)
 
-    # Off-catalogue relay/splay band (peaks at 3..22 px from visible traces)
-    relay_envelope = np.exp(-((d_vis - 8.5) / 14.0) ** 2).astype(np.float32)
-    strain_mod = 0.50 + 0.25 * z_shear + 0.15 * kostrov_ratio + 0.10 * seismic_rate
-    raw_k = (0.52 * tip_field + 0.28 * jnc_field + 0.20 * relay_envelope) * strain_mod
-    K_tip = robust_zpos(raw_k, foot)
-    K_tip[~foot] = 0.0
-    return K_tip, d_vis
+    gdr = extract_gdr1391_geothermal_layers(data_dir, fp, aff, crs)
+    vent_comp = gdr["vent_comp"]
+    vent_corridor = gdr["vent_corridor"]
+    vent_stats = gdr["stats"]
+    vent_stats_path.write_text(json.dumps(vent_stats, indent=2))
 
+    write_col(16, vent_comp)
+    write_col(17, gdr["vent_spring"])
+    write_col(18, gdr["vent_paleo"])
+    write_col(19, gdr["vent_2m"])
+    del gdr
+    gc.collect()
 
-def compose_h71a_surface(comp: dict[str, np.ndarray], visible_faults: np.ndarray,
-                         foot: np.ndarray) -> tuple[np.ndarray, dict[str, np.ndarray]]:
-    """Compose the H71-A (DPST-HDT) continuous propensity surface in [0, 1] inside ``foot``.
+    with rasterio.open(data_dir / "training_features.tif") as ds:
+        def rband(b: int) -> np.ndarray:
+            a = ds.read(b).astype(np.float32)
+            a[~np.isfinite(a) | (a < -1e30)] = 0.0
+            return a
 
-    Combines:
-      * P_persist (32%): Upward-continued potential-field depth-persistence
-      * S_scarp   (30%): Shoreline-decoupled multi-scale scarp crest
-      * H_vent    (22%): Hydrothermal magnetite-destruction & K-metasomatism conduit
-      * K_tip(V)  (16%): Visible-only crack-tip & step-over process-zone stress concentration
-    Plus a multiplicative synergistic boost where >=2 independent physical regimes corroborate.
-    """
-    K_tip, d_vis = compute_visible_tip_stress(
-        visible_faults,
-        foot,
-        comp["z_shear"],
-        comp["kostrov_ratio"],
-        comp["seismic_rate"],
+        det_elev = rband(12)
+        det_slope = rband(19)
+        write_col(0, det_elev); del det_elev
+        write_col(1, det_slope); del det_slope
+
+        grav_iso = rband(13)
+        grav_slope = rband(5)
+        grav_hg = rband(18)
+        grav_vg = rband(11)
+        depth_base = rband(15)
+        write_col(4, grav_iso)
+        write_col(5, -grav_slope); del grav_slope
+        write_col(6, grav_hg); del grav_hg
+        write_col(7, np.abs(grav_vg)); del grav_vg
+        write_col(8, -depth_base)
+
+        rtp = rband(2)
+        gm_g, gx_g, gy_g = _grad_mag(grav_iso); del grav_iso
+        gm_m, gx_m, gy_m = _grad_mag(rtp)
+        gm_b, gx_b, gy_b = _grad_mag(depth_base); del depth_base
+        dot_gm = (gx_g * gx_m + gy_g * gy_m) / (gm_g * gm_m + 1e-6)
+        write_col(11, (np.sqrt(gm_g * gm_m) * (dot_gm * dot_gm)).astype(np.float32))
+        del gm_m, gx_m, gy_m, dot_gm
+        dot_gb = (gx_g * gx_b + gy_g * gy_b) / (gm_g * gm_b + 1e-6)
+        write_col(12, (np.sqrt(gm_g * gm_b) * (dot_gb * dot_gb)).astype(np.float32))
+        del gm_g, gx_g, gy_g, gm_b, gx_b, gy_b, dot_gb
+        gc.collect()
+
+        tc = rband(6)
+        tmi_hg = rband(3)
+        tmi_vg = rband(9)
+        cond_surf = rband(17)
+        write_col(9, -tc)
+        write_col(10, tmi_hg); del tmi_hg
+
+        with rasterio.open(ext / "geodawn_extensions_u8.tif") as eds:
+            ext_UTh = eds.read(3).astype(np.float32) / 255.0
+            tmi_up150 = eds.read(4).astype(np.float32) / 255.0
+
+        rtp_z = (rtp - np.mean(rtp[fp])) / (np.std(rtp[fp]) + 1e-6); del rtp
+        up150_z = (tmi_up150 - np.mean(tmi_up150[fp])) / (np.std(tmi_up150[fp]) + 1e-6); del tmi_up150
+        hydro_demag = (
+            np.abs(rtp_z - up150_z) * (np.abs(tc) / (np.std(tc[fp]) + 1e-6))
+            + np.maximum(-tmi_vg / (np.std(tmi_vg[fp]) + 1e-6), 0.0)
+        ).astype(np.float32)
+        write_col(13, hydro_demag); del rtp_z, up150_z, tc, tmi_vg, hydro_demag
+
+        gm_c, _, _ = _grad_mag(cond_surf); del cond_surf
+        write_col(15, (gm_c * (1.0 + vent_comp)).astype(np.float32)); del gm_c, vent_comp
+        gc.collect()
+
+        geod_2nd = rband(4)
+        geod_shear = rband(7)
+        geod_dil = rband(8)
+        ieq = rband(16)
+        gm_eq, _, _ = _grad_mag(ieq); del ieq
+        transtens = (
+            (geod_2nd / (np.std(geod_2nd[fp]) + 1e-6))
+            + (geod_shear / (np.std(geod_shear[fp]) + 1e-6))
+            + 0.5 * (geod_dil / (np.std(geod_dil[fp]) + 1e-6))
+            + (gm_eq / (np.std(gm_eq[fp]) + 1e-6))
+        ).astype(np.float32)
+        write_col(20, transtens); del geod_2nd, geod_shear, geod_dil, gm_eq, transtens
+        gc.collect()
+
+    with rasterio.open(ext / "geodawn_rad_u8.tif") as ds:
+        rad_K = ds.read(1).astype(np.float32) / 255.0
+        rad_Th = ds.read(2).astype(np.float32) / 255.0
+        rad_TC = ds.read(4).astype(np.float32) / 255.0
+    k_th_ratio = rad_K / (rad_Th + 0.05); del rad_K, rad_Th
+    gm_kth, _, _ = _grad_mag(k_th_ratio); del k_th_ratio
+    write_col(14, (0.5 * gm_kth + 0.3 * ext_UTh + 0.2 * (1.0 - rad_TC)).astype(np.float32))
+    del gm_kth, ext_UTh, rad_TC
+    gc.collect()
+
+    with rasterio.open(ext / "topo_10m_derived_100m_u8.tif") as ds:
+        slope_p90 = ds.read(1).astype(np.float32) / 255.0
+        slope_std = ds.read(4).astype(np.float32) / 255.0
+        relief_10m = ds.read(5).astype(np.float32) / 255.0
+        curv_10m = ds.read(6).astype(np.float32) / 255.0
+        hs_lin = ds.read(8).astype(np.float32) / 255.0
+    write_col(2, slope_p90)
+    write_col(3, relief_10m)
+    write_col(25, (0.35 * slope_p90 + 0.25 * slope_std + 0.20 * curv_10m + 0.20 * hs_lin).astype(np.float32))
+    relief_10m_fp = relief_10m[fp].copy()
+    del slope_p90, slope_std, relief_10m, curv_10m, hs_lin
+    gc.collect()
+
+    with rasterio.open(ext / "lidar_scarp_features_u8.tif") as ds:
+        ex_max = ds.read(1).astype(np.float32) / 255.0
+        ex_mean = ds.read(2).astype(np.float32) / 255.0
+        step_max = ds.read(3).astype(np.float32) / 255.0
+        lapneg = ds.read(4).astype(np.float32) / 255.0
+        lappos = ds.read(5).astype(np.float32) / 255.0
+        downface = ds.read(6).astype(np.float32) / 255.0
+        upface = ds.read(7).astype(np.float32) / 255.0
+        cross_max = ds.read(8).astype(np.float32) / 255.0
+    with rasterio.open(ext / "h52_scarp3m_100m.tif") as ds:
+        r3 = ds.read(2)
+        h_gate12 = np.where(r3 != -32768, r3.astype(np.float32) / 100.0, 0.0); del r3
+
+    scarp_amp_snr = (0.5 * step_max * np.sqrt(ex_max * ex_mean + 1e-6) + 0.5 * np.abs(h_gate12)).astype(np.float32)
+    del ex_max, ex_mean, step_max, h_gate12
+    scarp_dipole = (np.sqrt(lapneg * lappos) * (upface + downface)).astype(np.float32)
+    del lapneg, lappos
+    scarp_facing_net = np.maximum(downface + upface - 0.5 * cross_max, 0.0).astype(np.float32)
+    del downface, upface, cross_max
+    write_col(21, scarp_amp_snr)
+    write_col(22, scarp_dipole)
+    write_col(23, scarp_facing_net); del scarp_facing_net
+
+    comb_scarp = scarp_amp_snr + scarp_dipole; del scarp_amp_snr, scarp_dipole
+    bg_scarp = ndi.uniform_filter(comb_scarp, size=15)
+    write_col(24, (comb_scarp / (bg_scarp + 0.02)).astype(np.float32))
+    del comb_scarp, bg_scarp
+    gc.collect()
+
+    with rasterio.open(ext / "tiger_road_distance_m.tif") as ds:
+        d_road = ds.read(1).astype(np.float32)
+    with rasterio.open(ext / "blm_closed_claim_distance_m.tif") as ds:
+        d_claim = ds.read(1).astype(np.float32)
+    cult_mask = fp & ((d_road < 75.0) | (d_claim < 60.0))
+    del d_road, d_claim
+
+    X_fp.flush()
+    np.savez_compressed(
+        masks_path,
+        cult_mask_fp=cult_mask[fp],
+        vent_corridor_fp=vent_corridor[fp],
+        relief_10m_fp=relief_10m_fp,
     )
-    P = comp["P_persist"]
-    S = comp["S_scarp"]
-    H = comp["H_vent"]
+    names_path.write_text(json.dumps(feature_names, indent=2))
 
-    linear = 0.32 * P + 0.30 * S + 0.22 * H + 0.16 * K_tip
-    # Multi-physics corroboration synergy: geometric conjunction across subsurface + surface + thermal
-    synergy = np.sqrt(np.maximum(P * S, 0.0)) * 0.18 + np.sqrt(np.maximum(P * H, 0.0)) * 0.14 + np.sqrt(np.maximum(S * K_tip, 0.0)) * 0.12
-    raw = linear + synergy
-    raw[~foot] = 0.0
-    vmax = float(raw[foot].max()) if foot.any() else 1.0
-    surf = (raw / max(vmax, 1e-9)).astype(np.float32)
-    surf[~foot] = 0.0
-    return np.clip(surf, 0.0, 1.0), {"K_tip": K_tip, "d_vis": d_vis}
+    X_fp_ro = np.load(npy_path, mmap_mode="r")
+    masks_npz = np.load(masks_path)
+    masks = {k: masks_npz[k] for k in masks_npz.files}
+    return X_fp_ro, masks, feature_names, vent_stats
+
+
+def run_leakage_canary(
+    X_fp: np.ndarray,
+    feature_names: list[str],
+    fp: np.ndarray,
+    folds20: list[dict[str, Any]],
+    sgmc_off: np.ndarray,
+    d_cat: np.ndarray,
+    relay_oof_2d: np.ndarray,
+    seed: int = 71,
+) -> dict[str, Any]:
+    """Evaluate every single feature alone on holdout and SGMC off-catalogue faults.
+
+    Rule 4: Before trusting any result, test each feature alone on holdout.
+    A single feature with AUC > 0.90 is leakage until proven otherwise.
+    """
+    H, W = fp.shape
+    fp_idx_map = np.full((H, W), -1, dtype=np.int32)
+    fp_idx_map[fp] = np.arange(int(fp.sum()), dtype=np.int32)
+
+    truth_all = np.zeros(int(fp.sum()), dtype=bool)
+    eval_all = np.zeros(int(fp.sum()), dtype=bool)
+    for f in folds20:
+        t_idx = fp_idx_map[f["truth"] & fp & f["region"] & (~f["masked_known"])]
+        e_idx = fp_idx_map[fp & f["region"] & (~f["masked_known"])]
+        truth_all[t_idx] = True
+        eval_all[e_idx] = True
+
+    rng = np.random.default_rng(seed)
+    pos_h = np.flatnonzero(truth_all & eval_all)
+    neg_h = np.flatnonzero((~truth_all) & eval_all)
+    sub_h = np.concatenate([pos_h, rng.choice(neg_h, size=60000, replace=False)])
+    yh = truth_all[sub_h]
+
+    sgmc_fp = sgmc_off[fp]
+    dcat_fp = d_cat[fp]
+    pos_s = np.flatnonzero(sgmc_fp)
+    neg_s = np.flatnonzero((dcat_fp > 3.0) & (~sgmc_fp))
+    sub_s = np.concatenate([rng.choice(pos_s, size=25000, replace=False), rng.choice(neg_s, size=60000, replace=False)])
+    ys = sgmc_fp[sub_s]
+
+    spec_map = {s["name"]: s for s in FEATURE_SPECS}
+    rows = []
+    for j, name in enumerate(feature_names):
+        auc_h = float(roc_auc_score(yh, X_fp[sub_h, j]))
+        auc_s = float(roc_auc_score(ys, X_fp[sub_s, j]))
+        dir_h = max(auc_h, 1.0 - auc_h)
+        dir_s = max(auc_s, 1.0 - auc_s)
+        spec = spec_map.get(name, {})
+        rows.append(
+            {
+                "feature_index": j,
+                "feature_name": name,
+                "family": spec.get("family", "engineered"),
+                "source": spec.get("source", ""),
+                "mechanism": spec.get("mechanism", ""),
+                "holdout_auc_raw": round(auc_h, 6),
+                "holdout_auc_directional": round(dir_h, 6),
+                "sgmc_off_catalogue_auc_raw": round(auc_s, 6),
+                "sgmc_off_catalogue_auc_directional": round(dir_s, 6),
+                "uses_catalogue": False,
+                "canary_pass": bool(dir_h <= 0.90 and dir_s <= 0.90),
+            }
+        )
+
+    # Also test the fold-proper visible-catalogue damage-zone relay prior (Rule 2 + Rule 4)
+    relay_fp = relay_oof_2d[fp]
+    auc_r_h = float(roc_auc_score(yh, relay_fp[sub_h]))
+    auc_r_s = float(roc_auc_score(ys, relay_fp[sub_s]))
+    dir_r_h = max(auc_r_h, 1.0 - auc_r_h)
+    dir_r_s = max(auc_r_s, 1.0 - auc_r_s)
+    rows.append(
+        {
+            "feature_index": len(feature_names),
+            "feature_name": "vis_relay_hydro_prior",
+            "family": "h71a_fold_proper_relay",
+            "source": "fold['visible'] EDT (d_vis > 2 px) * hydro_gate (strictly fold-isolated)",
+            "mechanism": "Hydrothermal-gated damage-zone relay continuation derived strictly from remaining visible faults per fold",
+            "holdout_auc_raw": round(auc_r_h, 6),
+            "holdout_auc_directional": round(dir_r_h, 6),
+            "sgmc_off_catalogue_auc_raw": round(auc_r_s, 6),
+            "sgmc_off_catalogue_auc_directional": round(dir_r_s, 6),
+            "uses_catalogue": True,
+            "derived_strictly_from_visible_faults_only": True,
+            "canary_pass": bool(dir_r_h <= 0.90 and dir_r_s <= 0.90),
+        }
+    )
+
+    max_phys_auc = max(r["holdout_auc_directional"] for r in rows if not r["uses_catalogue"])
+    max_all_auc = max(r["holdout_auc_directional"] for r in rows)
+    max_sgmc_auc = max(r["sgmc_off_catalogue_auc_directional"] for r in rows)
+    all_pass = all(r["canary_pass"] for r in rows)
+    if not all_pass:
+        raise RuntimeError("Leakage canary failed: at least one feature exceeded AUC 0.90")
+
+    return {
+        "canary_threshold_auc": 0.90,
+        "n_features_tested": len(rows),
+        "n_physical_non_catalogue_features": len(feature_names),
+        "n_fold_isolated_visible_relay_features": 1,
+        "max_physical_holdout_auc_directional": round(max_phys_auc, 6),
+        "max_overall_holdout_auc_directional": round(max_all_auc, 6),
+        "max_sgmc_off_catalogue_auc_directional": round(max_sgmc_auc, 6),
+        "all_features_pass": all_pass,
+        "features": rows,
+    }

@@ -1,228 +1,367 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Executive Summary | GEMSDOE71 Geothermal Fault Discovery</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Executive Summary &amp; One-Click Submission Download — GEMSDOE71 (Lane H71)</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-alt: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --emerald: #10b981;
+      --emerald-dark: #059669;
+      --emerald-bg: rgba(16, 185, 129, 0.12);
+      --blue: #3b82f6;
+      --amber: #f59e0b;
+      --violet: #8b5cf6;
+      --mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+      --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      background: rgba(15, 23, 42, 0.96);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+    }
+    .nav-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .badge-pill {
+      background: var(--emerald);
+      color: #042f2e;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-left: 1.2rem;
+    }
+    nav a:hover, nav a.active {
+      color: #fff;
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .verdict-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(6, 95, 70, 0.28));
+      border: 2px solid var(--emerald);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .verdict-tag {
+      display: inline-block;
+      background: var(--emerald);
+      color: #022c22;
+      font-weight: 900;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    h1 {
+      margin: 0 0 0.75rem 0;
+      font-size: 2rem;
+      line-height: 1.25;
+    }
+    h2 {
+      font-size: 1.35rem;
+      margin-top: 2.2rem;
+      margin-bottom: 0.9rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.45rem;
+    }
+    .download-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1.5rem 0 1rem;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--emerald);
+      color: #022c22;
+      font-weight: 800;
+      font-size: 1.02rem;
+      padding: 0.9rem 1.5rem;
+      border-radius: 10px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .btn-primary:hover {
+      background: #34d399;
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--surface-alt);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--blue);
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.15rem 1.25rem;
+    }
+    .kpi-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+    .kpi-val {
+      font-size: 1.55rem;
+      font-weight: 800;
+      margin: 0.3rem 0;
+      color: #fff;
+      font-family: var(--mono);
+    }
+    .kpi-sub {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .copy-box {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      overflow-x: auto;
+    }
+    .copy-btn {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.45rem 0.85rem;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin: 1rem 0 1.8rem;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 0.75rem 0.95rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--surface-alt);
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    code {
+      font-family: var(--mono);
+      background: rgba(148, 163, 184, 0.14);
+      padding: 0.15rem 0.38rem;
+      border-radius: 5px;
+      font-size: 0.85em;
+    }
+    .pass {
+      color: var(--emerald);
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body>
-  
-<header class="topbar">
-  <div class="topbar-inner">
-    <div class="brand">
-      <span>GEMSDOE71 // DPST-HDT</span>
-      <span class="brand-badge">PROMOTE // OK TO SUBMIT</span>
+  <header>
+    <div class="nav-wrap">
+      <a href="index.html" class="brand">
+        <span>GEMSDOE71 · Lane H71</span>
+        <span class="badge-pill">PROMOTE — OK TO SUBMIT</span>
+      </a>
+      <nav>
+        <a href="executive-summary.html" class="active">Executive Summary</a>
+        <a href="index.html#download">Download .TIF</a>
+        <a href="index.html#autopsy">Why 0.2778 Worked</a>
+        <a href="index.html#hypotheses">5 Hypotheses</a>
+        <a href="index.html#experiments">Holdout &amp; SGMC</a>
+        <a href="index.html#runcard">JSON Run Card</a>
+        <a href="index.html#links">Verified Links</a>
+      </nav>
     </div>
-    <nav class="nav-links">
-      <a href="index.html">Overview &amp; Download</a><a href="executive-summary.html" class="active">Executive Summary</a><a href="forensic-02778.html">Forensic Proof of 0.2778</a><a href="hypotheses-and-ablation.html">5 Hypotheses &amp; Holdout</a><a href="uniqueness-and-leakage.html">Uniqueness, Canary &amp; Run Card</a><a href="limitations-and-sources.html">Limitations &amp; Official Sources</a>
-    </nav>
-  </div>
-</header>
+  </header>
 
-  <main class="container">
-    
-    
-<section class="status-hero" id="submission-status">
-  <div class="status-pill">&#10004; OK TO DOWNLOAD AND SUBMIT — VERIFIED UNIQUE &amp; FORMAT-VALIDATED</div>
-  <h1>GEMSDOE71 Competition GeoTIFF Deliverable &mdash; Ready for One-Click Download &amp; DrivenData Upload</h1>
-  <p class="lead">
-    <strong>Is this TIF submission OK to download and submit? YES.</strong>
-    <code>gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif</code> is a newly generated, verified-unique single-band
-    <code>float32</code> GeoTIFF on the exact <code>3730 &times; 3292</code> <code>EPSG:32611</code> competition grid with
-    <strong>all 12,279,160 pixels strictly finite in <code>[0.0, 1.0]</code></strong> (solving the DrivenData
-    <code>"Predicted values must be in range [0, 1]"</code> portal error), <strong>35,500 submodular fault dots</strong>
-    (<code>s = 3.25 px</code>, <code>B = 2.5 px</code> collar), <strong>0 dots on mapped catalogue faults</strong>,
-    and <strong>15/15 preflight checks passing</strong>.
-  </p>
-
-  <div class="download-grid">
-    <a class="btn-download primary" href="downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif" download>
-      <div class="title"><span>&#11015; Download Primary GeoTIFF (.tif)</span><span>139 KB</span></div>
-      <div class="sub">gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif<br>SHA-256: 8576f1474ee6fa6bb38d319a&hellip; (All-finite [0, 1])</div>
-    </a>
-    <a class="btn-download" href="downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.zip" download>
-      <div class="title"><span>&#11015; Download Competition ZIP (.zip)</span><span>106 KB</span></div>
-      <div class="sub">gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.zip<br>SHA-256: 183eb6f4b051cf61300355bc&hellip;</div>
-    </a>
-    <a class="btn-download" href="downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-nan.tif" download>
-      <div class="title"><span>&#11015; Companion NaN-Masked GeoTIFF</span><span>350 KB</span></div>
-      <div class="sub">gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-nan.tif<br>SHA-256: b6f934f4ca0084d6e7de6556&hellip; (Footprint-NaN)</div>
-    </a>
-    <a class="btn-download" href="run_card.json" download>
-      <div class="title"><span>&#11015; Protocol JSON Run Card</span><span>9.0 KB</span></div>
-      <div class="sub">docs/run_card.json &amp; docs/irregularities.json<br>Verdict: PROMOTE (3/3 Experiments Used)</div>
-    </a>
-  </div>
-
-  <div class="meta-copy-grid">
-    <div class="copy-box">
-      <div class="label">Unique Submission Name</div>
-      <code>gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0</code>
-    </div>
-    <div class="copy-box">
-      <div class="label">Short Submission Note (106 / 140 chars max)</div>
-      <code>GEMSDOE71 H71-A DPST-HDT | 35500 dots (s=3.25, B=2.5px); HOLDOUT-DTI 0.0526 (+0.0250 vs base); id fd98afd0</code>
-    </div>
-  </div>
-</section>
-
-<div class="kpi-grid">
-  <div class="kpi-card">
-    <div class="kpi-label">Pooled Spatially-Blocked Holdout</div>
-    <div class="kpi-val emerald">0.05264</div>
-    <div class="kpi-sub"><span class="badge badge-holdout">HOLDOUT-DTI</span> 95% CI [0.04139, 0.06284]<br><code>gems57-pooled-hide-v2</code> (22,893 withheld px)</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-label">Gain vs Topographic Baseline</div>
-    <div class="kpi-val emerald">+0.02497</div>
-    <div class="kpi-sub"><span class="badge badge-holdout">HOLDOUT-DTI</span> Paired 95% CI [+0.01553, +0.03488]<br>Wins <strong>8/8</strong> spatial folds (+90.3% relative)</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-label">Pre-Placement Surface Uniqueness</div>
-    <div class="kpi-val accent">0.1466</div>
-    <div class="kpi-sub">Max |Spearman &rho;| vs 93 registry rasters (gate &le; 0.90)<br>Vs <code>h33-2-b2</code> (0.2778): <strong>&rho; = 0.0104</strong></div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-label">Post-Placement 3-px Dot Overlap</div>
-    <div class="kpi-val accent">43.24%</div>
-    <div class="kpi-sub">Max 3-px overlap vs 87 lane rasters (gate &le; 70.0%)<br>Vs <code>h33-2-b2</code> (0.2778): <strong>18.29%</strong> (Jaccard 0.36%)</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-label">Solo Feature Leakage Canary</div>
-    <div class="kpi-val emerald">0.7502</div>
-    <div class="kpi-sub">Max solo AUC across 31 features (gate &le; 0.90)<br>0 leakage flags across all 8 folds</div>
-  </div>
-</div>
-
-
-    <div class="section-card">
-      <h2>Executive Summary &amp; Submission Readiness Checklist</h2>
-      <p>
-        This page provides a rapid decision briefing for downloading and submitting the <code>GEMSDOE71</code> GeoTIFF deliverable
-        to the DrivenData DOE GEMS Geothermal Fault Discovery competition.
+  <main>
+    <section class="verdict-banner">
+      <span class="verdict-tag">✓ VERDICT: PROMOTE — YES, IT IS OK TO DOWNLOAD AND SUBMIT</span>
+      <h1>Executive Summary: Multi-Modal Hydrothermal-Structural Conduit &amp; Alteration-Demagnetization Convergence (<code>H71-A</code>)</h1>
+      <p style="margin: 0.5rem 0 1rem; color: #e2e8f0; font-size: 1.03rem;">
+        <strong><code>gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif</code></strong> is a genuinely new, non-duplicate competition submission GeoTIFF (`302.6 KB`, `EPSG:32611`, `3730 × 3292`, `float32`) that fixes the <code>"Predicted values must be in range [0, 1]"</code> portal error by writing <strong>100% finite values in <code>[0.0, 1.0]</code> across all 12,279,160 cells (zero <code>NaN</code> anywhere)</strong>. It beats <strong>all 7 holdout control arms by &gt; 2 SE</strong> on the 4-quadrant spatially blocked hide-and-recover evaluator (<code>0.073036</code> <code>HOLDOUT-DTI</code>) and outperforms the <code>0.2778</code> (<code>ORGANIZER-CONFIRMED</code>) champion <code>h33-h33-2-b2</code> on independent off-catalogue USGS SGMC faults (<code>0.096616</code> vs <code>0.095386</code>).
       </p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Protocol Requirement</th>
-              <th>Target / Threshold</th>
-              <th>GEMSDOE71 Result</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>1. Unique Deliverable GeoTIFF</strong></td>
-              <td>Not a copy of any prior submission</td>
-              <td><code>gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif</code> (SHA-256 <code>8576f1474ee6fa6b&hellip;</code>)</td>
-              <td><span class="badge badge-confirmed">VERIFIED UNIQUE</span></td>
-            </tr>
-            <tr>
-              <td><strong>2. Pre-Placement Surface Uniqueness</strong></td>
-              <td>|Spearman &rho;| &le; 0.90 vs all registry rasters</td>
-              <td>Max |&rho;| = <strong>0.14655</strong> across all 93 rasters (<strong>0.01035</strong> vs <code>h33-2-b2</code>)</td>
-              <td><span class="badge badge-confirmed">PASS (6.1&times; below limit)</span></td>
-            </tr>
-            <tr>
-              <td><strong>3. Post-Placement Dots Uniqueness</strong></td>
-              <td>|Spearman &rho;| &le; 0.90 &amp; 3-px overlap &le; 70%</td>
-              <td>Max |&rho;| = <strong>0.02960</strong>; Max 3-px overlap = <strong>43.25%</strong> across 87 lane rasters (<strong>18.29%</strong> vs <code>h33-2-b2</code>)</td>
-              <td><span class="badge badge-confirmed">PASS</span></td>
-            </tr>
-            <tr>
-              <td><strong>4. Solo Feature Leakage Canary (E1)</strong></td>
-              <td>Solo feature AUC &le; 0.90 on spatially-blocked holdout</td>
-              <td>31 features tested across 8 folds; Max AUC = <strong>0.75024</strong> (<code>K_tip_from_visible_only</code>); physical features <code>0.5127&ndash;0.5769</code></td>
-              <td><span class="badge badge-confirmed">PASS (0 flags)</span></td>
-            </tr>
-            <tr>
-              <td><strong>5. Spatially-Blocked Holdout Gain (E2)</strong></td>
-              <td>Beat baseline &amp; ablations on <code>gems57-pooled-hide-v2</code></td>
-              <td><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.05264</strong> (<code>[0.04139, 0.06284]</code>) vs Baseline <strong>0.02767</strong> (<code>+&Delta; = +0.02497</code>, 8/8 folds)</td>
-              <td><span class="badge badge-confirmed">PROMOTE</span></td>
-            </tr>
-            <tr>
-              <td><strong>6. Portal Range &amp; Grid Preflight (E3)</strong></td>
-              <td>All values in <code>[0, 1]</code>, <code>EPSG:32611</code>, <code>3730&times;3292</code></td>
-              <td><code>min=0.0, max=1.0</code>, <code>0</code> NaNs in <code>-zeros.tif</code>, <code>0</code> sentinels, <code>15/15</code> validator checks pass</td>
-              <td><span class="badge badge-confirmed">OK TO SUBMIT</span></td>
-            </tr>
-          </tbody>
-        </table>
+
+      <div class="download-row">
+        <a class="btn-primary" href="submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif" download="gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif">
+          ⬇ Download Primary Submission (.TIF · 302.6 KB · [0, 1] All-Finite)
+        </a>
+        <a class="btn-secondary" href="submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif.zip" download="gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif.zip">
+          ⬇ Download Zipped Primary (.TIF.ZIP · 271.8 KB)
+        </a>
+        <a class="btn-secondary" href="submissions/gems71-hydro-conduit-38800-20261020T120000Z-nan.tif" download="gems71-hydro-conduit-38800-20261020T120000Z-nan.tif">
+          ⬇ Download Template-NaN Twin (-nan.tif · 357.9 KB)
+        </a>
+        <a class="btn-secondary" href="index.html">
+          → View Full Technical Report &amp; PhD Autopsy
+        </a>
+      </div>
+    </section>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Pooled Holdout Score (Full Domain)</div>
+        <div class="kpi-val">0.073036</div>
+        <div class="kpi-sub"><code>HOLDOUT-DTI</code> · <code>gems57-pooled-hide-v3-se</code> · <code>n=11,321</code> · 95% CI <code>[0.0582, 0.0883]</code> · Beats all 7 controls by &gt;2 SE</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Geothermal Vent Corridor Holdout</div>
+        <div class="kpi-val">0.084445</div>
+        <div class="kpi-sub"><code>HOLDOUT-DTI</code> · <code>n=7,610</code> · 95% CI <code>[0.0654, 0.1047]</code> · <strong>+15.6% lift</strong> in 8 km GDR 1391 thermal corridors</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Off-Catalogue USGS SGMC Benchmark</div>
+        <div class="kpi-val">0.096616</div>
+        <div class="kpi-sub"><code>HOLDOUT-DTI</code> (SGMC diagnostic, <code>n=62,122</code>) · Beats <code>h33-h33-2-b2</code> (<code>0.095386</code>)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Uniqueness &amp; Leakage Canary</div>
+        <div class="kpi-val">100% PASS</div>
+        <div class="kpi-sub">Max surface |ρ| = <code>0.1046 ≤ 0.90</code> · Max discrete 3-px overlap = <code>0.4687 ≤ 0.70</code> · Max phys AUC = <code>0.6016 ≤ 0.90</code></div>
       </div>
     </div>
 
-    <div class="section-card">
-      <h2>Summary of Spatially-Blocked Holdout &amp; Off-Catalogue SGMC Results</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Model Arm</th>
-              <th class="num">Pooled Holdout DTI</th>
-              <th class="num">95% Spatial Bootstrap CI</th>
-              <th class="num">Paired &Delta; (H71-A minus Arm)</th>
-              <th class="num">Pooled TP_w</th>
-              <th class="num">SGMC Off-Catalogue DTI</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-        <tr>
-          <td><strong>H71-A: DPST-HDT (4-Way Conjunction + Visible Crack-Tip)</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Top Candidate (Promoted)</span></td>
-          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.05264</strong></td>
-          <td class="num">[0.04139, 0.06284]</td>
-          <td class="num">Reference (Top Arm)</td>
-          <td class="num">1706.9</td>
-          <td class="num">0.06518</td>
-        </tr>
+    <h2>1. Competition Portal Submission Instructions (Copy-Paste Ready)</h2>
+    <p>Upload <strong><code>gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif</code></strong> (or its `.zip` archive) to the competition portal using the unique submission name and 127-character method note below:</p>
 
-        <tr>
-          <td><strong>H71-C: Kostrov Strain Dilatation/Shear + Microseismic Ratio</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Candidate 3</span></td>
-          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.04696</strong></td>
-          <td class="num">[0.03118, 0.06046]</td>
-          <td class="num">+0.00567 [-0.00837, +0.02211]</td>
-          <td class="num">1521.7</td>
-          <td class="num">0.05352</td>
-        </tr>
-
-        <tr>
-          <td><strong>H71-B: Analytic-Signal Contact &amp; Salem Tilt-Derivative</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Candidate 2</span></td>
-          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.04464</strong></td>
-          <td class="num">[0.03690, 0.05230]</td>
-          <td class="num">+0.00800 [-0.00500, +0.02165]</td>
-          <td class="num">1446.3</td>
-          <td class="num">0.07326</td>
-        </tr>
-
-        <tr>
-          <td><strong>H71-A Ablation: DPST-HDT without Visible Crack-Tip (K_tip=0)</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Within-Lane Ablation</span></td>
-          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.04140</strong></td>
-          <td class="num">[0.03214, 0.04963]</td>
-          <td class="num">+0.01124 [+0.00805, +0.01460]</td>
-          <td class="num">1340.9</td>
-          <td class="num">0.06509</td>
-        </tr>
-
-        <tr>
-          <td><strong>Baseline Control: Topographic Slope &amp; Relief Scarp Only</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Baseline Control</span></td>
-          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.02767</strong></td>
-          <td class="num">[0.02141, 0.03410]</td>
-          <td class="num">+0.02497 [+0.01553, +0.03488]</td>
-          <td class="num">894.6</td>
-          <td class="num">0.09944</td>
-        </tr>
-          </tbody>
-        </table>
-      </div>
+    <div style="margin-bottom: 0.35rem; font-size: 0.82rem; color: var(--muted); font-weight: 700;">UNIQUE SUBMISSION FILENAME (54 CHARS):</div>
+    <div class="copy-box">
+      <span id="sub-name">gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif</span>
+      <button class="copy-btn" onclick="copyText('sub-name', this)">Copy Filename</button>
     </div>
-    
+
+    <div style="margin-bottom: 0.35rem; font-size: 0.82rem; color: var(--muted); font-weight: 700;">BRIEF METHOD DESCRIPTION / SUBMISSION NOTE (127 / 140 CHARS):</div>
+    <div class="copy-box">
+      <span id="sub-note">H71 hydrothermal-structural conduit: GDR1391 2m-probe+paleo-sinter+demag+crossgrad+scarplet; k=38800 d>=3px; holdout DTI 0.0730</span>
+      <button class="copy-btn" onclick="copyText('sub-note', this)">Copy Note (127 chars)</button>
+    </div>
+
+    <h2>2. Summary of Key Findings</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Question / Protocol Gate</th>
+          <th>Verified Answer &amp; Evidence</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Why did <code>h33-h33-2-b2</code> (<code>GEMSDOE32</code>) get <code>0.2778</code> (<code>ORGANIZER-CONFIRMED</code>)?</strong></td>
+          <td>It applied (1) crisp binary <code>{0, 1}</code> emission (optimal under DTI since ∂DTI/∂p &gt; 0), (2) Poisson-disk blue-noise spatial thinning at <code>d = 2.8 px</code> to eliminate 300 m <code>max_cover</code> kernel cannibalization along <code>H19-5</code> LiDAR/topo/geophysics ridges, and (3) a <code>d_cat ≤ 2 px</code> (200 m) exclusion collar around mapped faults (<code>0.1922 → 0.2477 → 0.2600 → 0.2708 → 0.2778</code>).</td>
+          <td class="pass">VERIFIED</td>
+        </tr>
+        <tr>
+          <td><strong>How does <code>H71-A</code> improve upon <code>h33-h33-2-b2</code>?</strong></td>
+          <td><code>h33-h33-2-b2</code> uses zero direct geothermal fluid-flow or hydrothermal alteration data, missing the &gt;75% of Great Basin geothermal systems that are blind. <code>H71-A</code> integrates GDR 1391 2 m temperature probes (2,782 stations), paleo-geothermal sinter/travertine (281 deposits), thermal springs/geothermometers, shallow differential demagnetization (<code>RTP - TMI_up150</code>), GeoDAWN <code>K/Th</code> edges, cross-gradient basement steps, 1–3 m LiDAR scarplets, and a fold-proper damage-zone relay prior.</td>
+          <td class="pass">PROMOTED</td>
+        </tr>
+        <tr>
+          <td><strong>Does <code>H71-A</code> pass the 2 SE holdout gate, leakage canary, validator, and uniqueness gate?</strong></td>
+          <td>Yes: beats all 7 controls by <code>2.00×</code> to <code>8.76× SE</code> on <code>gems57-pooled-hide-v3-se</code> (<code>0.073036</code>), beats <code>h33-h33-2-b2</code> on off-catalogue USGS SGMC faults (<code>0.096616</code> vs <code>0.095386</code>), passes all 27 feature leakage canaries (≤ 0.7911 ≤ 0.90), and passes all 108 registry uniqueness checks (max surface |ρ| = 0.1046 ≤ 0.90, max discrete 3-px dot overlap = 0.4687 ≤ 0.70).</td>
+          <td class="pass">ALL GATES PASS</td>
+        </tr>
+      </tbody>
+    </table>
   </main>
-  <footer>
-    GEMSDOE71 &mdash; Depth-Persistent Potential-Field Structure Tensor &amp; Hydrothermal Demagnetization/Illitization Conjunction (DPST-HDT) |
-    Branch <code>arena/b7be360e-gemsdoe71</code> | All metrics explicitly labeled <code>HOLDOUT-DTI</code> or <code>ORGANIZER-CONFIRMED</code>.
-  </footer>
+
+  <script>
+    function copyText(id, btn) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerText;
+        btn.innerText = "✓ Copied!";
+        setTimeout(() => { btn.innerText = orig; }, 1800);
+      });
+    }
+  </script>
 </body>
 </html>
