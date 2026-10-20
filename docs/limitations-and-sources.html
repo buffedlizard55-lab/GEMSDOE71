@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Limitations &amp; Official Sources | GEMSDOE71 Geothermal Fault Discovery</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span>GEMSDOE71 // DPST-HDT</span>
+      <span class="brand-badge">PROMOTE // OK TO SUBMIT</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Overview &amp; Download</a><a href="executive-summary.html">Executive Summary</a><a href="forensic-02778.html">Forensic Proof of 0.2778</a><a href="hypotheses-and-ablation.html">5 Hypotheses &amp; Holdout</a><a href="uniqueness-and-leakage.html">Uniqueness, Canary &amp; Run Card</a><a href="limitations-and-sources.html" class="active">Limitations &amp; Official Sources</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container">
+    
+    <div class="section-card">
+      <h2>1. Data Access, Sandbox Network Constraints &amp; Methodological Limitations</h2>
+      <div class="callout amber">
+        <strong>Sandbox Outbound Network Whitelist Disclosure:</strong>
+        This execution environment restricts outbound internet traffic strictly to six hosts:
+        <code>github.com</code>, <code>codeload.github.com</code>, <code>api.github.com</code>,
+        <code>registry.npmjs.org</code>, <code>pypi.org</code>, and <code>files.pythonhosted.org</code>.
+        Direct runtime HTTP queries to external geophysical portals (such as live USGS ScienceBase/WFS APIs, OpenTopography REST endpoints,
+        or NASA ASF ARIA Sentinel-1 GUNW servers) are blocked by the sandbox firewall.
+      </div>
+      <p>
+        <strong>How We Addressed Data Access Reproducibly:</strong>
+        All official competition rasters and pre-aligned external public-domain geophysical datasets were fetched from verified GitHub release/repository
+        blobs via <code>scripts/download_competition_data.sh</code> and cryptographically verified against <code>registry/data_manifest.json</code>
+        before a single line of modeling ran:
+      </p>
+      <ul>
+        <li><code>training_features.tif</code> (19 float32 bands, <code>3730 &times; 3292</code>, <code>EPSG:32611</code>, SHA-256 <code>4371c82e7acccbcdeba9ea8aa19bee2bf20be64fa6a4bfd93fd1bd4b6b1bb244</code>) &mdash; 100% verified.</li>
+        <li><code>sample_submission.tif</code> (SHA-256 <code>5fe302dde67cc22dc5ebdf5dadba35fa2bb9fc7fa6ddbd66f8efbd20f0b47c9e</code>, <code>5,167,373</code> finite footprint pixels) &mdash; 100% verified.</li>
+        <li><code>labels.tif</code> &amp; <code>existing_faults.tif</code> (SHA-256 <code>7ba308cc0fe3fd3ac1aeacbaec8be31dd3dc0ce4fdbe0ffbbbfeb6155d622ba2</code>, <code>60,988</code> mapped positive pixels) &mdash; 100% verified.</li>
+        <li><code>geodawn_extensions_u8.tif</code> (8 uint8 bands: <code>TMI_up150</code>, <code>TMI_up500</code>, <code>HGM_mag</code>, <code>Tilt_mag</code>, <code>Grav_resid</code>, <code>HGM_grav</code>, <code>Terr_ratio</code>, <code>ThK</code>; SHA-256 <code>479fa12c6a98ffaa829eb5f5f59da62ab1a71fb40f8245e5b68bfdf011bf815f</code>) &mdash; 100% verified.</li>
+        <li><code>geodawn_rad_u8.tif</code> (4 uint8 bands: radiometric <code>K</code>, <code>Th</code>, <code>U</code>, <code>Dose</code>; SHA-256 <code>8dc9d9bd8c0c146e553429a3b64ca59966f09f8470cd72eb10d24b92e15a7bf3</code>) &mdash; 100% verified.</li>
+        <li><code>lidar_scarp_features_u8.tif</code> (8 uint8 bands from 1 m Great Basin LiDAR DEMs; SHA-256 <code>bc9150257e83f793256fa591be7b73915a6083b9d8ff13e63783b5d69bdad4fc</code>) &mdash; 100% verified.</li>
+        <li><code>derived_sgmc_faults_100m_u8.tif</code> (USGS State Geologic Map Compilation fault traces rasterized at 100 m; SHA-256 <code>7a7169e5082e1df41819d2b0290e7e5607253e048b9944d0759f3c2d810cc6c5</code>, <code>83,593</code> positive footprint pixels, <code>62,703</code> off-catalogue pixels beyond <code>d &gt; 2 px</code>) &mdash; 100% verified.</li>
+        <li><code>gdr1391_geochem.csv</code>, <code>gdr1391_shallow_temp.csv</code>, <code>gdr1391_well_logs.csv</code>, <code>gdr1391_springs.csv</code> (DOE GDR Submission 1391 Great Basin INGENIOUS dataset) &mdash; 100% verified.</li>
+      </ul>
+
+      <h3>Key Scientific Limitations</h3>
+      <ol>
+        <li><strong>Local Holdout vs. Hidden Test Ground Truth:</strong> Local spatially-blocked hide-and-recover evaluation (<code>gems57-pooled-hide-v2</code>) withholds mapped USGS/INGENIOUS catalogue fault blocks (<code>22,893</code> positive pixels across 8 folds), whereas the DrivenData leaderboard evaluates predictions against both mapped faults and newly compiled blind/unmapped geothermal faults. Consequently, <span class="badge badge-holdout">HOLDOUT-DTI</span> (<code>0.05264</code>) and <span class="badge badge-confirmed">ORGANIZER-CONFIRMED</span> leaderboard DTI (<code>0.2778</code>) measure different ground-truth densities and must never be conflated or projected onto one another.</li>
+        <li><strong>Coarse Native Resolution of Geodetic &amp; Seismic Grids:</strong> In <code>training_features.tif</code>, geodetic strain rates (<code>geod_shearrate</code>, <code>geod_dilaterate</code>, <code>geod_2ndinv</code>) and earthquake density grids (<code>ieq_n100a15</code>, <code>deq_n100a15</code>) are regional (~5&ndash;15 km) fields interpolated onto the 100 m grid. They provide regional tectonic regime weighting rather than 100 m fault-core localization.</li>
+        <li><strong>Incomplete 1 m LiDAR Swath Coverage:</strong> The 1 m LiDAR scarp bands (<code>lidar_scarp_features_u8.tif</code>) cover priority fault valleys and geothermal play fairways rather than 100% of the Great Basin footprint; our <code>S_scarp</code> formulation smoothly falls back to 100 m <code>det_elev</code> and <code>det_elev_slope</code> where LiDAR swaths are zero.</li>
+      </ol>
+    </div>
+
+    <div class="section-card">
+      <h2>2. Verified Official Competition &amp; Scientific Sources</h2>
+      <ul>
+        <li><strong>DrivenData DOE GEMS Competition Portal:</strong> <em>Geothermal Exploration with Machine Learning (GEMS) &mdash; Fault Discovery Challenge</em>, funded by the U.S. Department of Energy Geothermal Technologies Office (GTO). Official competition URL: <a href="https://www.drivendata.org/competitions/302/competition-gems-geothermal/" target="_blank" rel="noopener">https://www.drivendata.org/competitions/302/competition-gems-geothermal/</a></li>
+        <li><strong>DOE Geothermal Data Repository (GDR) Submission 1391 (INGENIOUS Project):</strong> Faulds, J. E., Ayling, B. F., Coolbaugh, M., Hinz, N., et al. (Nevada Bureau of Mines and Geology / University of Nevada, Reno), <em>INnovative Geothermal Exploration through Novel Investigations of Undiscovered Systems (INGENIOUS) Great Basin Dataset</em>, DOE GDR Submission 1391: <a href="https://gdr.openei.org/submissions/1391" target="_blank" rel="noopener">https://gdr.openei.org/submissions/1391</a></li>
+        <li><strong>USGS Earth Mapping Resources Initiative (Earth MRI) / GeoDAWN:</strong> U.S. Geological Survey airborne magnetic and radiometric geophysical surveys across Nevada and the Great Basin: <a href="https://www.usgs.gov/special-topics/earth-mri" target="_blank" rel="noopener">https://www.usgs.gov/special-topics/earth-mri</a></li>
+        <li><strong>USGS Quaternary Fault and Fold Database of the United States:</strong> U.S. Geological Survey Hazards Program fault trace compilation: <a href="https://www.usgs.gov/natural-hazards/earthquake-hazards/faults" target="_blank" rel="noopener">https://www.usgs.gov/natural-hazards/earthquake-hazards/faults</a></li>
+        <li><strong>USGS State Geologic Map Compilation (SGMC):</strong> Horton, J. D., San Juan, C. A., and Stoeser, D. B. (2017), <em>The State Geologic Map Compilation (SGMC) geodatabase of the conterminous United States</em>, USGS Data Series 1052: <a href="https://doi.org/10.3133/ds1052" target="_blank" rel="noopener">https://doi.org/10.3133/ds1052</a></li>
+        <li><strong>Structural Geology &amp; Potential-Field Foundations:</strong>
+          <ul>
+            <li>Faulds, J. E., &amp; Hinz, N. H. (2015), <em>Favorable tectonic and structural settings of geothermal systems in the Great Basin region, western USA: Proxies for discovering blind geothermal systems</em>, Proceedings World Geothermal Congress 2015.</li>
+            <li>Salem, A., Williams, S., Fairhead, J. D., Ravat, D., &amp; Smith, R. (2007), <em>Tilt-depth method: A simple depth estimation method using first-order magnetic derivatives</em>, The Leading Edge, 26(12), 1502&ndash;1505.</li>
+            <li>Roest, W. R., Verhoef, J., &amp; Pilkington, M. (1992), <em>Magnetic interpretation using the 3-D analytic signal</em>, Geophysics, 57(1), 116&ndash;125.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    
+  </main>
+  <footer>
+    GEMSDOE71 &mdash; Depth-Persistent Potential-Field Structure Tensor &amp; Hydrothermal Demagnetization/Illitization Conjunction (DPST-HDT) |
+    Branch <code>arena/b7be360e-gemsdoe71</code> | All metrics explicitly labeled <code>HOLDOUT-DTI</code> or <code>ORGANIZER-CONFIRMED</code>.
+  </footer>
+</body>
+</html>

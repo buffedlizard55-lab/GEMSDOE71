@@ -1,0 +1,73 @@
+{
+  "schema_version": "GEMSDOE71-IRREGULARITIES-v1",
+  "generated_utc": "2026-10-20T20:06:00Z",
+  "summary": "Four technical and data irregularities identified during line-by-line forensic verification and resolved in the GEMSDOE71 pipeline.",
+  "irregularities": [
+    {
+      "id": "IR-71-DATA-01",
+      "severity": "HIGH",
+      "category": "Raw Feature Raster Sentinel",
+      "title": "Unflagged float32 sentinel -3.4028235e+38 inside training_features.tif (nodata=None)",
+      "evidence": {
+        "file": ".cache/training_features.tif",
+        "sha256": "4371c82e7acccbcdeba9ea8aa19bee2bf20be64fa6a4bfd93fd1bd4b6b1bb244",
+        "gdal_nodata_tag": null,
+        "total_sentinel_band_pixels_in_footprint": 58171,
+        "unique_footprint_pixels_affected": 3073,
+        "bands_with_3061_sentinel_pixels": 18,
+        "band_6_tc_sentinel_pixels": 3073
+      },
+      "impact": "Because the GeoTIFF nodata tag is None, rasterio.read(masked=True) does not mask the -3.4028235e+38 cells. Linear feature combinations or unclipped scores propagate -3.4e38 into the output array, triggering DrivenData's 'Predicted values must be in range [0, 1]' rejection.",
+      "resolution": "scripts/prepare_data.py explicitly filters (val <= -1e30) | ~np.isfinite(val) to NaN before robust median/IQR standardization and imputes non-finite footprint cells to 0.0 (the robust median)."
+    },
+    {
+      "id": "IR-71-MASK-02",
+      "severity": "CRITICAL",
+      "category": "Portal Validation Failure Root Cause",
+      "title": "4,601-pixel footprint mask mismatch between sample_submission.tif (5,167,373 px) and training_features.tif (5,165,852 px)",
+      "evidence": {
+        "sample_submission_finite_pixels": 5167373,
+        "training_features_band1_finite_pixels": 5165852,
+        "in_sample_submission_but_sentinel_in_features": 3061,
+        "in_features_but_nan_in_sample_submission": 1540,
+        "total_symmetric_difference_pixels": 4601
+      },
+      "impact": "If a competitor defines their valid study mask from training_features.tif (5,165,852 px) and writes NaN outside that mask, 3,061 pixels inside sample_submission.tif's 5,167,373-pixel evaluation mask are NaN. Since IEEE-754 comparisons evaluate (np.nan >= 0.0) & (np.nan <= 1.0) as False, any portal check of ((pred >= 0) & (pred <= 1)).all() on the evaluation mask or full grid raises 'Predicted values must be in range [0, 1]'.",
+      "resolution": "Primary submission gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif writes 0.0 outside the footprint so all 12,279,160 float32 pixels are finite in {0.0, 1.0}. Companion -nan.tif is masked strictly by sample_submission.tif's 5,167,373-pixel mask."
+    },
+    {
+      "id": "IR-71-REG-03",
+      "severity": "MEDIUM",
+      "category": "Registry Uniqueness Audit Stratification",
+      "title": "6 of 93 registry rasters are dense blanket lattices or full-footprint continuous surfaces (73.97% to 100.00% 3-px footprint coverage)",
+      "evidence": {
+        "total_registry_rasters": 93,
+        "hypothesis_lane_rasters": 87,
+        "blanket_or_surface_controls": [
+          {"name": "gems68-autoctx-40000-20261012T014104Z-surface-zeros.tif", "positive_pixels": 5167373, "footprint_3px_coverage": 1.0},
+          {"name": "gems13_r13_lattice_s5_00904.tif", "positive_pixels": 206895, "footprint_3px_coverage": 0.9987},
+          {"name": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif", "positive_pixels": 311617, "footprint_3px_coverage": 0.9582},
+          {"name": "gems13_r14_union_tips10_lat6.tif", "positive_pixels": 192231, "footprint_3px_coverage": 0.7620},
+          {"name": "gems13_r11_greedy_mp.tif", "positive_pixels": 272853, "footprint_3px_coverage": 0.7397},
+          {"name": "gems8_hedge_v2_01563.tif", "positive_pixels": 227507, "footprint_3px_coverage": 0.3984}
+        ],
+        "max_hypothesis_lane_3px_footprint_coverage": 0.2836
+      },
+      "impact": "Because a continuous diagnostic surface has positive values on 100% of footprint pixels (and a 5-px lattice covers 99.87% of footprint pixels within 3 px), any raster's 3-px dot overlap against those controls is tautologically ~1.0 even when Spearman rank correlation is near zero (-0.0002 to 0.1466).",
+      "resolution": "src/gems71/uniqueness.py audits all 93 rasters, enforces |Spearman rho| <= 0.90 across all 93 rasters on both pre-placement surface (max 0.1466) and post-placement dots (max 0.0861), and enforces 3-px dot overlap <= 0.70 across all 87 hypothesis-lane rasters (max 0.4325) while explicitly reporting the 6 blanket/surface controls."
+    },
+    {
+      "id": "IR-71-LEAK-04",
+      "severity": "HIGH",
+      "category": "Local Validation Protocol",
+      "title": "labels.tif and existing_faults.tif are byte-identical (SHA-256 7ba308cc...); catalogue distance features leak if not recomputed per fold",
+      "evidence": {
+        "labels_sha256": "7ba308cc0fe3fd3ac1aeacbaec8be31dd3dc0ce4fdbe0ffbbbfeb6155d622ba2",
+        "existing_faults_sha256": "7ba308cc0fe3fd3ac1aeacbaec8be31dd3dc0ce4fdbe0ffbbbfeb6155d622ba2",
+        "positive_pixels_in_footprint": 60988
+      },
+      "impact": "Computing distance-to-fault or tip-stress features on the full existing_faults.tif before splitting folds leaks the withheld target segments (solo AUC > 0.99).",
+      "resolution": "All E1 and E2 evaluations use gems57-pooled-hide-v2 spatially-blocked hide-and-recover folds where K_tip(visible) is computed strictly from fold.visible_faults (solo AUC = 0.7502 <= 0.90)."
+    }
+  ]
+}
