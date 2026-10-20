@@ -1,9 +1,11 @@
-# Restored competition mirrors are large and are not the submission.
-# Pins and the fetch script are the reproducible record.
+# Competition inputs and large mirrors stay out of git.
+# The audit GeoTIFF under docs/downloads/ and submissions/ is small and is tracked on purpose.
 /data/
+/runs/
 registry/rasters/
 __pycache__/
 *.pyc
+.pytest_cache/
 .venv/
 *.partial
 .DS_Store

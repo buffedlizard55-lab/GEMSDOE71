@@ -253,7 +253,10 @@ def index_body():
 {"".join(f"<tr><td>{row['rank']}</td><td>{row['participant']}</td><td>{row['public_dw_tversky']:.4f}</td></tr>" for row in FEED["rows"][:8])}
 </tbody>
 </table>
-<p class="muted">Ranks 9–23 are in the feed file. Lower rows were not transcribed from that fetch.</p>
+<p class="muted">Ranks 9–23 are in the feed file. Lower rows were not transcribed from that fetch. An earlier session on this repository could not reach the leaderboard and flagged the brief's 0.4413 / 0.3774 / 0.3195 conflict as F6. This fetch resolves the current public top: 0.4413. It does not rewrite the owner-reported site scores in <a href="data/user_reported_scores.csv">data/user_reported_scores.csv</a>.</p>
+
+<h2>Earlier scaffold, still in the repository</h2>
+<p>A previous session merged a pipeline under <code>gems/</code> and a hub that correctly said no file had been scored. That hub is no longer the front page. Its notes remain: <a href="RESEARCH.md">RESEARCH.md</a>, <a href="FLAGS.md">FLAGS.md</a>, <a href="SOURCES.md">SOURCES.md</a>. Do not run <code>scripts/make_submission.py</code> and treat the output as this audit file. The only file this site is willing to name is the one on the plate, and it is not cleared.</p>
 
 <h2>Format receipt</h2>
 <p>Re-opened from disk after the writer finished. The portal message &quot;Predicted values must be in range [0, 1]&quot; is produced by values outside that range and by a nodata sentinel such as −3.4×10<sup>38</sup>. This zeros file has neither.</p>
@@ -290,7 +293,8 @@ def executive_body():
   <li>Confirm the home-page plate says <strong>OK TO SUBMIT</strong>. If it says anything else, stop. Today's plate says not to submit.</li>
   <li>Download the <code>-zeros.tif</code> named on the plate. Do not upload the <code>-nan.tif</code> twin. The zip is the same zeros file, packed, and is not a better upload.</li>
   <li>Check the sha256 of the downloaded file against the sha256 on the plate. If they differ, do not upload.</li>
-  <li>Submit that GeoTIFF. The problem page requires one single-band file. Keep the note at or under 140 characters and use the name printed on the plate if the form asks for one. This session did not re-open the form, so it does not claim a particular field label.</li>
+  <li>On the form the requester pasted into the project brief: choose the file under <em>File to submit</em>. The brief quotes the form as accepting “a single-band GeoTIFF (.tif) file, or a .zip file containing a single GeoTIFF,” which must match the submission format's CRS, shape, and geotransform. This session did not log in and re-open that form; the wording is the requester's, not a new screenshot.</li>
+  <li>Paste the note from the plate into <em>Note (optional)</em>. The brief's example of that field is “clustering with k=25”. Keep the note at or under 140 characters. The unique name is printed on its own line in case a later form asks for one separately.</li>
   <li>Record the organizer receipt. Until that receipt exists, the score is not ORGANIZER-CONFIRMED, no matter what a holdout number was.</li>
 </ol>
 
