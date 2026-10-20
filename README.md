@@ -1,83 +1,55 @@
-# GEMSDOE71 — GEMS Prize geothermal-fault submission pipeline
+# GEMSDOE71
 
-> **READ FIRST, EVERY SESSION.** This README carries the full project brief (under *Project brief*, verbatim). Before any work, re-read the brief and the **Core values**, then check the **Status** section against it. Do not claim a score that is not labelled HOLDOUT-DTI or ORGANIZER-CONFIRMED.
+Read this file before changing the lane, the metric, or the submission file. The full requester brief is below, under **Project brief**. Read it at the start of every session.
 
-## Status (2026-10-20)
+**Verdict: negative. Not OK to submit.** The audit page is [`docs/index.html`](docs/index.html). The file is downloadable. It is not cleared for a DrivenData slot. `slots_used` is 0.
 
-| Item | State |
+| | |
 |---|---|
-| Submission TIF | **None yet.** The competition labels and features are not in this repo. DrivenData needs a login, and the public Dropbox mirrors were unreachable from the build sandbox. |
-| Pipeline | Built and tested: holdout evaluator, leakage canary, trivial baseline, validated TIF writer. `pytest`: 16 passed. |
-| Holdout DTI | **Not run** on real data. |
-| Lane check vs other rasters | **Not run.** Registry rasters are on GEMSDOE sites that are unreachable from here. |
-| Research | 5 ranked hypotheses in [`docs/RESEARCH.md`](docs/RESEARCH.md). None validated. |
-| Irregularities | [`docs/FLAGS.md`](docs/FLAGS.md) — 12 flags, including bugs found in the reference notebook. |
-| Sources | [`docs/SOURCES.md`](docs/SOURCES.md) — each row says what was checked here and what is blocked. |
-| Site | GitHub Pages (source `main` `/`; the root redirects to `docs/`): hub [`docs/index.html`](docs/index.html), executive summary [`docs/executive-summary.html`](docs/executive-summary.html). |
+| File | `docs/downloads/gemsdoe71-h71-ventconduit-20261020T200548Z-9dc1668b-zeros.tif` |
+| sha256 | `c5c63e82a1f788fe2c30463a08b4e72d8c477ce3154d9727033bb40efa01a4d2` |
+| Name | `GEMSDOE71-H71-vent-conduit` |
+| Note (116 chars) | `GEMSDOE71 H71 vent-conduit; sinter/spring axes x mag-edge; NMS3 off-catalogue; local checks only; no organiser score` |
+| HOLDOUT-DTI | 0.001538, 95% CI [0.000219, 0.003261], evaluator `gems57-pooled-hide-v2`, 11,321 withheld positives |
+| Organizer score | none |
 
-## Core values
+## What this checkout found
 
-- **Maximize P(Win).** In every decision, weigh trade-offs, assess risk, and choose the path most likely to succeed.
-- **Own the Outcome.** Own results end to end. Treat failure and success as signals and improve from them.
+H71 tested whether sinter, travertine, and spring-cluster axes, confirmed by a magnetic edge, mark catalogue-missed faults. They do not, on this holdout. The winner of the three preregistered experiments does not beat a mass-matched random draw. The file is a valid, unique, finite `[0, 1]` GeoTIFF, and it is still a negative.
 
-## Quick start (on a machine that can reach DrivenData and Dropbox)
+`h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros` is an owner-reported public score of 0.2778 from the GEMSDOE32 site, not an organizer receipt held here. On the shared evaluator it scores about 0.0037. The official public board, fetched 2026-10-20, has rank 1 at 0.4413, so a higher organizer score than 0.2778 exists. This file is not evidence that this lane can reach it. The argument is on the [method page](docs/method.html).
+
+The brief says the lane is “the single method paragraph below.” No method paragraph is present; GEMSDOE71’s own row in the brief is empty. That gap is IR-71-LANE-01. The lane was taken from the brief’s scientific instruction — geothermal-vent evidence for faults the catalogue missed — and frozen in `registry/preregistration-h71.json` before any score.
+
+## Pages
+
+- [Audit page](docs/index.html) — verdict and download. This is the site front page.
+- [How to submit](docs/executive-summary.html)
+- [Why 0.2778](docs/method.html)
+- [Hypotheses](docs/hypotheses.html)
+- [Sources](docs/sources.html)
+- [Irregularities](docs/irregularities.html)
+- [Run card](docs/data/run-card.json)
+- Earlier scaffold, not the scored file: [RESEARCH.md](docs/RESEARCH.md), [FLAGS.md](docs/FLAGS.md), [SOURCES.md](docs/SOURCES.md). Do not treat `scripts/make_submission.py` output as this audit file.
+
+## Reproduce the published card
+
+Do not retune `registry/preregistration-h71.json`. Do not spend a slot.
 
 ```bash
+python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt
-bash scripts/download_competition_data.sh      # public Dropbox links; DrivenData files by hand into data/
-python scripts/prepare_data.py                 # checks CRS, shape, band count; writes data/manifest.json
-python scripts/run_holdout.py                  # HOLDOUT-DTI + 95% CI + leakage canary + all-ones baseline
-python scripts/make_submission.py --name <name> --note "<≤140 chars>"
-python scripts/validate_submission.py submissions/<name>.tif --template data/example_submission.tif
-python -m pytest -q                            # unit + synthetic end-to-end tests
+python tests/test_metric_and_loader.py
+python scripts/publish_corrections.py   # needs the remeasurement JSON; the card is already patched
+python scripts/build_site.py
+python scripts/refresh_leaderboard.py   # fail-closed; does not invent rows
 ```
 
-Upload only a file whose validator output has `"pass": true`, after a holdout result that beats the all-ones baseline. Step-by-step: [`docs/executive-summary.html`](docs/executive-summary.html).
+The experiment runner is `scripts/run_h71.py`. It already ran. Re-running it does not change the frozen verdict. The 19-band feature stack was not available in this sandbox; the canary that needed it is labeled skipped in the card.
 
-## Layout
+Shared evaluator: [60GEMSDOE](https://github.com/buffedlizard55-lab/60GEMSDOE) commit `b99591ee`, vendored byte-identically into `src/gems57`. Hashes are in `docs/template-provenance.json`.
 
-```
-gems/            pipeline package: rasters, features, metric, holdout, model, submission, validate
-scripts/         command-line entry points (download, prepare, holdout, submit, validate)
-tests/           pytest suite on synthetic rasters (no competition data)
-docs/            GitHub Pages site + RESEARCH, FLAGS, SOURCES, run cards, leaderboard CSV, link check
-data/            competition inputs (git-ignored; never committed)
-runs/            holdout outputs (git-ignored)
-submissions/     candidate TIFs (git-ignored; large files go to GitHub Releases)
-```
-
-## Limitations and access still needed
-
-**Access needed (none of these is reachable from the build sandbox):**
-1. DrivenData data tab (login): `labels.tif`, `training_features.tif`, `sample_submission.tif`, `1m_DEM_links.csv`.
-2. Dropbox mirrors from the brief (5 files), via `scripts/download_competition_data.sh` on an unrestricted machine.
-3. GEMS_96647.pdf (the metric and submission text), at `docs.nlr.gov` (also mirrored on Dropbox).
-4. DrivenData leaderboard page, to replace the conflicting "current high" values with an ORGANIZER-CONFIRMED number.
-5. USGS ComCat earthquake API (only if hypothesis H5 is pursued). **Obtainability unverified.**
-6. USGS GeoDAWN survey extents and NBMG geology (for the H1 survey-bias control). Unchecked.
-
-**Limitations of this build:**
-- No competition data, so no real holdout result, no trivial-baseline comparison, and no lane check.
-- The metric is an assumption until GEMS_96647.pdf is read (FLAGS F9).
-- The sandbox has 3 GB RAM and no GPU. Full-size runs peak at about 3.7 GB (synthetic measurement). The U-Net reference needs a GPU and is not implemented here.
-- The weekly submission cap is not visible from here.
-- Our GEM GAF-DB check shows that source is not independent of USGS for US faults (FLAGS F10).
-
-**Suggested next steps (next session):**
-1. Place the data on an unrestricted machine, then run `prepare_data.py` and `run_holdout.py`. Record the all-ones baseline before anything else.
-2. Read GEMS_96647.pdf and update `gems/metric.py` if it differs. Re-run all holdouts.
-3. Run H1 (PU correction) as the first real experiment, against the gate in RESEARCH §2.1.
-4. Add the reference U-Net on a GPU machine, for an apples-to-apples comparison under the same holdout.
-5. Automate a "current feed": a scheduled job that refreshes `docs/data/` from the leaderboard, if the runner can reach DrivenData (unverified).
-
-## Ground rules
-
-1. Every number is labelled **HOLDOUT-DTI** (our evaluator, with version, withheld positives and CI), **ORGANIZER-CONFIRMED** (copied from a submission receipt), or **USER-REPORTED**. A projection is never written as a score.
-2. Synthetic test data is never a submission. Synthetic files are deleted after tests.
-3. The metric definition in `gems/metric.py` is an assumption until the official text (GEMS_96647.pdf) has been read. If it differs, fix `metric.py` once and re-run every holdout.
-4. Negative results are kept and reported.
-
----
+Two filename tokens in the brief below (`evaluate_holdout.py`, `submission_writer.py`) were restored from markdown auto-links in the previous checkout’s copy. The rest of the brief is that copy.
 
 ## Project brief
 
@@ -96,7 +68,7 @@ PARALLEL-RUN PROTOCOL — read first. This session is one of several running fro
 
 1. LANE. Your lane is the single method paragraph below. Stay inside it. If your raster's rank-correlation with any registry raster exceeds [0.90], or more than [70%] of your dots fall within 3 px of one registry raster's dots, you have drifted into another lane: log it as a duplicate and stop. Check this on the surface before placement AND on the final dots.
 
-2. REUSE, DON'T REBUILD. Use the template's cached feature stack, evaluate_[holdout.py](http://holdout.py) and submission_[writer.py](http://writer.py). Holdout = hide-and-recover: withhold whole fault segments with a buffer, derive every catalogue-based feature only from the visible faults, mask visible faults pixel-exactly, score pooled DTI (alpha 0.2, beta 0.8, 300 m triangular kernel). If a shared tool is wrong, fix it once in the template and report it; never keep a private fork.
+2. REUSE, DON'T REBUILD. Use the template's cached feature stack, evaluate_holdout.py and submission_writer.py. Holdout = hide-and-recover: withhold whole fault segments with a buffer, derive every catalogue-based feature only from the visible faults, mask visible faults pixel-exactly, score pooled DTI (alpha 0.2, beta 0.8, 300 m triangular kernel). If a shared tool is wrong, fix it once in the template and report it; never keep a private fork.
 
 3. LABEL EVERY NUMBER as HOLDOUT-DTI (evaluator version, number of withheld positives, 95% CI) or ORGANIZER-CONFIRMED (copied from a submission-page receipt). A projection is never written as a score.
 

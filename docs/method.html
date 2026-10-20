@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why 0.2778 — GEMSDOE71</title>
+<style>
+:root {
+  --paper: #f3efe6;
+  --ink: #1b1914;
+  --muted: #5c564c;
+  --line: #d9d0c1;
+  --brown: #7a4e24;
+  --no: #8d1d1d;
+  --no-bg: #f6e4e1;
+  --yes: #1d4d34;
+  --yes-bg: #e5f0e8;
+  --card: #fffdf8;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.55 "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+}
+a { color: var(--brown); }
+a:hover { color: var(--ink); }
+header.site {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.6rem 1rem; align-items: baseline;
+  padding: 0.8rem 1.4rem; border-bottom: 1px solid var(--line); background: #ebe4d6;
+  font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.02em;
+}
+header.site strong { font-family: Georgia, serif; font-size: 1rem; letter-spacing: 0; }
+nav a { margin-left: 0.9rem; text-decoration: none; color: var(--ink); }
+main { max-width: 860px; margin: 0 auto; padding: 1.4rem 1.2rem 4rem; overflow-x: auto; }
+h1 { font-size: 1.85rem; line-height: 1.2; font-weight: 600; margin: 0.2rem 0 0.6rem; }
+h2 { font-size: 1.25rem; margin: 2rem 0 0.5rem; }
+h3 { font-size: 1.05rem; margin: 1.3rem 0 0.3rem; }
+p, li { color: var(--ink); }
+.muted { color: var(--muted); }
+.plate {
+  border: 2px solid var(--no); background: var(--no-bg); padding: 1.1rem 1.2rem 1.2rem;
+  margin: 0 0 1.2rem;
+}
+.plate.ok { border-color: var(--yes); background: var(--yes-bg); }
+.plate .kicker {
+  font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em;
+  text-transform: uppercase; margin: 0 0 0.3rem;
+}
+.plate h1 { font-size: 2rem; margin: 0 0 0.4rem; }
+.plate p { margin: 0.35rem 0; }
+.row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
+.btn {
+  display: inline-block; background: var(--ink); color: #fff; text-decoration: none;
+  padding: 0.7rem 1rem; font-family: var(--mono); font-size: 0.85rem;
+}
+.btn.secondary { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+.btn:hover { background: var(--brown); color: #fff; }
+.card {
+  background: var(--card); border: 1px solid var(--line); padding: 0.9rem 1rem; margin: 0.8rem 0;
+}
+label { display: block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted); margin-top: 0.7rem; }
+code, .mono { font-family: var(--mono); font-size: 0.86rem; }
+.copyline {
+  display: flex; gap: 0.4rem; align-items: center; background: #f7f3ea;
+  border: 1px solid var(--line); padding: 0.45rem 0.55rem; margin-top: 0.2rem;
+}
+.copyline code { flex: 1; word-break: break-all; }
+button.copy {
+  font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--ink);
+  background: #fff; padding: 0.25rem 0.45rem; cursor: pointer;
+}
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin: 0.6rem 0 1rem; }
+th, td { text-align: left; vertical-align: top; padding: 0.35rem 0.4rem; border-bottom: 1px solid var(--line); }
+th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.tag { font-family: var(--mono); font-size: 0.72rem; border: 1px solid var(--line); padding: 0.05rem 0.35rem; }
+footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; margin-top: 2rem; padding-top: 0.8rem; }
+ol.steps li { margin: 0.45rem 0; }
+</style>
+</head>
+<body>
+<header class="site">
+  <strong>GEMSDOE71</strong>
+  <nav><a href="index.html">Status</a> <a href="executive-summary.html">How to submit</a> <a href="method.html"><strong>Why 0.2778</strong></a> <a href="hypotheses.html">Hypotheses</a> <a href="sources.html">Sources</a> <a href="irregularities.html">Irregularities</a></nav>
+</header>
+<main>
+
+<h1>Why the 0.2778 file scores what it scores</h1>
+<p class="muted">Every measurement below was made in this checkout or copied from a page fetched on 2026-10-20. The group's earlier inversion of hidden-set size is not repeated, because that size is not public and was not re-derived here.</p>
+
+<h2>The metric, from the problem page</h2>
+<p>Source: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">DrivenData competition 306, problem description</a>. Alpha = 0.2, beta = 0.8, triangular kernel k(d) = max(1 − d/300 m, 0).</p>
+<p class="mono">DTI = TPw / (TPw + 0.2·FPw + 0.8·FNw)</p>
+<p>The published worked example is TPw = 3.00, FPw = 1.89, FNw = 2.00, displayed as 0.60. The exact ratio is 3 / 4.978 = 0.60265, which rounds to the displayed 0.60. This repository's metric module matches that arithmetic and matches a brute-force oracle on a synthetic grid.</p>
+<p>Algebra, not a score: a non-redundant extra dot with kernel credit k raises DTI only if k &gt; 0.2 × DTI. If a file really sits at 0.2778, that bar is 0.0556 credit per dot. A dot on a mapped fault earns nothing against a test set that excludes mapped faults, and it still pays the false-positive tax. That is why deleting catalogue-adjacent mass can raise a live score without adding any new geology.</p>
+
+<h2>What the 0.2778 file actually is</h2>
+<p>The bytes in the template registry, <code>GEMSDOE32__h33-2-b2-zeros.tif</code>, have sha256 <code>c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9</code>. The GEMSDOE32 site publishes the same prefix for the file it calls h33-2-b2. Remeasured here:</p>
+<table>
+<tbody>
+<tr><td>Dots</td><td>37654, each exactly 1.0</td></tr>
+<tr><td>Dots on the published catalogue</td><td>0</td></tr>
+<tr><td>Minimum distance to the catalogue</td><td>223.6 m</td></tr>
+<tr><td>Median distance to the catalogue</td><td>1964.7 m</td></tr>
+<tr><td>Fraction of dots within 300 m</td><td>5.8%</td></tr>
+<tr><td>HOLDOUT-DTI on this session's instrument</td><td>0.003699 (gems57-pooled-hide-v2, 11,321 withheld positives)</td></tr>
+<tr><td>Live score 0.2778</td><td>OWNER-REPORTED, not ORGANIZER-CONFIRMED in this checkout</td></tr>
+</tbody>
+</table>
+<p>GEMSDOE32's own page says no organiser score exists for that artifact and quotes a projected 0.2747 as a model. This site does not promote either number to ORGANIZER-CONFIRMED. The structural reading, which does not require believing the 0.2778 figure, is still solid: the file is a thin off-catalogue dotting of a structural-habitat surface. The last gains in that family, as described by the group's own sites, came from deleting dots near the catalogue, not from a new detector.</p>
+
+<h2>Can a new file beat it?</h2>
+<p>Yes, in principle. The public board already has. Rank 1 on the official leaderboard, fetched 2026-10-20, is <strong>xiaofanhu at 0.4413</strong>. That is an ORGANIZER-CONFIRMED public row. It is not a score of any file in this repository, and it is not a target this file is projected to reach.</p>
+<p>Beating 0.2778, if that owner-reported figure is real, requires more credit per unit of mass: either dots closer to the hidden faults, or fewer wasted dots at the same coverage. Copying the 37,654-dot file is forbidden by the uniqueness rule and would not be new information. Thinning it further is the experiment that family already ran.</p>
+<p>This session tested a different mechanism: alignments of hot springs, sinter, travertine, and 2 m temperature anomalies, optionally continued along a magnetic gradient. It is the kind of evidence a field geologist uses to draw a fault the USGS map missed. On the mandated holdout it does not work.</p>
+<ul>
+  <li>Spring density AUC against withheld faults: 0.498. Paleo density: 0.499. The traces themselves: 0.500. Chance.</li>
+  <li>HOLDOUT-DTI of the shipped arm: 0.001538, 95% CI [0.0002, 0.0033], 11321 withheld positives. Paired difference versus a mass-matched random map has a confidence interval that includes zero.</li>
+  <li>True-positive weight was 14.1 against 11321 withheld pixels. Seven hundred and thirty-five dots recovered almost none of the hidden catalogue segments.</li>
+  <li>Overlap with the 0.2778 file is 0.140, so this is not a disguised copy. It is a different map, and a weaker one on this instrument.</li>
+</ul>
+<p>The catalogue holdout cannot reward a fault that is absent from the catalogue. A null result here does not prove the axes are geologically empty. It does prove they are not a certified improvement. A few hundred dots cannot cover the fault mass a 37,654-dot file is covering unless almost every dot is a direct hit, and we measured the opposite. That is an argument about coverage, not a projected leaderboard score.</p>
+
+<h2>The holdout bar is partly the wrong bar</h2>
+<p>The highest HOLDOUT-DTI in the local registry is 0.2701 on <code>calib_hedgev2_01563_sample.tif</code>. That file is positive on every one of the 60,988 catalogue pixels, so its false-negative count on withheld catalogue segments is zero. A discovery file that refuses to paint the catalogue cannot beat that number, and should not try. The preregistered gate still fails for an independent reason: we also fail to beat random.</p>
+<p>Restricted to registry rasters with zero dots on the catalogue, the best HOLDOUT-DTI is 0.0943. Still an order of magnitude above this file. That comparison is a diagnostic, not a rewritten gate.</p>
+<p>Known inversion, remeasured rather than assumed: the owner-reported 0.2778 file scores 0.0037 on this holdout, while a catalogue-covering hedge file scores about 0.270. Live rankings and catalogue-recovery rankings are not the same instrument. Until that is repaired, a holdout win is necessary and not sufficient. This file does not have the necessary part.</p>
+
+<footer>
+DOE GEMS Prize, DrivenData 306. Numbers on this site are either measured in this repository
+or copied from a named official page. A projection is never written as a score.
+No weekly submission slot was used.
+</footer>
+</main>
+<script>
+document.querySelectorAll('button.copy').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const text = btn.parentElement.querySelector('code').textContent;
+    navigator.clipboard.writeText(text).then(() => { btn.textContent = 'copied'; });
+  });
+});
+</script>
+</body>
+</html>

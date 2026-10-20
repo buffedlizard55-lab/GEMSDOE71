@@ -1,0 +1,16 @@
+{
+  "file": "GEMSDOE32__h33-2-b2-zeros.tif",
+  "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+  "dots": 37654,
+  "min_distance_to_catalogue_m": 223.60679774997897,
+  "median_distance_to_catalogue_m": 1964.68827043885,
+  "fraction_within_300m": 0.057656557072289796,
+  "values_min": 0.0,
+  "values_max": 1.0,
+  "owner_reported_live_score": 0.2778,
+  "owner_reported_live_score_evidence_class": "OWNER-REPORTED, not ORGANIZER-CONFIRMED in this checkout",
+  "holdout_dti_this_instrument": 0.0036986805987087195,
+  "dots_on_catalogue": 0,
+  "distance_method": "distance_transform_edt of the complement of the catalogue; previous card inverted the mask and is void",
+  "void_first_write": "The first card write reported min distance 0 m. That call complemented the catalogue twice. It is void. The numbers in this object were remeasured."
+}

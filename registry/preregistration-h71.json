@@ -1,0 +1,53 @@
+{
+  "id": "GEMSDOE71-PREREG-H71",
+  "written_before_scores": true,
+  "utc_note": "Frozen before scripts/run_h71.py is executed. Thresholds below are not revised after seeing holdout numbers.",
+  "lane": "H71 geothermal conduit lineaments",
+  "method_paragraph": "Blind and poorly mapped permeable faults in the GeoDAWN / northwestern Great Basin are often expressed by colinear geothermal discharge — hot and warm springs, sinter and travertine, and shallow 2 m temperature anomalies — rather than by a USGS/INGENIOUS scarp. Fit a local principal axis to discharge points inside a 6 km neighbourhood; keep the axis only when it is elongated, has at least three points spanning 1.5 km, has perpendicular RMS under 350 m, and contains at least one non-well anchor (spring, sinter/travertine/alteration, 2 m anomaly, vent, or a geothermometer >= 120 C). Rasterize that axis. Experiment 2 keeps axis pixels only where the upward-continued magnetic horizontal gradient is in the top 40 percent of the footprint. Experiment 3 extends those corroborated axes along strike by up to 4 km while the gradient stays elevated. Emit a 3 px Euclidean NMS of the trace, at most 12000 dots, with catalogue pixels set to zero. Do not use dist_known_fault_px or any other label-derived distance column. Exclude tufa and silica-cemented sand from seeds because Pleistocene Lake Lahontan shorelines (highstand near 1332-1338 m) precipitate tufa that is not a fault.",
+  "why_not_the_catalogue": "The USGS/INGENIOUS compilation records faults with geomorphic or mapped expression. A discharge alignment under basin fill can mark a permeable conduit that compilation missed. The detector is seeded by discharge points, not by dilating the catalogue.",
+  "differs_from_repo": "Not a dotted habitat thinning of H19-5 (the 0.2600-0.2778 family), not lidar scarplet/Steger/Frangi, not chi/knickpoint, not relay-ramp geometry from catalogue tips, not auto-context, not CVaR selection of an existing field, not the E62 thermal multiplier on knickpoints.",
+  "named_mimic": "Pleistocene Lake Lahontan tufa shoreline, and cultural alignments of water wells along roads",
+  "parameters": {
+    "neighborhood_px": 60,
+    "min_points": 3,
+    "min_span_px": 15,
+    "min_eigen_ratio": 3.5,
+    "max_rms_px": 3.5,
+    "nms_radius_px": 3.0,
+    "budget_dots": 12000,
+    "hg_percentile": 60,
+    "extension_px": 40,
+    "probe_dab_min_c": 2.0,
+    "geotherm_anchor_c": 120.0,
+    "spring_temp_hot_c": 50.0,
+    "spring_temp_warm_c": 30.0,
+    "well_temp_warm_c": 40.0,
+    "lahontan_band_m": [1320.0, 1345.0],
+    "holdout_seed": 20,
+    "holdout_hide_frac": 0.2,
+    "holdout_buffer_px": 3,
+    "bootstrap_draws": 1000,
+    "bootstrap_seed": 71001,
+    "random_seed": 71071
+  },
+  "experiments": [
+    "E1 thermal-axis traces only",
+    "E2 axes gated by TMI-up150 horizontal-gradient percentile",
+    "E3 E2 axes extended along strike while the gradient stays elevated"
+  ],
+  "gates": {
+    "canary_auc_max": 0.9,
+    "rho_max": 0.9,
+    "dot_overlap_max": 0.7,
+    "promote_requires": [
+      "canary AUC of every used feature <= 0.90",
+      "like-for-like uniqueness pass on the surface before placement and on the final dots (Spearman <= 0.90 against every checked raster; forward 3 px overlap <= 0.70 against dot-field rasters)",
+      "HOLDOUT-DTI paired difference versus mass-matched NMS random has 95% CI lower bound > 0 on gems57-pooled-hide-v2",
+      "HOLDOUT-DTI point estimate exceeds every local registry raster rescored on the same folds"
+    ],
+    "literal_overlap_against_space_filling_rasters": "Reported, not silently exempted. A firing only against continuous-surface priors is not lane drift; a firing against a dot-field prior is a stop."
+  },
+  "submission_name": "GEMSDOE71-H71-vent-conduit",
+  "note_prefix": "GEMSDOE71 H71 vent-conduit; sinter/spring axes x mag-edge; NMS3 off-catalogue; local checks only; no organiser score",
+  "slots_used": 0
+}
