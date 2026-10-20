@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Executive summary — how to submit to GEMS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <span class="brand">GEMS Prize · Submission Hub</span>
+  <a href="index.html">Home</a>
+  <a href="executive-summary.html">Executive summary: how to submit</a>
+  <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/RESEARCH.md">Research</a>
+  <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/FLAGS.md">Flags</a>
+  <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/SOURCES.md">Sources</a>
+</header>
+<main>
+
+<h1>Executive summary: how to make and upload a GEMS submission</h1>
+<p class="small">Written from the upload page text quoted in the project brief. The competition pages themselves were not reachable from the build sandbox, so the rules below must be re-checked on the live page before every upload.</p>
+
+<section class="card hero">
+  <h2 style="margin-top:0;border:0">The short version</h2>
+  <ol>
+    <li>Make a single-band GeoTIFF (<code>.tif</code>) on the <strong>same grid</strong> as the template: CRS <code>EPSG:32611</code>, same shape and geotransform.</li>
+    <li>Every value must be a finite number between <strong>0 and 1</strong>. No NaN, no nodata inside the study area.</li>
+    <li>Check the file with <code>scripts/validate_submission.py</code>. Upload only if it prints <code>"pass": true</code>.</li>
+    <li>Give it a unique name and a short note. Upload it on the competition's <em>New submission</em> form.</li>
+  </ol>
+</section>
+
+<section class="card">
+  <h2 style="margin-top:0;border:0">1. What the upload form asks for</h2>
+  <p>From the brief's quote of the form: <em>File to submit</em> accepts a single-band GeoTIFF (<code>.tif</code>) or a <code>.zip</code> containing a single GeoTIFF. It must match the submission format's CRS, shape and geotransform. The <em>Note (optional)</em> field is a short comment, e.g. <code>clustering with k=25</code>.</p>
+  <p class="small">The brief's example form text is USER-PROVIDED. Check the live page: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition page</a>.</p>
+</section>
+
+<section class="card">
+  <h2 style="margin-top:0;border:0">2. Exact steps</h2>
+  <h3>Step A — get the data (on your own machine)</h3>
+  <pre><code>git clone https://github.com/buffedlizard55-lab/GEMSDOE71.git
+cd GEMSDOE71
+pip install -r requirements.txt
+bash scripts/download_competition_data.sh   # public Dropbox links from the brief
+# Then place by hand from the DrivenData data tab (login required):
+#   labels.tif  training_features.tif  sample_submission.tif  1m_DEM_links.csv
+# into data/</code></pre>
+  <h3>Step B — check the inputs</h3>
+  <pre><code>python scripts/prepare_data.py     # checks CRS, shape, band count; writes data/manifest.json</code></pre>
+  <h3>Step C — run the holdout first (required before any upload)</h3>
+  <pre><code>python scripts/run_holdout.py      # HOLDOUT-DTI, 95% CI, leakage canary, all-ones baseline</code></pre>
+  <p>Do not upload unless the candidate beats the all-ones baseline on the same holdout, with a confidence interval that excludes it. Read <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/RESEARCH.md">RESEARCH §2.1</a> for the full gate.</p>
+  <h3>Step D — write the file</h3>
+  <pre><code>python scripts/make_submission.py \
+  --name h1-pu-cat-20261020 \
+  --note "PU catalogue correction; HOLDOUT-DTI=&lt;value&gt;; not lane-checked" \
+  --holdout-json runs/holdout_&lt;timestamp&gt;.json</code></pre>
+  <p>The tool writes <code>submissions/&lt;name&gt;.tif</code> and a sidecar <code>.tif.json</code> with the sha256 and verification results. It refuses to write a file with NaN, values outside [0, 1], or a mismatched grid.</p>
+  <h3>Step E — validate the file again, independently</h3>
+  <pre><code>python scripts/validate_submission.py submissions/h1-pu-cat-20261020.tif --template data/example_submission.tif</code></pre>
+  <p>Upload only if the last line of output shows <code>"pass": true</code>.</p>
+  <h3>Step F — upload</h3>
+  <ol>
+    <li>Open the competition's <em>New submission</em> page and choose <code>submissions/&lt;name&gt;.tif</code> under <em>File to submit</em>.</li>
+    <li>Paste the note into <em>Note (optional)</em>. Keep it under 140 characters.</li>
+    <li>Submit. Record the receipt: the score you see there is <strong>ORGANIZER-CONFIRMED</strong>. Anything else is not.</li>
+    <li>Choose which submissions count as real entries <strong>manually</strong>, within the weekly cap shown on the submission page. This repo does not pick submissions for you.</li>
+  </ol>
+</section>
+
+<section class="card">
+  <h2 style="margin-top:0;border:0">3. The "Predicted values must be in range [0, 1]" error</h2>
+  <table>
+    <thead><tr><th>Likely cause</th><th>How to check</th><th>What this repo does</th></tr></thead>
+    <tbody>
+      <tr><td>Values above 1 (raw scores, logits, or unnormalised sums)</td><td><code>validate_submission.py</code> prints <code>max</code> and <code>in_unit_interval</code></td><td>Refuses to write; never clips silently</td></tr>
+      <tr><td>NaN or inf inside the footprint</td><td><code>nan_or_inf_count</code> must be 0</td><td>Refuses to write</td></tr>
+      <tr><td>A nodata tag such as <code>-3.4e38</code> or <code>-1</code> being read as data</td><td><code>nodata_tag</code> should be <code>null</code></td><td>Writes no nodata tag</td></tr>
+      <tr><td>Wrong grid (different CRS, shape or geotransform)</td><td><code>template_*_match</code> fields must be true</td><td>Checked against the template and re-read after writing</td></tr>
+    </tbody>
+  </table>
+  <p class="small">We have not seen the failed file, so which cause applies is UNVERIFIED. The checks above cover each cause.</p>
+</section>
+
+<section class="card">
+  <h2 style="margin-top:0;border:0">4. Naming and notes</h2>
+  <ul>
+    <li><strong>Name:</strong> 3–64 characters: letters, digits, <code>.</code> <code>_</code> <code>-</code>. Include the hypothesis, date and a hash, e.g. <code>h1-pu-cat-20261020-a1b2c3d4</code>.</li>
+    <li><strong>Note:</strong> at most 140 characters. Say what changed, the holdout value and its label, and whether it is lane-checked, e.g. <code>PU catalogue correction; HOLDOUT-DTI=&lt;value&gt; (CI &lt;lo&gt;-&lt;hi&gt;, n_folds=&lt;k&gt;); not lane-checked</code> with the numbers copied from your run (no example numbers are given here on purpose).</li>
+  </ul>
+</section>
+
+<section class="card status-box">
+  <h2 style="margin-top:0;border:0">5. Do not upload if any of these are true</h2>
+  <ul>
+    <li>The file came from synthetic test data (the selftest files are not submissions).</li>
+    <li>The validator did not pass.</li>
+    <li>There is no holdout result, or it does not beat the all-ones baseline with a CI that excludes it.</li>
+    <li>A leakage canary flag is open for review.</li>
+    <li>The lane check against other registry rasters has not been run (it has not been run yet; see FLAGS F12).</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2 style="margin-top:0;border:0">Where to check the evidence</h2>
+  <ul>
+    <li><a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/SOURCES.md">Sources, with what was verified and what is blocked</a></li>
+    <li><a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/FLAGS.md">Flags for manual review</a></li>
+    <li><a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/run_cards/2026-10-20-session1.json">Run card, session 1</a></li>
+    <li><a href="https://github.com/drivendataorg/gems-prize-reference-solution">Reference solution (DrivenData, GitHub)</a> — read and verified.</li>
+  </ul>
+</section>
+
+<footer>Labels: HOLDOUT-DTI (our evaluator) · ORGANIZER-CONFIRMED (copied from a receipt) · USER-REPORTED · PROJECTION (never written as a score).</footer>
+</main>
+</body>
+</html>

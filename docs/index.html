@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEMS Prize — Submission Hub</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <span class="brand">GEMS Prize · Submission Hub</span>
+  <a href="index.html">Home</a>
+  <a href="executive-summary.html">Executive summary: how to submit</a>
+  <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/RESEARCH.md">Research</a>
+  <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/FLAGS.md">Flags</a>
+  <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/SOURCES.md">Sources</a>
+</header>
+<main>
+
+<h1>Submit to the GEMS geothermal-fault competition</h1>
+<p class="small">Competition: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">DrivenData, DOE GEMS prize</a> (page not reachable from the build sandbox; see Sources). Last updated 2026-10-20 UTC.</p>
+
+<section class="card hero" id="download">
+  <h2 style="margin-top:0;border:0">Submission file</h2>
+  <div id="sub-status">Checking for a validated submission file…</div>
+  <div id="sub-files"></div>
+  <p class="small">A file appears here only after <code>scripts/make_submission.py</code> writes it and <code>scripts/validate_submission.py</code> passes. Nothing is shown here before that. Do not upload a file that is not listed as validated.</p>
+</section>
+
+<section class="card status-box">
+  <h2 style="margin-top:0;border:0">Honest status</h2>
+  <p><span class="warn">No scored result exists yet.</span> The competition labels and features are not in this repository (DrivenData login is required, and the Dropbox mirrors were unreachable from the build sandbox).</p>
+  <ul>
+    <li>Built and tested: the holdout evaluator (hide-and-recover, pooled DTI with a 300 m triangular tolerance), a leakage canary, a trivial all-ones baseline, and a submission writer that refuses NaN or out-of-range values. Tests: 16 passed. Details in <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/run_cards/2026-10-20-session1.json">the run card</a>.</li>
+    <li>Not done: any holdout result on real data, any lane check against other rasters, any submission.</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2 style="margin-top:0;border:0">Three steps to a file</h2>
+  <ol>
+    <li><strong>Place the data</strong> (once, on your own machine): <code>bash scripts/download_competition_data.sh</code>, then add the DrivenData files by hand.</li>
+    <li><strong>Check it:</strong> <code>python scripts/prepare_data.py</code></li>
+    <li><strong>Make and validate the file:</strong> <code>python scripts/make_submission.py --name &lt;name&gt; --note "&lt;note&gt;"</code>, then <code>python scripts/validate_submission.py submissions/&lt;name&gt;.tif --template data/example_submission.tif</code></li>
+  </ol>
+  <p>Full instructions, including the "Predicted values must be in range [0, 1]" error fix: <a class="btn" href="executive-summary.html">Executive summary →</a></p>
+</section>
+
+<section class="card">
+  <h2 style="margin-top:0;border:0">Scores reported in the brief (USER-REPORTED, not verified)</h2>
+  <p class="small">Full list of 97 rows with links: <a href="data/user_reported_scores.csv">user_reported_scores.csv</a>. Highest per-site score listed: <strong>0.2778</strong>. The brief also quotes 0.4413, 0.3774 and 0.3195 as "current high" values that conflict with each other and with the list (see <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/FLAGS.md">FLAGS F6</a>).</p>
+  <table>
+    <thead><tr><th>Score (reported)</th><th>Site</th><th>Submission name</th></tr></thead>
+    <tbody>
+      <tr><td>0.2778</td><td>GEMSDOE32</td><td>h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros</td></tr>
+      <tr><td>0.2750</td><td>GEMSDOE36</td><td>anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros</td></tr>
+      <tr><td>0.2710</td><td>GEMSDOE28</td><td>h36-1-rung30-blind-r1-20261003-b531dae0a36f-nan</td></tr>
+      <tr><td>0.2708</td><td>GEMSDOE31</td><td>h27-4-solo-d28-20261004-8acb75e1-nan</td></tr>
+      <tr><td>0.2708</td><td>GEMSDOE28</td><td>h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-nan</td></tr>
+      <tr><td>0.2707</td><td>GEMSDOE28</td><td>h38-1-hf-euler-r30-r1-20261003-56a9f473edc7-nan</td></tr>
+      <tr><td>0.2649</td><td>GEMSDOE28</td><td>h32-1-prethin-tip-euler-d2-8-20261003-31e35eee884e-nan</td></tr>
+      <tr><td>0.2632</td><td>GEMSDOE33</td><td>h33d-analog-tip-stepover-r30-20261004-cb490425926e</td></tr>
+      <tr><td>0.2600</td><td>GEMSDOE25</td><td>dotted-h19-5-d2-8-20261002-e56ea318af89-nan</td></tr>
+      <tr><td>0.2600</td><td>GEMSDOE30</td><td>d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="card">
+  <h2 style="margin-top:0;border:0">What the holdout must beat</h2>
+  <p>A trivial map that predicts "fault" everywhere reaches about 0.24 on a sparse synthetic fault network under our metric, and beats 0.2778 whenever the real mean tolerance coverage is at least 7.1%. Any model must beat that trivial baseline on the same holdout, with a confidence interval that excludes it. See <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/docs/RESEARCH.md">RESEARCH §1</a>.</p>
+</section>
+
+<section class="card">
+  <h2 style="margin-top:0;border:0">Core values</h2>
+  <p><strong>Maximize P(Win).</strong> Weigh every trade-off, assess risk, and pick the path most likely to succeed.</p>
+  <p><strong>Own the Outcome.</strong> Treat failure and success as signals. Flag problems rather than hiding them.</p>
+</section>
+
+<footer>
+  Every number on this site is labelled HOLDOUT-DTI, ORGANIZER-CONFIRMED, USER-REPORTED, or a projection. Projections are never written as scores.<br>
+  <a href="https://github.com/buffedlizard55-lab/GEMSDOE71">Repository</a> · <a href="https://github.com/buffedlizard55-lab/GEMSDOE71/blob/main/README.md">README and project brief</a>
+</footer>
+</main>
+
+<script>
+// Show a download only when a validated manifest lists a file. Otherwise say so plainly.
+(async function () {
+  const box = document.getElementById('sub-status');
+  const files = document.getElementById('sub-files');
+  try {
+    const r = await fetch('submissions/manifest.json', { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const m = await r.json();
+    if (!m.files || m.files.length === 0) {
+      box.innerHTML = '<span class="warn">No validated submission file yet.</span> ' + (m.message || '');
+      return;
+    }
+    box.innerHTML = '<span class="ok">Validated submission file(s) available.</span>';
+    m.files.forEach(function (f) {
+      const a = document.createElement('a');
+      a.className = 'btn';
+      a.href = f.download_url;
+      a.textContent = 'Download ' + f.name + '.tif';
+      files.appendChild(a);
+      const p = document.createElement('div');
+      p.className = 'small';
+      p.textContent = 'Note: ' + f.note + ' · sha256: ' + f.sha256;
+      files.appendChild(p);
+    });
+  } catch (e) {
+    box.innerHTML = '<span class="warn">No validated submission file yet.</span> The status file could not be read (' + e.message + ').';
+  }
+})();
+</script>
+</body>
+</html>
