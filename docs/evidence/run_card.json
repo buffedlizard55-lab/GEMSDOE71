@@ -1,249 +1,325 @@
 {
-  "schema_version": "GEMSDOE71-RUN-CARD-v1",
-  "generated_utc": "2026-10-20T20:09:01Z",
-  "lane": "GEMSDOE71 \u2014 Depth-Persistent Potential-Field Structure Tensor & Hydrothermal Demagnetization/Illitization Conjunction (DPST-HDT)",
-  "hypothesis": "H71-A (DPST-HDT): Blind and unmapped geothermal faults in the Great Basin are localized by the four-way conjunction of (1) 150 m upward-continued magnetic/gravity depth-persistence steps (TMI_up150 + tmi_hg + iso_grav_anom_hg + depth_to_base_surf), (2) hydrothermal magnetite-destruction Laplacian troughs (d2(rtp) > 0) with electrical conductivity (cond_surf), K/Th illite-adularia enrichment, and GDR 1391 chemical geothermometer anomalies, (3) shoreline-decoupled 1 m LiDAR / 100 m DEM scarp crests, and (4) visible-only crack-tip & step-over stress concentration, emitted via submodular 300 m triangular-kernel coverage priority outside a 225 m catalogue-flank collar.",
-  "mechanism": "Ascending hydrothermal fluids along steep basement-cutting fault conduits alter ferromagnetic magnetite to paramagnetic pyrite/hematite/leucoxene (creating a persistent potential-field step paired with an RTP demagnetization trough) while precipitating potassium-bearing adularia/illite (high K/Th) and smectite clay caps (high cond_surf), preferentially within transtensional crack-tip and relay process zones.",
-  "named_non_fault_process_that_could_mimic_it": "Pluvial Lake Lahontan shoreline scarps and alluvial-fan terrace risers mimic topographic scarps on basin margins; discordant volcanic flow edges or hydrothermal alteration along permeable ash-flow tuffs can mimic magnetic lows and K/Th enrichment without brittle fault offset (mitigated by requiring 150 m upward-continued potential-field persistence and applying the low-elevation shoreline contour suppressor).",
+  "lane_id": "H71",
+  "submission_id": "gems71-hydro-conduit-38800-20261020T120000Z",
+  "submission_name": "gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif",
+  "submission_note": "H71 hydrothermal-structural conduit: GDR1391 2m-probe+paleo-sinter+demag+crossgrad+scarplet; k=38800 d>=3px; holdout DTI 0.0730",
+  "submission_note_length_chars": 127,
+  "verdict": "promote",
+  "ok_to_download_and_submit": true,
+  "hypothesis": "H71-A: Multi-Modal Hydrothermal-Structural Conduit & Alteration-Demagnetization Convergence. Blind and unmapped Great Basin geothermal fault conduits are jointly expressed by the spatial convergence of (1) GDR 1391 2 m temperature probe conductive anomalies, paleo-geothermal sinter/travertine deposits, and thermal spring/geothermometer upflow plumes, (2) shallow fault-zone magnetite destruction (Jacobsen upward-continuation differential RTP - TMI_up150 trough), GeoDAWN K/Th potassium-metasomatism gradients, and clay-cap electrical conductivity edges, (3) Gallardo-Meju (2003) collinear cross-gradient basement detachment steps and geodetic-seismic transtensional shear/dilatation, and (4) 1-3 m LiDAR scarplet curvature dipoles and 10 m topographic ridges.",
+  "physical_mechanism": "Upwelling hydrothermal fluids (>=80 C quartz/chalcedony geothermometer reservoirs) migrate along critically stressed transtensional fault step-overs, relay ramps, and range-front detachments. Fluid-rock interaction oxidizes primary titanomagnetite to non-magnetic pyrite/hematite in the upper 150-300 m breccia zone (creating a localized short-wavelength magnetic trough between RTP and 150 m upward-continued TMI), enriches potassium relative to immobile thorium (adularia/illite alteration), precipitates smectite/illite clay caps (sharp lateral conductivity gradients) and surface sinter/travertine, and generates subtle 0.2-1.5 m surface scarplets in 1-3 m LiDAR and 10 m DEM curvature.",
+  "named_non_fault_mimic_process_and_mitigation": "Stratiform altered rhyolitic ash-flow tuffs, closed evaporitic playa lakes (alkali flats with high surface electrical conductivity and K-feldspar detritus), and anthropogenic road/mining earthworks can mimic individual radiometric, conductivity, or micro-topographic signals. H71-A suppresses these non-fault mimics by requiring multi-modal structural concordance (collinear gravity-basement cross-gradient step + anisotropic scarplet dipole/facing net of cross-slope channel banks + transtensional strain) and applying an explicit cultural-artifact suppression mask within 75 m of TIGER roads and 60 m of BLM mining claims.",
   "holdout_dti": {
-    "label": "HOLDOUT-DTI (evaluator=gems57-pooled-hide-v2, withheld_positives=22893, 95% CI)",
     "evidence_class": "HOLDOUT-DTI",
-    "evaluator_version": "gems57-pooled-hide-v2",
-    "withheld_positive_pixels": 22893,
-    "n_folds": 8,
-    "pooled_dti": 0.05264,
+    "evaluator_version": "gems57-pooled-hide-v3-se",
+    "withheld_positive_pixels": 11321,
+    "dti": 0.073036,
     "ci95": [
-      0.04139,
-      0.06284
+      0.058155,
+      0.088277
     ],
-    "paired_delta_vs_baseline_toposcarp": 0.02497,
-    "paired_delta_ci95_vs_baseline": [
-      0.01553,
-      0.03488
-    ],
-    "folds_beat_baseline": "8/8",
-    "all_arms_pooled_dti": {
-      "H71A_DPST_HDT": {
-        "dti": 0.05264,
-        "ci95": [
-          0.04139,
-          0.06284
-        ]
-      },
-      "H71A_NoTip_Ablation": {
-        "dti": 0.0414,
-        "ci95": [
-          0.03214,
-          0.04963
-        ]
-      },
-      "H71B_ASTR_Tilt": {
-        "dti": 0.04464,
-        "ci95": [
-          0.0369,
-          0.0523
-        ]
-      },
-      "H71C_Kostrov_Riedel": {
-        "dti": 0.04696,
-        "ci95": [
-          0.03118,
-          0.06046
-        ]
-      },
-      "Baseline_TopoScarp": {
-        "dti": 0.02767,
-        "ci95": [
-          0.02141,
-          0.0341
-        ]
-      }
+    "off_range_front_domain": {
+      "evidence_class": "HOLDOUT-DTI",
+      "evaluator_version": "gems57-pooled-hide-v3-se",
+      "withheld_positive_pixels": 8717,
+      "dti": 0.048586,
+      "ci95": [
+        0.038186,
+        0.059101
+      ]
     },
-    "sgmc_off_catalogue_calibrated_dti": 0.06518
+    "geothermal_vent_corridor_domain": {
+      "evidence_class": "HOLDOUT-DTI",
+      "evaluator_version": "gems57-pooled-hide-v3-se",
+      "withheld_positive_pixels": 7610,
+      "dti": 0.084445,
+      "ci95": [
+        0.065359,
+        0.10474
+      ]
+    },
+    "usgs_sgmc_off_catalogue_diagnostic": {
+      "dti_at_k38800": 0.096616,
+      "dti_at_k37654_equal_budget": 0.094553,
+      "tpw": 5608.128,
+      "fpw": 36131.121,
+      "fnw": 56513.872,
+      "n_truth": 62122,
+      "n_emitted": 38800,
+      "evidence_class": "HOLDOUT-DTI (USGS-SGMC-OFF-CATALOGUE-DIAGNOSTIC)"
+    },
+    "paired_differences_vs_controls": {
+      "random_control": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems57-pooled-hide-v3-se",
+        "control_dti": 0.046595,
+        "delta_dti": 0.026442,
+        "bootstrap_se": 0.007676,
+        "ci95": [
+          0.011236,
+          0.041923
+        ],
+        "beats_two_se": true
+      },
+      "baseline_100m_topogeophys": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems57-pooled-hide-v3-se",
+        "control_dti": 0.026602,
+        "delta_dti": 0.046434,
+        "bootstrap_se": 0.006994,
+        "ci95": [
+          0.03235,
+          0.06031
+        ],
+        "beats_two_se": true
+      },
+      "h71b_crossgrad_ablation": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems57-pooled-hide-v3-se",
+        "control_dti": 0.05796,
+        "delta_dti": 0.015076,
+        "bootstrap_se": 0.007537,
+        "ci95": [
+          0.000508,
+          0.029608
+        ],
+        "beats_two_se": true
+      },
+      "h71c_strain_seis_ablation": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems57-pooled-hide-v3-se",
+        "control_dti": 0.047954,
+        "delta_dti": 0.025082,
+        "bootstrap_se": 0.009392,
+        "ci95": [
+          0.007708,
+          0.044342
+        ],
+        "beats_two_se": true
+      },
+      "h71d_hydro_alteration_ablation": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems57-pooled-hide-v3-se",
+        "control_dti": 0.04423,
+        "delta_dti": 0.028807,
+        "bootstrap_se": 0.006851,
+        "ci95": [
+          0.014494,
+          0.04155
+        ],
+        "beats_two_se": true
+      },
+      "h71a_phys_only_ablation": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems57-pooled-hide-v3-se",
+        "control_dti": 0.060341,
+        "delta_dti": 0.012696,
+        "bootstrap_se": 0.002469,
+        "ci95": [
+          0.008172,
+          0.017589
+        ],
+        "beats_two_se": true
+      },
+      "h33_2_b2_champion": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems57-pooled-hide-v3-se",
+        "control_dti": 0.003699,
+        "delta_dti": 0.069338,
+        "bootstrap_se": 0.007911,
+        "ci95": [
+          0.054366,
+          0.084962
+        ],
+        "beats_two_se": true
+      }
+    }
   },
   "leakage_canary": {
-    "all_passed": true,
-    "n_features_tested": 31,
-    "max_solo_auc": 0.75024,
-    "max_solo_feature": "visible_context::K_tip_from_visible_only",
-    "threshold": 0.9
+    "max_physical_feature_auc": 0.6016,
+    "max_overall_feature_auc": 0.791089,
+    "threshold_auc": 0.9,
+    "all_features_pass": true
   },
-  "correlation_and_overlap_vs_registry": {
-    "evidence_class": "REGISTRY-MEASUREMENT",
-    "registry_rasters_checked": 93,
-    "hypothesis_lane_rasters_checked": 87,
-    "pre_placement_surface_max_abs_spearman": 0.14655,
-    "pre_placement_surface_closest_raster": "gems68-autoctx-40000-20261012T014104Z-surface-zeros.tif",
-    "post_placement_dots_max_abs_spearman": 0.0296,
-    "post_placement_dots_max_3px_overlap_lane_rasters": 0.43245,
-    "post_placement_dots_closest_overlap_raster": "gemsdoe68-autocontext-s2-20261012T014136Z-nan.tif",
-    "limits": {
-      "max_abs_spearman_rho": 0.9,
-      "max_dot_overlap_3px": 0.7,
-      "radius_px": 3.0
-    },
-    "verdict": "UNIQUE"
+  "registry_uniqueness": {
+    "n_registry_rasters_checked": 108,
+    "n_discrete_fault_detectors": 103,
+    "max_abs_spearman_pre_placement_surface": 0.1046,
+    "max_abs_spearman_pre_placement_surface_match": "gems68-autoctx-40000-20261012T014104Z-surface-zeros.tif",
+    "max_abs_spearman_final_dots": 0.0524,
+    "max_abs_spearman_final_dots_match": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+    "max_3px_overlap_symmetric_discrete": 0.4687,
+    "max_3px_overlap_symmetric_discrete_match": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+    "max_3px_overlap_directed_discrete": 0.557,
+    "max_3px_overlap_symmetric_all_including_lattices": 0.56,
+    "passed": true
   },
-  "raster": {
-    "primary_zeros_tif": "docs/downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif",
-    "primary_zeros_sha256": "8576f1474ee6fa6bb38d319abfa58ef7016d4909fc58abbf7dd8ef722b957bfe",
-    "primary_zeros_bytes": 141563,
-    "zip_archive": "docs/downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.zip",
-    "zip_sha256": "183eb6f4b051cf61300355bc6ede63808933c442dc7af626b7ad737d89ba3591",
-    "companion_nan_tif": "docs/downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-nan.tif",
-    "companion_nan_sha256": "b6f934f4ca0084d6e7de6556f6cd5faf6a71fb49312214c8391823e8a7cd655e",
-    "companion_nan_bytes": 357808,
-    "emitted_positive_pixels": 35500,
-    "on_catalogue_pixels": 0,
-    "within_2px_of_catalogue_pixels": 0,
-    "min_separation_px": 3.25,
-    "collar_exclusion_px": 2.5
+  "raster_sha256": {
+    "primary_zeros_tif": "0b08a50224d7ac16d8514fd7af99f90e9f179ebd0d3d6291d97c649cca88d8ad",
+    "primary_zeros_zip": "8a4d7f7cce1b95eb315a17952225fca3f843ba73e09713fd292a31d0857743c7",
+    "secondary_nan_tif": "5f5047180a53e5ebbe4f4ab53cc24663b1a130a3d6ea8b2c1323c2172af1c10e",
+    "pre_placement_surface_zeros_tif": "abdd5764aab9431f0a4a230b3702780dce1bbcd41662631973dcd82e6ffbd369"
   },
   "validator_output": {
-    "no_nan_inside_footprint": true,
+    "no_nan_in_footprint": true,
     "values_in_0_1": true,
-    "crs_shape_transform_match": true,
-    "zero_dots_on_mapped_catalogue": true,
-    "all_checks_passed": true,
-    "upstream_nan_validator_passed": true,
-    "checks_detail": {
-      "single_band": true,
-      "dtype_float32": true,
-      "dimensions_3730x3292": true,
-      "crs_epsg_32611": true,
-      "transform_matches_sample_submission": true,
-      "no_nan_anywhere": true,
-      "no_inf_anywhere": true,
-      "no_sentinel_values": true,
-      "range_0_1_guaranteed": true,
-      "min_ge_0": true,
-      "max_le_1": true,
-      "in_footprint_all_finite": true,
-      "in_footprint_range_0_1": true,
-      "outside_footprint_zero": true,
-      "zero_dots_on_mapped_catalogue": true
+    "crs_matches_epsg32611": true,
+    "shape_matches_3292x3730": true,
+    "transform_matches_template": true,
+    "emitted_positive_dots": 38800,
+    "gems_validate_submission_zeros": {
+      "file": "/home/user/GEMSDOE71/submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif",
+      "sha256": "0b08a50224d7ac16d8514fd7af99f90e9f179ebd0d3d6291d97c649cca88d8ad",
+      "passed": true,
+      "has_failures": false,
+      "checks": [
+        {
+          "check": "single band",
+          "status": "PASS",
+          "detail": "count=1"
+        },
+        {
+          "check": "dtype float32",
+          "status": "PASS",
+          "detail": "dtype=float32"
+        },
+        {
+          "check": "CRS EPSG:32611",
+          "status": "PASS",
+          "detail": "crs=EPSG:32611"
+        },
+        {
+          "check": "shape matches",
+          "status": "PASS",
+          "detail": "file=(3730, 3292) expected=(3730, 3292)"
+        },
+        {
+          "check": "resolution 100 m",
+          "status": "PASS",
+          "detail": "res=(100.0, 100.0)"
+        },
+        {
+          "check": "transform matches reference",
+          "status": "PASS",
+          "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+        },
+        {
+          "check": "CRS matches reference",
+          "status": "PASS",
+          "detail": "file=EPSG:32611 ref=EPSG:32611"
+        },
+        {
+          "check": "nodata tag is none or NaN",
+          "status": "PASS",
+          "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+        },
+        {
+          "check": "no infinities",
+          "status": "PASS",
+          "detail": "inf_count=0"
+        },
+        {
+          "check": "values within [0, 1]",
+          "status": "PASS",
+          "detail": "min=0.0 max=1.0 finite_cells=12279160"
+        },
+        {
+          "check": "features grid shape matches",
+          "status": "PASS",
+          "detail": "features=(3730, 3292) reference=(3730, 3292)"
+        },
+        {
+          "check": "features transform matches reference grid",
+          "status": "PASS",
+          "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+        },
+        {
+          "check": "features CRS matches reference grid",
+          "status": "PASS",
+          "detail": "features=EPSG:32611 reference=EPSG:32611"
+        },
+        {
+          "check": "no NaN inside footprint",
+          "status": "PASS",
+          "detail": "nan_inside=0 footprint_cells=5167373 mask=reference sample-submission mask"
+        },
+        {
+          "check": "NaN-only outside footprint",
+          "status": "PASS",
+          "detail": "finite_outside=7111787 of 7111787 outside cells; accepted under outside_policy='either' because every written value is finite and inside [0, 1]"
+        },
+        {
+          "check": "info: features band-1 mask disagrees with the authoritative mask",
+          "status": "INFO",
+          "detail": "in_reference_not_features=0 in_features_not_reference=0; the 12 organizer-scored owner artifacts all follow the reference mask (IR-67-FOOTPRINT-01)"
+        },
+        {
+          "check": "info: emitted cells (value > 0)",
+          "status": "INFO",
+          "detail": "emitted=38800"
+        }
+      ],
+      "skipped_checks_mean_unverified": false
     },
-    "companion_nan_checks": [
-      {
-        "check": "single band",
-        "status": "PASS",
-        "detail": "count=1"
+    "gems57_validate_geotiff_zeros": {
+      "file": "/home/user/GEMSDOE71/submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif",
+      "bytes": 309897,
+      "sha256": "0b08a50224d7ac16d8514fd7af99f90e9f179ebd0d3d6291d97c649cca88d8ad",
+      "meta": {
+        "crs": "EPSG:32611",
+        "shape": [
+          3730,
+          3292
+        ],
+        "dtype": "float32",
+        "count": 1,
+        "nodata": null,
+        "transform": [
+          100.0,
+          0.0,
+          243350.0,
+          0.0,
+          -100.0,
+          4508550.0
+        ],
+        "profile_compress": "deflate"
       },
-      {
-        "check": "dtype float32",
-        "status": "PASS",
-        "detail": "dtype=float32"
+      "band_description": [
+        null
+      ],
+      "n_finite": 12279160,
+      "n_nan": 0,
+      "n_infinite": 0,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.003159825224429369,
+      "emitted_positive_pixels": 38800,
+      "checks": {
+        "single_band": true,
+        "nonempty_positive_support": true,
+        "nodata_tag_absent": true,
+        "dtype_float32": true,
+        "dimensions_3730x3292": true,
+        "crs_epsg_32611": true,
+        "transform_matches_sample_submission": true,
+        "no_nan_anywhere": true,
+        "no_inf_anywhere": true,
+        "no_sentinel_values": true,
+        "range_0_1_guaranteed": true,
+        "min_ge_0": true,
+        "max_le_1": true,
+        "no_masked_pixels_inside_footprint": true,
+        "in_footprint_all_finite": true,
+        "in_footprint_range_0_1": true,
+        "outside_footprint_zero": true,
+        "zero_dots_on_mapped_catalogue": true
       },
-      {
-        "check": "CRS EPSG:32611",
-        "status": "PASS",
-        "detail": "crs=EPSG:32611"
-      },
-      {
-        "check": "shape matches",
-        "status": "PASS",
-        "detail": "file=(3730, 3292) expected=(3730, 3292)"
-      },
-      {
-        "check": "resolution 100 m",
-        "status": "PASS",
-        "detail": "res=(100.0, 100.0)"
-      },
-      {
-        "check": "transform matches reference",
-        "status": "PASS",
-        "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
-      },
-      {
-        "check": "CRS matches reference",
-        "status": "PASS",
-        "detail": "file=EPSG:32611 ref=EPSG:32611"
-      },
-      {
-        "check": "nodata tag is none or NaN",
-        "status": "PASS",
-        "detail": "nodata=nan (finite nodata tags are rejected conservatively)"
-      },
-      {
-        "check": "no infinities",
-        "status": "PASS",
-        "detail": "inf_count=0"
-      },
-      {
-        "check": "values within [0, 1]",
-        "status": "PASS",
-        "detail": "min=0.0 max=1.0 finite_cells=5167373"
-      },
-      {
-        "check": "features grid shape matches",
-        "status": "PASS",
-        "detail": "features=(3730, 3292) reference=(3730, 3292)"
-      },
-      {
-        "check": "features transform matches reference grid",
-        "status": "PASS",
-        "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
-      },
-      {
-        "check": "features CRS matches reference grid",
-        "status": "PASS",
-        "detail": "features=EPSG:32611 reference=EPSG:32611"
-      },
-      {
-        "check": "no NaN inside footprint",
-        "status": "PASS",
-        "detail": "nan_inside=0 footprint_cells=5167373"
-      },
-      {
-        "check": "NaN-only outside footprint",
-        "status": "PASS",
-        "detail": "finite_outside=0; only NaN is allowed outside"
-      },
-      {
-        "check": "info: emitted cells (value > 0)",
-        "status": "INFO",
-        "detail": "emitted=35500"
-      }
-    ]
-  },
-  "submission": {
-    "name": "gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0",
-    "note": "GEMSDOE71 H71-A DPST-HDT | 35500 dots (s=3.25, B=2.5px); HOLDOUT-DTI 0.0526 (+0.0250 vs base); id fd98afd0",
-    "note_length_chars": 106,
-    "ok_to_download_and_submit": true,
-    "status_banner": "OK TO DOWNLOAD AND SUBMIT \u2014 VERIFIED UNIQUE & FORMAT-VALIDATED"
-  },
-  "experiments_used": 3,
-  "experiment_budget_max": 3,
-  "e3_parameter_sweep": [
-    {
-      "tag": "c2p00_s3p05_n37654",
-      "collar_px": 2.0,
-      "min_sep_px": 3.05,
-      "n_dots": 37654,
-      "holdout_s20_pooled_dti": 0.0533,
-      "sgmc_calibrated_dti": 0.06487,
-      "emitted_dots": 37654
-    },
-    {
-      "tag": "c2p25_s3p15_n36800",
-      "collar_px": 2.25,
-      "min_sep_px": 3.15,
-      "n_dots": 36800,
-      "holdout_s20_pooled_dti": 0.05291,
-      "sgmc_calibrated_dti": 0.06516,
-      "emitted_dots": 36800
-    },
-    {
-      "tag": "c2p50_s3p25_n35500",
-      "collar_px": 2.5,
-      "min_sep_px": 3.25,
-      "n_dots": 35500,
-      "holdout_s20_pooled_dti": 0.05372,
-      "sgmc_calibrated_dti": 0.06667,
-      "emitted_dots": 35500
+      "all_checks_passed": true,
+      "validation_class": "local format/range preflight; not organizer acceptance or uniqueness clearance",
+      "on_catalogue_positive_pixels": 0,
+      "in_footprint_positive_pixels": 38800,
+      "footprint_fraction": 0.007508650914110516
     }
-  ],
-  "verdict": "promote",
-  "elapsed_s": 118.81
+  },
+  "runtime_seconds": 60.29
 }
