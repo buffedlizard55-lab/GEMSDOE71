@@ -1,0 +1,202 @@
+{
+  "experiment": "E1_LEAKAGE_CANARY",
+  "evidence_class": "HOLDOUT-LEAKAGE-CANARY",
+  "evaluator_version": "gems57-pooled-hide-v2",
+  "generated_utc": "2026-10-20T19:55:15Z",
+  "rule": "Test each feature alone on the spatially-blocked holdout before trusting any result. AUC > 0.90 means leakage until proven otherwise.",
+  "n_folds_evaluated": 8,
+  "n_features_tested": 31,
+  "max_feature_auc": 0.75024,
+  "max_feature_name": "visible_context::K_tip_from_visible_only",
+  "flagged_features_gt_090": [],
+  "all_passed": true,
+  "per_feature": {
+    "official::mag_anom": {
+      "mean_fold_auc": 0.53038,
+      "max_fold_auc": 0.56251,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::rtp": {
+      "mean_fold_auc": 0.52642,
+      "max_fold_auc": 0.55975,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::tmi_hg": {
+      "mean_fold_auc": 0.53028,
+      "max_fold_auc": 0.558,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::geod_2ndinv": {
+      "mean_fold_auc": 0.53187,
+      "max_fold_auc": 0.57754,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::iso_grav_anom_slope": {
+      "mean_fold_auc": 0.54666,
+      "max_fold_auc": 0.59682,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::tc": {
+      "mean_fold_auc": 0.56142,
+      "max_fold_auc": 0.61694,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::geod_shearrate": {
+      "mean_fold_auc": 0.54069,
+      "max_fold_auc": 0.58298,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::geod_dilaterate": {
+      "mean_fold_auc": 0.53734,
+      "max_fold_auc": 0.59137,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::tmi_vg": {
+      "mean_fold_auc": 0.51411,
+      "max_fold_auc": 0.53802,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::deq_n100a15": {
+      "mean_fold_auc": 0.54298,
+      "max_fold_auc": 0.59007,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::iso_grav_anom_vg": {
+      "mean_fold_auc": 0.51397,
+      "max_fold_auc": 0.52892,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::det_elev": {
+      "mean_fold_auc": 0.56106,
+      "max_fold_auc": 0.63373,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::iso_grav_anom": {
+      "mean_fold_auc": 0.51645,
+      "max_fold_auc": 0.5379,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::tmi": {
+      "mean_fold_auc": 0.51831,
+      "max_fold_auc": 0.53944,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::depth_to_base_surf": {
+      "mean_fold_auc": 0.52365,
+      "max_fold_auc": 0.56397,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::ieq_n100a15": {
+      "mean_fold_auc": 0.53236,
+      "max_fold_auc": 0.57136,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::cond_surf": {
+      "mean_fold_auc": 0.53118,
+      "max_fold_auc": 0.56805,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::iso_grav_anom_hg": {
+      "mean_fold_auc": 0.5414,
+      "max_fold_auc": 0.60206,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "official::det_elev_slope": {
+      "mean_fold_auc": 0.56737,
+      "max_fold_auc": 0.64364,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "external::ext_TMI_up150": {
+      "mean_fold_auc": 0.51456,
+      "max_fold_auc": 0.53934,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "external::ext_ThK": {
+      "mean_fold_auc": 0.5389,
+      "max_fold_auc": 0.57739,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "external::rad_K": {
+      "mean_fold_auc": 0.57688,
+      "max_fold_auc": 0.62396,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "external::rad_Th": {
+      "mean_fold_auc": 0.55249,
+      "max_fold_auc": 0.61141,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "external::lidar_step_max": {
+      "mean_fold_auc": 0.57154,
+      "max_fold_auc": 0.62562,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "external::lidar_cross_max": {
+      "mean_fold_auc": 0.54649,
+      "max_fold_auc": 0.62041,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "derived::P_persist": {
+      "mean_fold_auc": 0.5197,
+      "max_fold_auc": 0.54055,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "derived::H_vent": {
+      "mean_fold_auc": 0.51893,
+      "max_fold_auc": 0.53679,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "derived::S_scarp": {
+      "mean_fold_auc": 0.55126,
+      "max_fold_auc": 0.63097,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "derived::H71_B_surface": {
+      "mean_fold_auc": 0.51273,
+      "max_fold_auc": 0.53307,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "derived::H71_C_surface": {
+      "mean_fold_auc": 0.54107,
+      "max_fold_auc": 0.5984,
+      "leakage_flag": false,
+      "status": "PASS"
+    },
+    "visible_context::K_tip_from_visible_only": {
+      "mean_fold_auc": 0.75024,
+      "max_fold_auc": 0.80591,
+      "leakage_flag": false,
+      "status": "PASS"
+    }
+  },
+  "elapsed_s": 31.69
+}

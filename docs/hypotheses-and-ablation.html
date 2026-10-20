@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>5 Hypotheses &amp; Holdout Validation | GEMSDOE71 Geothermal Fault Discovery</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span>GEMSDOE71 // DPST-HDT</span>
+      <span class="brand-badge">PROMOTE // OK TO SUBMIT</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Overview &amp; Download</a><a href="executive-summary.html">Executive Summary</a><a href="forensic-02778.html">Forensic Proof of 0.2778</a><a href="hypotheses-and-ablation.html" class="active">5 Hypotheses &amp; Holdout</a><a href="uniqueness-and-leakage.html">Uniqueness, Canary &amp; Run Card</a><a href="limitations-and-sources.html">Limitations &amp; Official Sources</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container">
+    
+    <div class="section-card">
+      <h2>5 Candidate Geological Hypotheses (Ranked by Expected DTI Gain &amp; Cost)</h2>
+      <p>
+        Following the competition protocol, we formulated five distinct geological hypotheses before running holdout experiments,
+        explicitly specifying for each: (a) the exact competition/external layers used, (b) the physical signature &amp; mathematical transform,
+        (c) why it detects blind/unmapped geothermal faults missed by the USGS/INGENIOUS surface catalogue, (d) named non-fault geological processes
+        that could mimic it (and our suppressor), and (e) how it differs from prior sibling implementations.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank &amp; ID</th>
+              <th>Geological Hypothesis &amp; Layers Used</th>
+              <th>Physical Transform &amp; Mechanism</th>
+              <th>Why Missed by Catalogue &amp; Named Non-Fault Mimic</th>
+              <th class="num">Expected Gain / Cost</th>
+              <th class="num">Validated Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>#1<br><code>H71-A</code><br>(DPST-HDT)</strong></td>
+              <td>
+                <strong>Depth-Persistent Potential-Field Structure Tensor &amp; Hydrothermal Demagnetization/Illitization Conjunction</strong><br>
+                Layers: <code>ext_TMI_up150</code>, <code>tmi_hg</code>, <code>iso_grav_anom_hg</code>, <code>depth_to_base_surf</code>, <code>rtp</code>, <code>cond_surf</code>, <code>rad_K</code>, <code>rad_Th</code>, <code>ext_ThK</code>, GDR 1391 geothermometers, <code>det_elev</code>, <code>det_elev_slope</code>, <code>lidar_step_max</code>, <code>geod_shearrate</code>, <code>geod_dilaterate</code>, <code>ieq_n100a15</code>, <code>existing_faults</code> (visible-only).
+              </td>
+              <td>
+                4-way conjunction: (1) <code>P_persist</code> = 150 m upward-continued TMI step &times; horizontal magnetic/gravity gradients &times; basement slope;
+                (2) <code>H_vent</code> = RTP Laplacian trough (<code>&nabla;&sup2;RTP &gt; 0</code> from hydrothermal magnetite &rarr; pyrite destruction) + <code>cond_surf</code> smectite cap + <code>K/Th</code> illite/adularia enrichment + chemical geothermometer IDW;
+                (3) <code>S_scarp</code> = multi-scale topographic crest with Lake Lahontan low-elevation contour suppressor;
+                (4) <code>K_tip(visible)</code> = crack-tip &amp; relay stress halo weighted by geodetic shear/dilatation.
+              </td>
+              <td>
+                <strong>Why missed:</strong> Play-fairway hidden geothermal conduits (e.g., Fallon, Bradys/Desert Peak, McGinness Hills step-overs) are buried beneath Quaternary playa/alluvial cover without continuous 1:24k surface scarps.<br>
+                <strong>Named mimic:</strong> Pluvial Lake Lahontan shoreline benches (~1,200&ndash;1,338 m) and discordant tuff flow edges (suppressed by requiring 150 m potential-field persistence and penalizing shoreline contour bands lacking geophysical gradients).
+              </td>
+              <td class="num">High Gain<br>Low Cost<br>(Cached Stack)</td>
+              <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span><br><strong>0.05264</strong><br>(#1 Winner,<br>PROMOTED)</td>
+            </tr>
+            <tr>
+              <td><strong>#2<br><code>H71-C</code><br>(Kostrov-Riedel)</strong></td>
+              <td>
+                <strong>Kostrov Geodetic Dilatation-to-Shear Partitioning &amp; Microseismic Crack Density</strong><br>
+                Layers: <code>geod_dilaterate</code>, <code>geod_shearrate</code>, <code>geod_2ndinv</code>, <code>ieq_n100a15</code>, <code>deq_n100a15</code>, plus visible-only tip mask.
+              </td>
+              <td>
+                Computes dimensionless transtensional ratio <code>R_K = geod_dilaterate / (&radic;(geod_2ndinv&sup2; + geod_shearrate&sup2;) + &epsilon;)</code>
+                multiplied by active shear strain and shallow microseismic intensity-to-distance ratio <code>ieq_n100a15 - 0.5 deq_n100a15</code>.
+              </td>
+              <td>
+                <strong>Why missed:</strong> Actively creeping or seismogenic Riedel shear zones in the Walker Lane accommodate strain across distributed unmapped step-overs.<br>
+                <strong>Named mimic:</strong> Long-wavelength GPS interpolation lobes and mining-blast/swarm halos (~10 km smoothing scale exceeds 300 m DTI kernel).
+              </td>
+              <td class="num">Medium Gain<br>Low Cost<br>(Cached Stack)</td>
+              <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span><br><strong>0.04696</strong><br>(#2 Arm)</td>
+            </tr>
+            <tr>
+              <td><strong>#3<br><code>H71-B</code><br>(ASTR-Tilt)</strong></td>
+              <td>
+                <strong>Analytic-Signal Tilt-Ratio Contact Depth &amp; Salem Zero-Crossing Edge Sharpness</strong><br>
+                Layers: <code>tmi_hg</code>, <code>tmi_vg</code>, <code>iso_grav_anom_hg</code>, <code>iso_grav_anom_vg</code>, <code>tc</code>, <code>ext_HGM_mag</code>, <code>ext_HGM_grav</code>.
+              </td>
+              <td>
+                Salem et al. (2007) tilt-derivative contact detector: peaks where <code>|tc|</code> crosses zero (<code>exp(-tc&sup2;/0.35)</code>) co-located with high magnetic and gravity analytic-signal amplitude <code>&radic;(HG&sup2; + VG&sup2;)</code>.
+              </td>
+              <td>
+                <strong>Why missed:</strong> Steep intrabasinal horst/graben contacts beneath valley fill produce sharp potential-field tilt zero-crossings with no surface trace.<br>
+                <strong>Named mimic:</strong> Intrusive pluton margins and tilted volcanic dike swarms (non-fault lithologic contacts).
+              </td>
+              <td class="num">Medium Gain<br>Low Cost<br>(Cached Stack)</td>
+              <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span><br><strong>0.04464</strong><br>(#3 Arm)</td>
+            </tr>
+            <tr>
+              <td><strong>#4<br><code>H71-D</code><br>(GDR-2m-Sinter)</strong></td>
+              <td>
+                <strong>Shallow 2-Meter Thermal Probe &amp; Opaline/Chalcedonic Sinter Outflow Plume Alignment</strong><br>
+                Layers: GDR 1391 <code>ShallowTemp2m</code> survey points + <code>Well_Logs</code> + <code>tg_gradient</code>.
+              </td>
+              <td>
+                Anisotropic strike-aligned kriging of 2 m temperature anomalies along local structural azimuths.
+              </td>
+              <td>
+                <strong>Why missed:</strong> Blind upflow zones leak heat into shallow alluvium before surface faulting is mapped.<br>
+                <strong>Named mimic:</strong> Lateral shallow groundwater outflow plumes migrating down-hydraulic-gradient 2&ndash;5 km away from the parent fault.
+              </td>
+              <td class="num">Low-Med Gain<br>Medium Cost<br>(Sparse Point Coverage)</td>
+              <td class="num">Integrated via<br>GDR 1391 IDW<br>inside <code>H_vent</code></td>
+            </tr>
+            <tr>
+              <td><strong>#5<br><code>H71-E</code><br>(ARIA-InSAR)</strong></td>
+              <td>
+                <strong>ASF ARIA Sentinel-1 GUNW Co-Seismic/Aseismic Phase-Gradient Discontinuity</strong><br>
+                Layers: External NASA/JPL ARIA Sentinel-1 unwrapped interferograms.
+              </td>
+              <td>
+                Spatial directional derivative of multi-temporal stacked LOS displacement maps to isolate creeping fault discontinuities.
+              </td>
+              <td>
+                <strong>Why missed:</strong> Aseismic creep and poroelastic subsidence discontinuities occur across unmapped basin-floor faults.<br>
+                <strong>Named mimic:</strong> Agricultural groundwater pumping subsidence bowls and playa soil-moisture phase decorrelation.
+              </td>
+              <td class="num">Medium Gain<br>High Cost<br>(Blocked by Sandbox Firewall)</td>
+              <td class="num">Deferred<br>(See Limitations)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h2>Experiment E2: Spatially-Blocked Hide-and-Recover Holdout Results</h2>
+      <p>
+        All five experimental arms in E2 were evaluated on the exact shared <code>gems57-pooled-hide-v2</code> evaluator:
+        whole fault segments are withheld in 50 km spatial blocks with a 2 km (20 px) safety buffer; catalogue features (<code>K_tip</code>)
+        are computed <strong>strictly from <code>fold.visible_faults</code></strong>; visible faults are masked pixel-exactly; and pooled DTI is
+        computed across all 8 spatial folds (<code>22,893</code> withheld positive pixels) with 1,000 paired 20 km spatial-cluster bootstrap draws.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Experimental Arm</th>
+              <th class="num">Pooled Holdout DTI</th>
+              <th class="num">95% Spatial Bootstrap CI</th>
+              <th class="num">Paired &Delta; (H71-A minus Arm)</th>
+              <th class="num">Pooled TP_w</th>
+              <th class="num">SGMC Off-Catalogue DTI</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><strong>H71-A: DPST-HDT (4-Way Conjunction + Visible Crack-Tip)</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Top Candidate (Promoted)</span></td>
+          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.05264</strong></td>
+          <td class="num">[0.04139, 0.06284]</td>
+          <td class="num">Reference (Top Arm)</td>
+          <td class="num">1706.9</td>
+          <td class="num">0.06518</td>
+        </tr>
+
+        <tr>
+          <td><strong>H71-C: Kostrov Strain Dilatation/Shear + Microseismic Ratio</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Candidate 3</span></td>
+          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.04696</strong></td>
+          <td class="num">[0.03118, 0.06046]</td>
+          <td class="num">+0.00567 [-0.00837, +0.02211]</td>
+          <td class="num">1521.7</td>
+          <td class="num">0.05352</td>
+        </tr>
+
+        <tr>
+          <td><strong>H71-B: Analytic-Signal Contact &amp; Salem Tilt-Derivative</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Candidate 2</span></td>
+          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.04464</strong></td>
+          <td class="num">[0.03690, 0.05230]</td>
+          <td class="num">+0.00800 [-0.00500, +0.02165]</td>
+          <td class="num">1446.3</td>
+          <td class="num">0.07326</td>
+        </tr>
+
+        <tr>
+          <td><strong>H71-A Ablation: DPST-HDT without Visible Crack-Tip (K_tip=0)</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Within-Lane Ablation</span></td>
+          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.04140</strong></td>
+          <td class="num">[0.03214, 0.04963]</td>
+          <td class="num">+0.01124 [+0.00805, +0.01460]</td>
+          <td class="num">1340.9</td>
+          <td class="num">0.06509</td>
+        </tr>
+
+        <tr>
+          <td><strong>Baseline Control: Topographic Slope &amp; Relief Scarp Only</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Baseline Control</span></td>
+          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.02767</strong></td>
+          <td class="num">[0.02141, 0.03410]</td>
+          <td class="num">+0.02497 [+0.01553, +0.03488]</td>
+          <td class="num">894.6</td>
+          <td class="num">0.09944</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="figure-box">
+        <img src="assets/fig2_holdout_ablation.svg" alt="Holdout Comparison and Per-Fold Consistency">
+      </div>
+    </div>
+    
+  </main>
+  <footer>
+    GEMSDOE71 &mdash; Depth-Persistent Potential-Field Structure Tensor &amp; Hydrothermal Demagnetization/Illitization Conjunction (DPST-HDT) |
+    Branch <code>arena/b7be360e-gemsdoe71</code> | All metrics explicitly labeled <code>HOLDOUT-DTI</code> or <code>ORGANIZER-CONFIRMED</code>.
+  </footer>
+</body>
+</html>

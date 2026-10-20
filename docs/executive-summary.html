@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Executive Summary | GEMSDOE71 Geothermal Fault Discovery</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span>GEMSDOE71 // DPST-HDT</span>
+      <span class="brand-badge">PROMOTE // OK TO SUBMIT</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Overview &amp; Download</a><a href="executive-summary.html" class="active">Executive Summary</a><a href="forensic-02778.html">Forensic Proof of 0.2778</a><a href="hypotheses-and-ablation.html">5 Hypotheses &amp; Holdout</a><a href="uniqueness-and-leakage.html">Uniqueness, Canary &amp; Run Card</a><a href="limitations-and-sources.html">Limitations &amp; Official Sources</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container">
+    
+    
+<section class="status-hero" id="submission-status">
+  <div class="status-pill">&#10004; OK TO DOWNLOAD AND SUBMIT — VERIFIED UNIQUE &amp; FORMAT-VALIDATED</div>
+  <h1>GEMSDOE71 Competition GeoTIFF Deliverable &mdash; Ready for One-Click Download &amp; DrivenData Upload</h1>
+  <p class="lead">
+    <strong>Is this TIF submission OK to download and submit? YES.</strong>
+    <code>gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif</code> is a newly generated, verified-unique single-band
+    <code>float32</code> GeoTIFF on the exact <code>3730 &times; 3292</code> <code>EPSG:32611</code> competition grid with
+    <strong>all 12,279,160 pixels strictly finite in <code>[0.0, 1.0]</code></strong> (solving the DrivenData
+    <code>"Predicted values must be in range [0, 1]"</code> portal error), <strong>35,500 submodular fault dots</strong>
+    (<code>s = 3.25 px</code>, <code>B = 2.5 px</code> collar), <strong>0 dots on mapped catalogue faults</strong>,
+    and <strong>15/15 preflight checks passing</strong>.
+  </p>
+
+  <div class="download-grid">
+    <a class="btn-download primary" href="downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif" download>
+      <div class="title"><span>&#11015; Download Primary GeoTIFF (.tif)</span><span>139 KB</span></div>
+      <div class="sub">gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif<br>SHA-256: 8576f1474ee6fa6bb38d319a&hellip; (All-finite [0, 1])</div>
+    </a>
+    <a class="btn-download" href="downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.zip" download>
+      <div class="title"><span>&#11015; Download Competition ZIP (.zip)</span><span>106 KB</span></div>
+      <div class="sub">gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.zip<br>SHA-256: 183eb6f4b051cf61300355bc&hellip;</div>
+    </a>
+    <a class="btn-download" href="downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-nan.tif" download>
+      <div class="title"><span>&#11015; Companion NaN-Masked GeoTIFF</span><span>350 KB</span></div>
+      <div class="sub">gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-nan.tif<br>SHA-256: b6f934f4ca0084d6e7de6556&hellip; (Footprint-NaN)</div>
+    </a>
+    <a class="btn-download" href="run_card.json" download>
+      <div class="title"><span>&#11015; Protocol JSON Run Card</span><span>9.0 KB</span></div>
+      <div class="sub">docs/run_card.json &amp; docs/irregularities.json<br>Verdict: PROMOTE (3/3 Experiments Used)</div>
+    </a>
+  </div>
+
+  <div class="meta-copy-grid">
+    <div class="copy-box">
+      <div class="label">Unique Submission Name</div>
+      <code>gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0</code>
+    </div>
+    <div class="copy-box">
+      <div class="label">Short Submission Note (106 / 140 chars max)</div>
+      <code>GEMSDOE71 H71-A DPST-HDT | 35500 dots (s=3.25, B=2.5px); HOLDOUT-DTI 0.0526 (+0.0250 vs base); id fd98afd0</code>
+    </div>
+  </div>
+</section>
+
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-label">Pooled Spatially-Blocked Holdout</div>
+    <div class="kpi-val emerald">0.05264</div>
+    <div class="kpi-sub"><span class="badge badge-holdout">HOLDOUT-DTI</span> 95% CI [0.04139, 0.06284]<br><code>gems57-pooled-hide-v2</code> (22,893 withheld px)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Gain vs Topographic Baseline</div>
+    <div class="kpi-val emerald">+0.02497</div>
+    <div class="kpi-sub"><span class="badge badge-holdout">HOLDOUT-DTI</span> Paired 95% CI [+0.01553, +0.03488]<br>Wins <strong>8/8</strong> spatial folds (+90.3% relative)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Pre-Placement Surface Uniqueness</div>
+    <div class="kpi-val accent">0.1466</div>
+    <div class="kpi-sub">Max |Spearman &rho;| vs 93 registry rasters (gate &le; 0.90)<br>Vs <code>h33-2-b2</code> (0.2778): <strong>&rho; = 0.0104</strong></div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Post-Placement 3-px Dot Overlap</div>
+    <div class="kpi-val accent">43.24%</div>
+    <div class="kpi-sub">Max 3-px overlap vs 87 lane rasters (gate &le; 70.0%)<br>Vs <code>h33-2-b2</code> (0.2778): <strong>18.29%</strong> (Jaccard 0.36%)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Solo Feature Leakage Canary</div>
+    <div class="kpi-val emerald">0.7502</div>
+    <div class="kpi-sub">Max solo AUC across 31 features (gate &le; 0.90)<br>0 leakage flags across all 8 folds</div>
+  </div>
+</div>
+
+
+    <div class="section-card">
+      <h2>Executive Summary &amp; Submission Readiness Checklist</h2>
+      <p>
+        This page provides a rapid decision briefing for downloading and submitting the <code>GEMSDOE71</code> GeoTIFF deliverable
+        to the DrivenData DOE GEMS Geothermal Fault Discovery competition.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Protocol Requirement</th>
+              <th>Target / Threshold</th>
+              <th>GEMSDOE71 Result</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Unique Deliverable GeoTIFF</strong></td>
+              <td>Not a copy of any prior submission</td>
+              <td><code>gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif</code> (SHA-256 <code>8576f1474ee6fa6b&hellip;</code>)</td>
+              <td><span class="badge badge-confirmed">VERIFIED UNIQUE</span></td>
+            </tr>
+            <tr>
+              <td><strong>2. Pre-Placement Surface Uniqueness</strong></td>
+              <td>|Spearman &rho;| &le; 0.90 vs all registry rasters</td>
+              <td>Max |&rho;| = <strong>0.14655</strong> across all 93 rasters (<strong>0.01035</strong> vs <code>h33-2-b2</code>)</td>
+              <td><span class="badge badge-confirmed">PASS (6.1&times; below limit)</span></td>
+            </tr>
+            <tr>
+              <td><strong>3. Post-Placement Dots Uniqueness</strong></td>
+              <td>|Spearman &rho;| &le; 0.90 &amp; 3-px overlap &le; 70%</td>
+              <td>Max |&rho;| = <strong>0.02960</strong>; Max 3-px overlap = <strong>43.25%</strong> across 87 lane rasters (<strong>18.29%</strong> vs <code>h33-2-b2</code>)</td>
+              <td><span class="badge badge-confirmed">PASS</span></td>
+            </tr>
+            <tr>
+              <td><strong>4. Solo Feature Leakage Canary (E1)</strong></td>
+              <td>Solo feature AUC &le; 0.90 on spatially-blocked holdout</td>
+              <td>31 features tested across 8 folds; Max AUC = <strong>0.75024</strong> (<code>K_tip_from_visible_only</code>); physical features <code>0.5127&ndash;0.5769</code></td>
+              <td><span class="badge badge-confirmed">PASS (0 flags)</span></td>
+            </tr>
+            <tr>
+              <td><strong>5. Spatially-Blocked Holdout Gain (E2)</strong></td>
+              <td>Beat baseline &amp; ablations on <code>gems57-pooled-hide-v2</code></td>
+              <td><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.05264</strong> (<code>[0.04139, 0.06284]</code>) vs Baseline <strong>0.02767</strong> (<code>+&Delta; = +0.02497</code>, 8/8 folds)</td>
+              <td><span class="badge badge-confirmed">PROMOTE</span></td>
+            </tr>
+            <tr>
+              <td><strong>6. Portal Range &amp; Grid Preflight (E3)</strong></td>
+              <td>All values in <code>[0, 1]</code>, <code>EPSG:32611</code>, <code>3730&times;3292</code></td>
+              <td><code>min=0.0, max=1.0</code>, <code>0</code> NaNs in <code>-zeros.tif</code>, <code>0</code> sentinels, <code>15/15</code> validator checks pass</td>
+              <td><span class="badge badge-confirmed">OK TO SUBMIT</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h2>Summary of Spatially-Blocked Holdout &amp; Off-Catalogue SGMC Results</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Model Arm</th>
+              <th class="num">Pooled Holdout DTI</th>
+              <th class="num">95% Spatial Bootstrap CI</th>
+              <th class="num">Paired &Delta; (H71-A minus Arm)</th>
+              <th class="num">Pooled TP_w</th>
+              <th class="num">SGMC Off-Catalogue DTI</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><strong>H71-A: DPST-HDT (4-Way Conjunction + Visible Crack-Tip)</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Top Candidate (Promoted)</span></td>
+          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.05264</strong></td>
+          <td class="num">[0.04139, 0.06284]</td>
+          <td class="num">Reference (Top Arm)</td>
+          <td class="num">1706.9</td>
+          <td class="num">0.06518</td>
+        </tr>
+
+        <tr>
+          <td><strong>H71-C: Kostrov Strain Dilatation/Shear + Microseismic Ratio</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Candidate 3</span></td>
+          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.04696</strong></td>
+          <td class="num">[0.03118, 0.06046]</td>
+          <td class="num">+0.00567 [-0.00837, +0.02211]</td>
+          <td class="num">1521.7</td>
+          <td class="num">0.05352</td>
+        </tr>
+
+        <tr>
+          <td><strong>H71-B: Analytic-Signal Contact &amp; Salem Tilt-Derivative</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Candidate 2</span></td>
+          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.04464</strong></td>
+          <td class="num">[0.03690, 0.05230]</td>
+          <td class="num">+0.00800 [-0.00500, +0.02165]</td>
+          <td class="num">1446.3</td>
+          <td class="num">0.07326</td>
+        </tr>
+
+        <tr>
+          <td><strong>H71-A Ablation: DPST-HDT without Visible Crack-Tip (K_tip=0)</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Within-Lane Ablation</span></td>
+          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.04140</strong></td>
+          <td class="num">[0.03214, 0.04963]</td>
+          <td class="num">+0.01124 [+0.00805, +0.01460]</td>
+          <td class="num">1340.9</td>
+          <td class="num">0.06509</td>
+        </tr>
+
+        <tr>
+          <td><strong>Baseline Control: Topographic Slope &amp; Relief Scarp Only</strong><br><span style="color:var(--text-muted);font-size:0.78rem">Baseline Control</span></td>
+          <td class="num"><span class="badge badge-holdout">HOLDOUT-DTI</span> <strong>0.02767</strong></td>
+          <td class="num">[0.02141, 0.03410]</td>
+          <td class="num">+0.02497 [+0.01553, +0.03488]</td>
+          <td class="num">894.6</td>
+          <td class="num">0.09944</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  </main>
+  <footer>
+    GEMSDOE71 &mdash; Depth-Persistent Potential-Field Structure Tensor &amp; Hydrothermal Demagnetization/Illitization Conjunction (DPST-HDT) |
+    Branch <code>arena/b7be360e-gemsdoe71</code> | All metrics explicitly labeled <code>HOLDOUT-DTI</code> or <code>ORGANIZER-CONFIRMED</code>.
+  </footer>
+</body>
+</html>

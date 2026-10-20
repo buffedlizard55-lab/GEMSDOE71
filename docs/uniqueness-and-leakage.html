@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Uniqueness Gate, Canary &amp; Run Card | GEMSDOE71 Geothermal Fault Discovery</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span>GEMSDOE71 // DPST-HDT</span>
+      <span class="brand-badge">PROMOTE // OK TO SUBMIT</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Overview &amp; Download</a><a href="executive-summary.html">Executive Summary</a><a href="forensic-02778.html">Forensic Proof of 0.2778</a><a href="hypotheses-and-ablation.html">5 Hypotheses &amp; Holdout</a><a href="uniqueness-and-leakage.html" class="active">Uniqueness, Canary &amp; Run Card</a><a href="limitations-and-sources.html">Limitations &amp; Official Sources</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container">
+    
+    <div class="section-card">
+      <h2>Experiment E1: Solo Feature Leakage Canary (31 Features Tested Across 8 Folds)</h2>
+      <p>
+        Per Rule 4 of the Parallel-Run Protocol: <em>"Test each feature alone on the holdout before trusting any result. AUC &gt; 0.90 means leakage until proven otherwise."</em>
+        Every single one of the 19 official <code>training_features.tif</code> bands, 6 external GeoDAWN/LiDAR bands, 5 derived physical surfaces,
+        and the visible-only crack-tip field <code>K_tip(visible)</code> was evaluated solo across all 8 spatially-blocked folds:
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature Name</th>
+              <th class="num">Mean 8-Fold Holdout AUC</th>
+              <th class="num">Max Single-Fold AUC</th>
+              <th class="num">Protocol Ceiling</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><code>visible_context::K_tip_from_visible_only</code></td>
+          <td class="num">0.75024</td>
+          <td class="num">0.80591</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>external::rad_K</code></td>
+          <td class="num">0.57688</td>
+          <td class="num">0.62396</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>external::lidar_step_max</code></td>
+          <td class="num">0.57154</td>
+          <td class="num">0.62562</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::det_elev_slope</code></td>
+          <td class="num">0.56737</td>
+          <td class="num">0.64364</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::tc</code></td>
+          <td class="num">0.56142</td>
+          <td class="num">0.61694</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::det_elev</code></td>
+          <td class="num">0.56106</td>
+          <td class="num">0.63373</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>external::rad_Th</code></td>
+          <td class="num">0.55249</td>
+          <td class="num">0.61141</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>derived::S_scarp</code></td>
+          <td class="num">0.55126</td>
+          <td class="num">0.63097</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::iso_grav_anom_slope</code></td>
+          <td class="num">0.54666</td>
+          <td class="num">0.59682</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>external::lidar_cross_max</code></td>
+          <td class="num">0.54649</td>
+          <td class="num">0.62041</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::deq_n100a15</code></td>
+          <td class="num">0.54298</td>
+          <td class="num">0.59007</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::iso_grav_anom_hg</code></td>
+          <td class="num">0.54140</td>
+          <td class="num">0.60206</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>derived::H71_C_surface</code></td>
+          <td class="num">0.54107</td>
+          <td class="num">0.59840</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::geod_shearrate</code></td>
+          <td class="num">0.54069</td>
+          <td class="num">0.58298</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>external::ext_ThK</code></td>
+          <td class="num">0.53890</td>
+          <td class="num">0.57739</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::geod_dilaterate</code></td>
+          <td class="num">0.53734</td>
+          <td class="num">0.59137</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::ieq_n100a15</code></td>
+          <td class="num">0.53236</td>
+          <td class="num">0.57136</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::geod_2ndinv</code></td>
+          <td class="num">0.53187</td>
+          <td class="num">0.57754</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::cond_surf</code></td>
+          <td class="num">0.53118</td>
+          <td class="num">0.56805</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::mag_anom</code></td>
+          <td class="num">0.53038</td>
+          <td class="num">0.56251</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::tmi_hg</code></td>
+          <td class="num">0.53028</td>
+          <td class="num">0.55800</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::rtp</code></td>
+          <td class="num">0.52642</td>
+          <td class="num">0.55975</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::depth_to_base_surf</code></td>
+          <td class="num">0.52365</td>
+          <td class="num">0.56397</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>derived::P_persist</code></td>
+          <td class="num">0.51970</td>
+          <td class="num">0.54055</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>derived::H_vent</code></td>
+          <td class="num">0.51893</td>
+          <td class="num">0.53679</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::tmi</code></td>
+          <td class="num">0.51831</td>
+          <td class="num">0.53944</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::iso_grav_anom</code></td>
+          <td class="num">0.51645</td>
+          <td class="num">0.53790</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>external::ext_TMI_up150</code></td>
+          <td class="num">0.51456</td>
+          <td class="num">0.53934</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::tmi_vg</code></td>
+          <td class="num">0.51411</td>
+          <td class="num">0.53802</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>official::iso_grav_anom_vg</code></td>
+          <td class="num">0.51397</td>
+          <td class="num">0.52892</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+
+        <tr>
+          <td><code>derived::H71_B_surface</code></td>
+          <td class="num">0.51273</td>
+          <td class="num">0.53307</td>
+          <td class="num">&le; 0.90000</td>
+          <td><span class="badge badge-confirmed">PASS</span></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h2>Experiment E3: 93-Raster Registry Uniqueness Gate (Surface &amp; Dots)</h2>
+      <p>
+        Per Rule 1 of the Parallel-Run Protocol, we audited <strong>both</strong> our pre-placement continuous surface (<code>H71-A</code>)
+        and our final emitted dots (<code>35,500</code> pixels) against all <strong>93 unique <code>3730 &times; 3292</code> rasters</strong>
+        collected across the sibling GEMSDOE repositories:
+      </p>
+      <ul>
+        <li><strong>Pre-Placement Continuous Surface Gate:</strong> Max <code>|Spearman &rho;| = 0.14655</code> across all 93 rasters (limit <code>&le; 0.90</code>). Against <code>GEMSDOE32 H33-2-B2</code> (<code>0.2778</code>), <code>&rho; = 0.01035</code>.</li>
+        <li><strong>Post-Placement Emitted Dots Gate:</strong> Max <code>|Spearman &rho;| = 0.02960</code> (full-footprint exact) / <code>0.08609</code> (sampled) and max 3-px dot overlap = <strong><code>43.25%</code></strong> across all 87 hypothesis-lane rasters (limit <code>&le; 70.0%</code>). Against <code>GEMSDOE32 H33-2-B2</code> (<code>0.2778</code>), 3-px overlap is only <strong><code>18.29%</code></strong> and exact Jaccard is <strong><code>0.36%</code></strong>.</li>
+      </ul>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Closest Hypothesis-Lane Registry Raster (Top 15 by 3-px Overlap)</th>
+              <th>SHA-256 Prefix</th>
+              <th class="num">Their Dots</th>
+              <th class="num">Surface Spearman &rho;</th>
+              <th class="num">Dots Spearman &rho;</th>
+              <th class="num">3-px Dot Overlap</th>
+              <th class="num">Exact Jaccard</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><code>gemsdoe68-autocontext-s2-20261012T014136Z-nan.tif</code></td>
+          <td><code>ec75090b9a5d6956&hellip;</code></td>
+          <td class="num">35,618</td>
+          <td class="num">+0.10522</td>
+          <td class="num">+0.08609</td>
+          <td class="num"><strong>43.24%</strong></td>
+          <td class="num">1.80%</td>
+        </tr>
+
+        <tr>
+          <td><code>gemsdoe68-autocontext-s2-20261012T014136Z-zeros.tif</code></td>
+          <td><code>753b55a678a4a7e7&hellip;</code></td>
+          <td class="num">35,618</td>
+          <td class="num">+0.10522</td>
+          <td class="num">+0.08609</td>
+          <td class="num"><strong>43.24%</strong></td>
+          <td class="num">1.80%</td>
+        </tr>
+
+        <tr>
+          <td><code>gems50_h52_coincidence8_80k.tif</code></td>
+          <td><code>a2ed87fac9fdb4b9&hellip;</code></td>
+          <td class="num">80,000</td>
+          <td class="num">+0.05686</td>
+          <td class="num">+0.02913</td>
+          <td class="num"><strong>42.51%</strong></td>
+          <td class="num">0.88%</td>
+        </tr>
+
+        <tr>
+          <td><code>gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif</code></td>
+          <td><code>1e404763feb330b9&hellip;</code></td>
+          <td class="num">45,000</td>
+          <td class="num">+0.06269</td>
+          <td class="num">+0.04835</td>
+          <td class="num"><strong>31.26%</strong></td>
+          <td class="num">1.12%</td>
+        </tr>
+
+        <tr>
+          <td><code>gems32-bayesopt-dilation-scarp-d28-20261004-zeros.tif</code></td>
+          <td><code>2c1861f1dbf5bfe7&hellip;</code></td>
+          <td class="num">45,000</td>
+          <td class="num">+0.06269</td>
+          <td class="num">+0.04835</td>
+          <td class="num"><strong>31.26%</strong></td>
+          <td class="num">1.12%</td>
+        </tr>
+
+        <tr>
+          <td><code>GEMSDOE49__gate_ortho_w0.25-40k.tif</code></td>
+          <td><code>3722e26fbf912987&hellip;</code></td>
+          <td class="num">40,000</td>
+          <td class="num">+0.04508</td>
+          <td class="num">+0.03069</td>
+          <td class="num"><strong>30.79%</strong></td>
+          <td class="num">0.82%</td>
+        </tr>
+
+        <tr>
+          <td><code>gems49_gate_ortho_w025_02376.tif</code></td>
+          <td><code>c58fe0551e120678&hellip;</code></td>
+          <td class="num">40,000</td>
+          <td class="num">+0.04508</td>
+          <td class="num">+0.03069</td>
+          <td class="num"><strong>30.79%</strong></td>
+          <td class="num">0.82%</td>
+        </tr>
+
+        <tr>
+          <td><code>gems50_h60_officialstack_50k.tif</code></td>
+          <td><code>7d5a83a326f9e3a9&hellip;</code></td>
+          <td class="num">50,000</td>
+          <td class="num">+0.04211</td>
+          <td class="num">+0.04680</td>
+          <td class="num"><strong>28.96%</strong></td>
+          <td class="num">1.09%</td>
+        </tr>
+
+        <tr>
+          <td><code>gems50_h60_union_d2_75308.tif</code></td>
+          <td><code>772cf4502bfc00f9&hellip;</code></td>
+          <td class="num">75,308</td>
+          <td class="num">-0.01085</td>
+          <td class="num">+0.00506</td>
+          <td class="num"><strong>27.32%</strong></td>
+          <td class="num">0.53%</td>
+        </tr>
+
+        <tr>
+          <td><code>gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-nan.tif</code></td>
+          <td><code>564d569b8500e3c6&hellip;</code></td>
+          <td class="num">46,090</td>
+          <td class="num">+0.02757</td>
+          <td class="num">+0.01208</td>
+          <td class="num"><strong>24.71%</strong></td>
+          <td class="num">0.56%</td>
+        </tr>
+
+        <tr>
+          <td><code>gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-zeros.tif</code></td>
+          <td><code>dee5c5c6bc390ed3&hellip;</code></td>
+          <td class="num">46,090</td>
+          <td class="num">+0.02757</td>
+          <td class="num">+0.01208</td>
+          <td class="num"><strong>24.71%</strong></td>
+          <td class="num">0.56%</td>
+        </tr>
+
+        <tr>
+          <td><code>19GEMSDOE__h19-4-multiline-corroborated.tif</code></td>
+          <td><code>ad52f4c2704f2a87&hellip;</code></td>
+          <td class="num">123,779</td>
+          <td class="num">+0.01637</td>
+          <td class="num">-0.01078</td>
+          <td class="num"><strong>23.66%</strong></td>
+          <td class="num">0.41%</td>
+        </tr>
+
+        <tr>
+          <td><code>gems19_h19_4_multiline_thermal_01894.tif</code></td>
+          <td><code>89109a3bd2cd3b12&hellip;</code></td>
+          <td class="num">123,779</td>
+          <td class="num">+0.01637</td>
+          <td class="num">-0.01078</td>
+          <td class="num"><strong>23.66%</strong></td>
+          <td class="num">0.41%</td>
+        </tr>
+
+        <tr>
+          <td><code>gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif</code></td>
+          <td><code>34218a188aa86592&hellip;</code></td>
+          <td class="num">40,000</td>
+          <td class="num">+0.09022</td>
+          <td class="num">+0.08852</td>
+          <td class="num"><strong>22.64%</strong></td>
+          <td class="num">1.86%</td>
+        </tr>
+
+        <tr>
+          <td><code>19GEMSDOE__h19-5-powerlaw-budget-multiline.tif</code></td>
+          <td><code>ef2ae808eb717986&hellip;</code></td>
+          <td class="num">121,131</td>
+          <td class="num">+0.01756</td>
+          <td class="num">-0.00839</td>
+          <td class="num"><strong>22.55%</strong></td>
+          <td class="num">0.43%</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h2>Irregularities Flagged &amp; Resolved During Line-by-Line Verification</h2>
+      
+        <div class="callout amber">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem">
+            <strong><code>IR-71-DATA-01</code> &mdash; Unflagged float32 sentinel -3.4028235e+38 inside training_features.tif (nodata=None)</strong>
+            <span class="badge badge-warn">HIGH // Raw Feature Raster Sentinel</span>
+          </div>
+          <p style="margin:0.35rem 0"><strong>Impact:</strong> Because the GeoTIFF nodata tag is None, rasterio.read(masked=True) does not mask the -3.4028235e+38 cells. Linear feature combinations or unclipped scores propagate -3.4e38 into the output array, triggering DrivenData&#x27;s &#x27;Predicted values must be in range [0, 1]&#x27; rejection.</p>
+          <p style="margin:0.35rem 0"><strong>Resolution in GEMSDOE71:</strong> scripts/prepare_data.py explicitly filters (val &lt;= -1e30) | ~np.isfinite(val) to NaN before robust median/IQR standardization and imputes non-finite footprint cells to 0.0 (the robust median).</p>
+        </div>
+
+        <div class="callout amber">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem">
+            <strong><code>IR-71-MASK-02</code> &mdash; 4,601-pixel footprint mask mismatch between sample_submission.tif (5,167,373 px) and training_features.tif (5,165,852 px)</strong>
+            <span class="badge badge-warn">CRITICAL // Portal Validation Failure Root Cause</span>
+          </div>
+          <p style="margin:0.35rem 0"><strong>Impact:</strong> If a competitor defines their valid study mask from training_features.tif (5,165,852 px) and writes NaN outside that mask, 3,061 pixels inside sample_submission.tif&#x27;s 5,167,373-pixel evaluation mask are NaN. Since IEEE-754 comparisons evaluate (np.nan &gt;= 0.0) &amp; (np.nan &lt;= 1.0) as False, any portal check of ((pred &gt;= 0) &amp; (pred &lt;= 1)).all() on the evaluation mask or full grid raises &#x27;Predicted values must be in range [0, 1]&#x27;.</p>
+          <p style="margin:0.35rem 0"><strong>Resolution in GEMSDOE71:</strong> Primary submission gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif writes 0.0 outside the footprint so all 12,279,160 float32 pixels are finite in {0.0, 1.0}. Companion -nan.tif is masked strictly by sample_submission.tif&#x27;s 5,167,373-pixel mask.</p>
+        </div>
+
+        <div class="callout amber">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem">
+            <strong><code>IR-71-REG-03</code> &mdash; 6 of 93 registry rasters are dense blanket lattices or full-footprint continuous surfaces (73.97% to 100.00% 3-px footprint coverage)</strong>
+            <span class="badge badge-warn">MEDIUM // Registry Uniqueness Audit Stratification</span>
+          </div>
+          <p style="margin:0.35rem 0"><strong>Impact:</strong> Because a continuous diagnostic surface has positive values on 100% of footprint pixels (and a 5-px lattice covers 99.87% of footprint pixels within 3 px), any raster&#x27;s 3-px dot overlap against those controls is tautologically ~1.0 even when Spearman rank correlation is near zero (-0.0002 to 0.1466).</p>
+          <p style="margin:0.35rem 0"><strong>Resolution in GEMSDOE71:</strong> src/gems71/uniqueness.py audits all 93 rasters, enforces |Spearman rho| &lt;= 0.90 across all 93 rasters on both pre-placement surface (max 0.1466) and post-placement dots (max 0.0861), and enforces 3-px dot overlap &lt;= 0.70 across all 87 hypothesis-lane rasters (max 0.4325) while explicitly reporting the 6 blanket/surface controls.</p>
+        </div>
+
+        <div class="callout amber">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem">
+            <strong><code>IR-71-LEAK-04</code> &mdash; labels.tif and existing_faults.tif are byte-identical (SHA-256 7ba308cc...); catalogue distance features leak if not recomputed per fold</strong>
+            <span class="badge badge-warn">HIGH // Local Validation Protocol</span>
+          </div>
+          <p style="margin:0.35rem 0"><strong>Impact:</strong> Computing distance-to-fault or tip-stress features on the full existing_faults.tif before splitting folds leaks the withheld target segments (solo AUC &gt; 0.99).</p>
+          <p style="margin:0.35rem 0"><strong>Resolution in GEMSDOE71:</strong> All E1 and E2 evaluations use gems57-pooled-hide-v2 spatially-blocked hide-and-recover folds where K_tip(visible) is computed strictly from fold.visible_faults (solo AUC = 0.7502 &lt;= 0.90).</p>
+        </div>
+    </div>
+
+    <div class="section-card">
+      <h2>Full JSON Run Card (<code>docs/run_card.json</code>)</h2>
+      <pre class="json-card">{
+  &quot;schema_version&quot;: &quot;GEMSDOE71-RUN-CARD-v1&quot;,
+  &quot;generated_utc&quot;: &quot;2026-10-20T20:09:01Z&quot;,
+  &quot;lane&quot;: &quot;GEMSDOE71 \u2014 Depth-Persistent Potential-Field Structure Tensor &amp; Hydrothermal Demagnetization/Illitization Conjunction (DPST-HDT)&quot;,
+  &quot;hypothesis&quot;: &quot;H71-A (DPST-HDT): Blind and unmapped geothermal faults in the Great Basin are localized by the four-way conjunction of (1) 150 m upward-continued magnetic/gravity depth-persistence steps (TMI_up150 + tmi_hg + iso_grav_anom_hg + depth_to_base_surf), (2) hydrothermal magnetite-destruction Laplacian troughs (d2(rtp) &gt; 0) with electrical conductivity (cond_surf), K/Th illite-adularia enrichment, and GDR 1391 chemical geothermometer anomalies, (3) shoreline-decoupled 1 m LiDAR / 100 m DEM scarp crests, and (4) visible-only crack-tip &amp; step-over stress concentration, emitted via submodular 300 m triangular-kernel coverage priority outside a 225 m catalogue-flank collar.&quot;,
+  &quot;mechanism&quot;: &quot;Ascending hydrothermal fluids along steep basement-cutting fault conduits alter ferromagnetic magnetite to paramagnetic pyrite/hematite/leucoxene (creating a persistent potential-field step paired with an RTP demagnetization trough) while precipitating potassium-bearing adularia/illite (high K/Th) and smectite clay caps (high cond_surf), preferentially within transtensional crack-tip and relay process zones.&quot;,
+  &quot;named_non_fault_process_that_could_mimic_it&quot;: &quot;Pluvial Lake Lahontan shoreline scarps and alluvial-fan terrace risers mimic topographic scarps on basin margins; discordant volcanic flow edges or hydrothermal alteration along permeable ash-flow tuffs can mimic magnetic lows and K/Th enrichment without brittle fault offset (mitigated by requiring 150 m upward-continued potential-field persistence and applying the low-elevation shoreline contour suppressor).&quot;,
+  &quot;holdout_dti&quot;: {
+    &quot;label&quot;: &quot;HOLDOUT-DTI (evaluator=gems57-pooled-hide-v2, withheld_positives=22893, 95% CI)&quot;,
+    &quot;evidence_class&quot;: &quot;HOLDOUT-DTI&quot;,
+    &quot;evaluator_version&quot;: &quot;gems57-pooled-hide-v2&quot;,
+    &quot;withheld_positive_pixels&quot;: 22893,
+    &quot;n_folds&quot;: 8,
+    &quot;pooled_dti&quot;: 0.05264,
+    &quot;ci95&quot;: [
+      0.04139,
+      0.06284
+    ],
+    &quot;paired_delta_vs_baseline_toposcarp&quot;: 0.02497,
+    &quot;paired_delta_ci95_vs_baseline&quot;: [
+      0.01553,
+      0.03488
+    ],
+    &quot;folds_beat_baseline&quot;: &quot;8/8&quot;,
+    &quot;all_arms_pooled_dti&quot;: {
+      &quot;H71A_DPST_HDT&quot;: {
+        &quot;dti&quot;: 0.05264,
+        &quot;ci95&quot;: [
+          0.04139,
+          0.06284
+        ]
+      },
+      &quot;H71A_NoTip_Ablation&quot;: {
+        &quot;dti&quot;: 0.0414,
+        &quot;ci95&quot;: [
+          0.03214,
+          0.04963
+        ]
+      },
+      &quot;H71B_ASTR_Tilt&quot;: {
+        &quot;dti&quot;: 0.04464,
+        &quot;ci95&quot;: [
+          0.0369,
+          0.0523
+        ]
+      },
+      &quot;H71C_Kostrov_Riedel&quot;: {
+        &quot;dti&quot;: 0.04696,
+        &quot;ci95&quot;: [
+          0.03118,
+          0.06046
+        ]
+      },
+      &quot;Baseline_TopoScarp&quot;: {
+        &quot;dti&quot;: 0.02767,
+        &quot;ci95&quot;: [
+          0.02141,
+          0.0341
+        ]
+      }
+    },
+    &quot;sgmc_off_catalogue_calibrated_dti&quot;: 0.06518
+  },
+  &quot;leakage_canary&quot;: {
+    &quot;all_passed&quot;: true,
+    &quot;n_features_tested&quot;: 31,
+    &quot;max_solo_auc&quot;: 0.75024,
+    &quot;max_solo_feature&quot;: &quot;visible_context::K_tip_from_visible_only&quot;,
+    &quot;threshold&quot;: 0.9
+  },
+  &quot;correlation_and_overlap_vs_registry&quot;: {
+    &quot;evidence_class&quot;: &quot;REGISTRY-MEASUREMENT&quot;,
+    &quot;registry_rasters_checked&quot;: 93,
+    &quot;hypothesis_lane_rasters_checked&quot;: 87,
+    &quot;pre_placement_surface_max_abs_spearman&quot;: 0.14655,
+    &quot;pre_placement_surface_closest_raster&quot;: &quot;gems68-autoctx-40000-20261012T014104Z-surface-zeros.tif&quot;,
+    &quot;post_placement_dots_max_abs_spearman&quot;: 0.0296,
+    &quot;post_placement_dots_max_3px_overlap_lane_rasters&quot;: 0.43245,
+    &quot;post_placement_dots_closest_overlap_raster&quot;: &quot;gemsdoe68-autocontext-s2-20261012T014136Z-nan.tif&quot;,
+    &quot;limits&quot;: {
+      &quot;max_abs_spearman_rho&quot;: 0.9,
+      &quot;max_dot_overlap_3px&quot;: 0.7,
+      &quot;radius_px&quot;: 3.0
+    },
+    &quot;verdict&quot;: &quot;UNIQUE&quot;
+  },
+  &quot;raster&quot;: {
+    &quot;primary_zeros_tif&quot;: &quot;docs/downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.tif&quot;,
+    &quot;primary_zeros_sha256&quot;: &quot;8576f1474ee6fa6bb38d319abfa58ef7016d4909fc58abbf7dd8ef722b957bfe&quot;,
+    &quot;primary_zeros_bytes&quot;: 141563,
+    &quot;zip_archive&quot;: &quot;docs/downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-zeros.zip&quot;,
+    &quot;zip_sha256&quot;: &quot;183eb6f4b051cf61300355bc6ede63808933c442dc7af626b7ad737d89ba3591&quot;,
+    &quot;companion_nan_tif&quot;: &quot;docs/downloads/gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0-nan.tif&quot;,
+    &quot;companion_nan_sha256&quot;: &quot;b6f934f4ca0084d6e7de6556f6cd5faf6a71fb49312214c8391823e8a7cd655e&quot;,
+    &quot;companion_nan_bytes&quot;: 357808,
+    &quot;emitted_positive_pixels&quot;: 35500,
+    &quot;on_catalogue_pixels&quot;: 0,
+    &quot;within_2px_of_catalogue_pixels&quot;: 0,
+    &quot;min_separation_px&quot;: 3.25,
+    &quot;collar_exclusion_px&quot;: 2.5
+  },
+  &quot;validator_output&quot;: {
+    &quot;no_nan_inside_footprint&quot;: true,
+    &quot;values_in_0_1&quot;: true,
+    &quot;crs_shape_transform_match&quot;: true,
+    &quot;zero_dots_on_mapped_catalogue&quot;: true,
+    &quot;all_checks_passed&quot;: true,
+    &quot;upstream_nan_validator_passed&quot;: true,
+    &quot;checks_detail&quot;: {
+      &quot;single_band&quot;: true,
+      &quot;dtype_float32&quot;: true,
+      &quot;dimensions_3730x3292&quot;: true,
+      &quot;crs_epsg_32611&quot;: true,
+      &quot;transform_matches_sample_submission&quot;: true,
+      &quot;no_nan_anywhere&quot;: true,
+      &quot;no_inf_anywhere&quot;: true,
+      &quot;no_sentinel_values&quot;: true,
+      &quot;range_0_1_guaranteed&quot;: true,
+      &quot;min_ge_0&quot;: true,
+      &quot;max_le_1&quot;: true,
+      &quot;in_footprint_all_finite&quot;: true,
+      &quot;in_footprint_range_0_1&quot;: true,
+      &quot;outside_footprint_zero&quot;: true,
+      &quot;zero_dots_on_mapped_catalogue&quot;: true
+    },
+    &quot;companion_nan_checks&quot;: [
+      {
+        &quot;check&quot;: &quot;single band&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;count=1&quot;
+      },
+      {
+        &quot;check&quot;: &quot;dtype float32&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;dtype=float32&quot;
+      },
+      {
+        &quot;check&quot;: &quot;CRS EPSG:32611&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;crs=EPSG:32611&quot;
+      },
+      {
+        &quot;check&quot;: &quot;shape matches&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;file=(3730, 3292) expected=(3730, 3292)&quot;
+      },
+      {
+        &quot;check&quot;: &quot;resolution 100 m&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;res=(100.0, 100.0)&quot;
+      },
+      {
+        &quot;check&quot;: &quot;transform matches reference&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)&quot;
+      },
+      {
+        &quot;check&quot;: &quot;CRS matches reference&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;file=EPSG:32611 ref=EPSG:32611&quot;
+      },
+      {
+        &quot;check&quot;: &quot;nodata tag is none or NaN&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;nodata=nan (finite nodata tags are rejected conservatively)&quot;
+      },
+      {
+        &quot;check&quot;: &quot;no infinities&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;inf_count=0&quot;
+      },
+      {
+        &quot;check&quot;: &quot;values within [0, 1]&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;min=0.0 max=1.0 finite_cells=5167373&quot;
+      },
+      {
+        &quot;check&quot;: &quot;features grid shape matches&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;features=(3730, 3292) reference=(3730, 3292)&quot;
+      },
+      {
+        &quot;check&quot;: &quot;features transform matches reference grid&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)&quot;
+      },
+      {
+        &quot;check&quot;: &quot;features CRS matches reference grid&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;features=EPSG:32611 reference=EPSG:32611&quot;
+      },
+      {
+        &quot;check&quot;: &quot;no NaN inside footprint&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;nan_inside=0 footprint_cells=5167373&quot;
+      },
+      {
+        &quot;check&quot;: &quot;NaN-only outside footprint&quot;,
+        &quot;status&quot;: &quot;PASS&quot;,
+        &quot;detail&quot;: &quot;finite_outside=0; only NaN is allowed outside&quot;
+      },
+      {
+        &quot;check&quot;: &quot;info: emitted cells (value &gt; 0)&quot;,
+        &quot;status&quot;: &quot;INFO&quot;,
+        &quot;detail&quot;: &quot;emitted=35500&quot;
+      }
+    ]
+  },
+  &quot;submission&quot;: {
+    &quot;name&quot;: &quot;gems71-dpst-hdt-35500dots-20261020T200000Z-fd98afd0&quot;,
+    &quot;note&quot;: &quot;GEMSDOE71 H71-A DPST-HDT | 35500 dots (s=3.25, B=2.5px); HOLDOUT-DTI 0.0526 (+0.0250 vs base); id fd98afd0&quot;,
+    &quot;note_length_chars&quot;: 106,
+    &quot;ok_to_download_and_submit&quot;: true,
+    &quot;status_banner&quot;: &quot;OK TO DOWNLOAD AND SUBMIT \u2014 VERIFIED UNIQUE &amp; FORMAT-VALIDATED&quot;
+  },
+  &quot;experiments_used&quot;: 3,
+  &quot;experiment_budget_max&quot;: 3,
+  &quot;e3_parameter_sweep&quot;: [
+    {
+      &quot;tag&quot;: &quot;c2p00_s3p05_n37654&quot;,
+      &quot;collar_px&quot;: 2.0,
+      &quot;min_sep_px&quot;: 3.05,
+      &quot;n_dots&quot;: 37654,
+      &quot;holdout_s20_pooled_dti&quot;: 0.0533,
+      &quot;sgmc_calibrated_dti&quot;: 0.06487,
+      &quot;emitted_dots&quot;: 37654
+    },
+    {
+      &quot;tag&quot;: &quot;c2p25_s3p15_n36800&quot;,
+      &quot;collar_px&quot;: 2.25,
+      &quot;min_sep_px&quot;: 3.15,
+      &quot;n_dots&quot;: 36800,
+      &quot;holdout_s20_pooled_dti&quot;: 0.05291,
+      &quot;sgmc_calibrated_dti&quot;: 0.06516,
+      &quot;emitted_dots&quot;: 36800
+    },
+    {
+      &quot;tag&quot;: &quot;c2p50_s3p25_n35500&quot;,
+      &quot;collar_px&quot;: 2.5,
+      &quot;min_sep_px&quot;: 3.25,
+      &quot;n_dots&quot;: 35500,
+      &quot;holdout_s20_pooled_dti&quot;: 0.05372,
+      &quot;sgmc_calibrated_dti&quot;: 0.06667,
+      &quot;emitted_dots&quot;: 35500
+    }
+  ],
+  &quot;verdict&quot;: &quot;promote&quot;,
+  &quot;elapsed_s&quot;: 118.81
+}</pre>
+    </div>
+    
+  </main>
+  <footer>
+    GEMSDOE71 &mdash; Depth-Persistent Potential-Field Structure Tensor &amp; Hydrothermal Demagnetization/Illitization Conjunction (DPST-HDT) |
+    Branch <code>arena/b7be360e-gemsdoe71</code> | All metrics explicitly labeled <code>HOLDOUT-DTI</code> or <code>ORGANIZER-CONFIRMED</code>.
+  </footer>
+</body>
+</html>
