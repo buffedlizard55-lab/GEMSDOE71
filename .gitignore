@@ -1,0 +1,8 @@
+# Competition inputs and large artifacts stay out of git (see README "Ground rules").
+/data/
+/runs/
+/submissions/*.tif
+/submissions/*.tif.json
+__pycache__/
+*.pyc
+.pytest_cache/
