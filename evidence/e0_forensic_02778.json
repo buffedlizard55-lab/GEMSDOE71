@@ -1,0 +1,64 @@
+{
+  "evidence_class": "OWNER-REPORTED-FORENSIC-INVERSION",
+  "generated_utc": "2026-10-20T19:54:18Z",
+  "artifact_inspected": {
+    "name": "h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+    "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+    "positive_pixels": 37654,
+    "on_catalogue_pixels": 0,
+    "within_1px_of_catalogue": 0,
+    "within_2px_of_catalogue": 0,
+    "within_3px_of_catalogue": 2171,
+    "beyond_3px_of_catalogue": 35483,
+    "fraction_beyond_3px": 0.94234,
+    "mean_distance_to_catalogue_px": 28.997,
+    "median_distance_to_catalogue_px": 19.647
+  },
+  "four_point_collinearity_inversion": {
+    "formula": "DTI(N_P) = T_w / (0.2 * N_P + C_G)",
+    "implied_weighted_true_positive_T_w": 5151.3,
+    "implied_constant_denominator_C_G": 10987.77,
+    "implied_effective_hidden_truth_pixels_at_zero_gap": 13734.7,
+    "pearson_r_inv_dti_vs_np": 0.999261,
+    "break_even_credit_per_dot_tau_at_02778": 0.05556,
+    "mean_credit_per_dot_of_02778": 0.13681,
+    "ladder": [
+      {
+        "submission": "dotted-h19-5-d2-8-20261002-e56ea318af89-nan",
+        "site": "GEMSDOE25 / GEMSDOE30",
+        "dots": 44090,
+        "collar_px": 0,
+        "owner_reported_dti": 0.26,
+        "collinear_model_dti": 0.26009,
+        "residual": -9e-05
+      },
+      {
+        "submission": "h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-nan",
+        "site": "GEMSDOE28 / GEMSDOE31",
+        "dots": 40199,
+        "collar_px": 1,
+        "owner_reported_dti": 0.2708,
+        "collinear_model_dti": 0.27073,
+        "residual": 7e-05
+      },
+      {
+        "submission": "anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros",
+        "site": "GEMSDOE36",
+        "dots": 38854,
+        "collar_px": 2,
+        "owner_reported_dti": 0.275,
+        "collinear_model_dti": 0.27461,
+        "residual": 0.00039
+      },
+      {
+        "submission": "h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros",
+        "site": "GEMSDOE32",
+        "dots": 37654,
+        "collar_px": 2,
+        "owner_reported_dti": 0.2778,
+        "collinear_model_dti": 0.27817,
+        "residual": -0.00037
+      }
+    ]
+  }
+}

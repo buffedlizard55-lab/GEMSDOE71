@@ -1,11 +1,33 @@
-# Competition inputs and large mirrors stay out of git.
-# The audit GeoTIFF under docs/downloads/ and submissions/ is small and is tracked on purpose.
-/data/
-/runs/
-registry/rasters/
+# Bytecode & virtualenvs
 __pycache__/
-*.pyc
-.pytest_cache/
+*.py[cod]
+*$py.class
 .venv/
-*.partial
-.DS_Store
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Cached large competition rasters (>10 MB)
+.cache
+.cache/
+work/
+data/raw/
+data/bridge/training_features.tif
+data/bridge/gems-geodawn-numerical-features.tif*
+data/external/lidar_scarp_features_u8.tif
+data/external/geodawn_rad_u8.tif
+data/external/geodawn_extensions_u8.tif
+data/external/*.csv
+
+# Keep small bridge files, manifests, docs, and verified submission deliverables
+!data/bridge/labels.tif
+!data/bridge/existing_faults.tif
+!data/bridge/sample_submission.tif
+!data/external/derived_sgmc_faults_100m_u8.tif
+!data/prepared_manifest.json
+!docs/downloads/*.tif
+!docs/downloads/*.zip
+!docs/downloads/*.json
+!submissions/*.tif
+!submissions/*.zip
+!submissions/*.json

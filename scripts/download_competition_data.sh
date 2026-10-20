@@ -1,42 +1,106 @@
 #!/usr/bin/env bash
-# Download the GEMS data files that the organisers link publicly (Dropbox links from the brief).
-#
-# Files that the brief says REQUIRE DrivenData login (labels.tif, training_features.tif,
-# sample_submission.tif, 1m_DEM_links.csv) are NOT downloaded by this script. Place them in data/
-# yourself; scripts/prepare_data.py will detect them.
-#
-# Dropbox links are used exactly as provided in the brief, with dl=1 for a direct download.
-# Each download is checked: a TIFF must start with the TIFF magic bytes, not an HTML login page.
-set -uo pipefail
-cd "$(dirname "$0")/.." || exit 1
-mkdir -p data/docs
+# Restore and SHA-256 verify the competition rasters and external layers from
+# the owner-pinned GitHub mirrors (registry/data_manifest.json).
+# Works inside the Arena sandbox via `gh api` (only github.com / api.github.com needed).
+set -euo pipefail
 
-fetch() {  # fetch <url> <dest> <kind: tif|pdf|any>
-  local url="$1" dest="$2" kind="$3"
-  echo "-> $dest"
-  if ! curl -fL --retry 3 --max-time 900 -sS -o "$dest.part" "$url"; then
-    echo "   FAILED: network/HTTP error (is dropbox.com reachable from this machine?)"; rm -f "$dest.part"; return 1
-  fi
-  local magic; magic=$(head -c 4 "$dest.part" | od -An -tx1 | tr -d ' \n')
-  case "$kind" in
-    tif) case "$magic" in 49492a00|4d4d002a) ;; *) echo "   FAILED: not a TIFF (got magic $magic)"; rm -f "$dest.part"; return 1;; esac ;;
-    pdf) [ "$(head -c 4 "$dest.part")" = "%PDF" ] || { echo "   FAILED: not a PDF"; rm -f "$dest.part"; return 1; } ;;
-  esac
-  mv "$dest.part" "$dest"
-  echo "   ok ($(wc -c < "$dest") bytes)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CACHE_DIR="${GEMS_CACHE_DIR:-/tmp/gems_cache}"
+mkdir -p "$CACHE_DIR/external" "$ROOT/data/bridge" "$ROOT/data/external"
+ln -sfn "$CACHE_DIR" "$ROOT/.cache"
+
+PY="${PYTHON_BIN:-/home/user/.venv/bin/python}"
+if [ ! -x "$PY" ]; then
+  PY="python3"
+fi
+
+"$PY" - "$ROOT" "$CACHE_DIR" <<'PYEOF'
+import hashlib
+import json
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+cache_dir = Path(sys.argv[2])
+manifest = json.loads((root / "registry" / "data_manifest.json").read_text())
+
+WANT_IDS = {
+    "training_features",
+    "labels",
+    "existing_faults",
+    "sample_submission",
+    "ext_lidar_scarp_features_u8",
+    "ext_geodawn_rad_u8",
+    "ext_geodawn_extensions_u8",
+    "ext_derived_sgmc_faults_100m_u8",
+    "ext_gdr_wellspring_in_footprint",
+    "ext_gdr_qfaults_traces",
+    "ext_gdr_volcanic_vents_in_footprint",
 }
 
-status=0
-fetch 'https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&st=8junzdyw&dl=1' data/example_submission.tif tif || status=1
-fetch 'https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&st=rnino7ya&dl=1' data/existing_faults.tif tif || status=1
-fetch 'https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&st=zj1lag1r&dl=1' data/gems-geodawn-numerical-features.tif tif || status=1
-fetch 'https://www.dropbox.com/scl/fi/aemhtutjgcp6tr3tint94/GEMS_96647.pdf?rlkey=rek210cj2smnmzb8n0sla1vmd&st=wz4kofki&dl=1' data/docs/GEMS_96647.pdf pdf || status=1
-fetch 'https://www.dropbox.com/scl/fi/ig0mban712ns1atphgphe/Digital-elevation-model-links-JSON.pdf?rlkey=zm77f1vbtt2if8hlruymptnu3&st=srhhir10&dl=1' data/docs/Digital-elevation-model-links-JSON.pdf pdf || status=1
 
-echo
-echo "DrivenData login required (not attempted here). Place these in data/ manually if you have access:"
-echo "  labels.tif  training_features.tif  sample_submission.tif  1m_DEM_links.csv"
-echo "  https://www.drivendata.org/competitions/306/competition-doe-gems/data/"
-echo
-echo "Next: python scripts/prepare_data.py"
-exit $status
+def sha256(p: Path) -> str:
+    h = hashlib.sha256()
+    with p.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def gh_raw(repo: str, ref: str, path: str, out: Path) -> None:
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with out.open("wb") as fh:
+        subprocess.run(
+            ["gh", "api", f"repos/{repo}/contents/{path}?ref={ref}",
+             "-H", "Accept: application/vnd.github.raw"],
+            stdout=fh,
+            check=True,
+        )
+
+
+for item in manifest["files"]:
+    fid = item["id"]
+    if fid not in WANT_IDS:
+        continue
+    target = cache_dir / item["dest"]
+    if target.exists() and sha256(target) == item["sha256"]:
+        print(f"[ok cached] {fid:35s} -> {target.name} (sha256={item['sha256'][:12]}...)")
+    else:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if "parts" in item:
+            chunks = []
+            for idx, part in enumerate(item["parts"]):
+                cpath = cache_dir / f"_part_{fid}_{idx:03d}"
+                print(f"[fetch part {idx+1}/{len(item['parts'])}] {fid} <- {part}", flush=True)
+                gh_raw(item["repo"], item["ref"], part, cpath)
+                chunks.append(cpath)
+            with target.open("wb") as out:
+                for cpath in chunks:
+                    out.write(cpath.read_bytes())
+            for cpath in chunks:
+                cpath.unlink()
+        else:
+            print(f"[fetch] {fid} <- {item['repo']}:{item['path']}", flush=True)
+            gh_raw(item["repo"], item["ref"], item["path"], target)
+        got = sha256(target)
+        if got != item["sha256"]:
+            target.unlink(missing_ok=True)
+            raise RuntimeError(f"SHA-256 mismatch for {fid}: expected {item['sha256']}, got {got}")
+        print(f"[ok fetched] {fid:35s} -> {target.name} ({target.stat().st_size:,} bytes)")
+
+# Mirror small core bridge files into data/bridge and data/external for template tools
+for name in ("labels.tif", "existing_faults.tif", "sample_submission.tif"):
+    src = cache_dir / name
+    dst = root / "data" / "bridge" / name
+    if not dst.exists() or sha256(dst) != sha256(src):
+        shutil.copy2(src, dst)
+
+sgmc_src = cache_dir / "external" / "derived_sgmc_faults_100m_u8.tif"
+sgmc_dst = root / "data" / "external" / "derived_sgmc_faults_100m_u8.tif"
+if not sgmc_dst.exists() or sha256(sgmc_dst) != sha256(sgmc_src):
+    shutil.copy2(sgmc_src, sgmc_dst)
+
+print("[DONE] All competition rasters and external layers verified by SHA-256.")
+PYEOF
