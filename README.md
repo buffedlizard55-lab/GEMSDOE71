@@ -13,7 +13,7 @@
 | Research | 5 ranked hypotheses in [`docs/RESEARCH.md`](docs/RESEARCH.md). None validated. |
 | Irregularities | [`docs/FLAGS.md`](docs/FLAGS.md) — 12 flags, including bugs found in the reference notebook. |
 | Sources | [`docs/SOURCES.md`](docs/SOURCES.md) — each row says what was checked here and what is blocked. |
-| Site | GitHub Pages from `docs/`: hub [`docs/index.html`](docs/index.html), executive summary [`docs/executive-summary.html`](docs/executive-summary.html). |
+| Site | GitHub Pages (source `main` `/`; the root redirects to `docs/`): hub [`docs/index.html`](docs/index.html), executive summary [`docs/executive-summary.html`](docs/executive-summary.html). |
 
 ## Core values
 
