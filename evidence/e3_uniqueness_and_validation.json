@@ -1,0 +1,590 @@
+{
+  "experiment_id": "E3",
+  "title": "GeoTIFF Packaging, Dual-Validator Verification & 108-Raster Registry Uniqueness Gate",
+  "primary_submission_zeros_tif": "submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif",
+  "primary_submission_zeros_zip": "submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif.zip",
+  "secondary_submission_nan_tif": "submissions/gems71-hydro-conduit-38800-20261020T120000Z-nan.tif",
+  "pre_placement_surface_zeros_tif": "submissions/gems71-hydro-conduit-38800-20261020T120000Z-surface-zeros.tif",
+  "sha256": {
+    "zeros_tif": "0b08a50224d7ac16d8514fd7af99f90e9f179ebd0d3d6291d97c649cca88d8ad",
+    "zeros_zip": "8a4d7f7cce1b95eb315a17952225fca3f843ba73e09713fd292a31d0857743c7",
+    "nan_tif": "5f5047180a53e5ebbe4f4ab53cc24663b1a130a3d6ea8b2c1323c2172af1c10e",
+    "surface_zeros_tif": "abdd5764aab9431f0a4a230b3702780dce1bbcd41662631973dcd82e6ffbd369"
+  },
+  "file_bytes": {
+    "zeros_tif": 309897,
+    "zeros_zip": 197954,
+    "nan_tif": 362389,
+    "surface_zeros_tif": 18816130
+  },
+  "validators": {
+    "gems_validate_submission_zeros": {
+      "file": "/home/user/GEMSDOE71/submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif",
+      "sha256": "0b08a50224d7ac16d8514fd7af99f90e9f179ebd0d3d6291d97c649cca88d8ad",
+      "passed": true,
+      "has_failures": false,
+      "checks": [
+        {
+          "check": "single band",
+          "status": "PASS",
+          "detail": "count=1"
+        },
+        {
+          "check": "dtype float32",
+          "status": "PASS",
+          "detail": "dtype=float32"
+        },
+        {
+          "check": "CRS EPSG:32611",
+          "status": "PASS",
+          "detail": "crs=EPSG:32611"
+        },
+        {
+          "check": "shape matches",
+          "status": "PASS",
+          "detail": "file=(3730, 3292) expected=(3730, 3292)"
+        },
+        {
+          "check": "resolution 100 m",
+          "status": "PASS",
+          "detail": "res=(100.0, 100.0)"
+        },
+        {
+          "check": "transform matches reference",
+          "status": "PASS",
+          "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+        },
+        {
+          "check": "CRS matches reference",
+          "status": "PASS",
+          "detail": "file=EPSG:32611 ref=EPSG:32611"
+        },
+        {
+          "check": "nodata tag is none or NaN",
+          "status": "PASS",
+          "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+        },
+        {
+          "check": "no infinities",
+          "status": "PASS",
+          "detail": "inf_count=0"
+        },
+        {
+          "check": "values within [0, 1]",
+          "status": "PASS",
+          "detail": "min=0.0 max=1.0 finite_cells=12279160"
+        },
+        {
+          "check": "features grid shape matches",
+          "status": "PASS",
+          "detail": "features=(3730, 3292) reference=(3730, 3292)"
+        },
+        {
+          "check": "features transform matches reference grid",
+          "status": "PASS",
+          "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+        },
+        {
+          "check": "features CRS matches reference grid",
+          "status": "PASS",
+          "detail": "features=EPSG:32611 reference=EPSG:32611"
+        },
+        {
+          "check": "no NaN inside footprint",
+          "status": "PASS",
+          "detail": "nan_inside=0 footprint_cells=5167373 mask=reference sample-submission mask"
+        },
+        {
+          "check": "NaN-only outside footprint",
+          "status": "PASS",
+          "detail": "finite_outside=7111787 of 7111787 outside cells; accepted under outside_policy='either' because every written value is finite and inside [0, 1]"
+        },
+        {
+          "check": "info: features band-1 mask disagrees with the authoritative mask",
+          "status": "INFO",
+          "detail": "in_reference_not_features=0 in_features_not_reference=0; the 12 organizer-scored owner artifacts all follow the reference mask (IR-67-FOOTPRINT-01)"
+        },
+        {
+          "check": "info: emitted cells (value > 0)",
+          "status": "INFO",
+          "detail": "emitted=38800"
+        }
+      ],
+      "skipped_checks_mean_unverified": false
+    },
+    "gems_validate_submission_nan": {
+      "file": "/home/user/GEMSDOE71/submissions/gems71-hydro-conduit-38800-20261020T120000Z-nan.tif",
+      "sha256": "5f5047180a53e5ebbe4f4ab53cc24663b1a130a3d6ea8b2c1323c2172af1c10e",
+      "passed": true,
+      "has_failures": false,
+      "checks": [
+        {
+          "check": "single band",
+          "status": "PASS",
+          "detail": "count=1"
+        },
+        {
+          "check": "dtype float32",
+          "status": "PASS",
+          "detail": "dtype=float32"
+        },
+        {
+          "check": "CRS EPSG:32611",
+          "status": "PASS",
+          "detail": "crs=EPSG:32611"
+        },
+        {
+          "check": "shape matches",
+          "status": "PASS",
+          "detail": "file=(3730, 3292) expected=(3730, 3292)"
+        },
+        {
+          "check": "resolution 100 m",
+          "status": "PASS",
+          "detail": "res=(100.0, 100.0)"
+        },
+        {
+          "check": "transform matches reference",
+          "status": "PASS",
+          "detail": "file=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) ref=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+        },
+        {
+          "check": "CRS matches reference",
+          "status": "PASS",
+          "detail": "file=EPSG:32611 ref=EPSG:32611"
+        },
+        {
+          "check": "nodata tag is none or NaN",
+          "status": "PASS",
+          "detail": "nodata=None (finite nodata tags are rejected conservatively)"
+        },
+        {
+          "check": "no infinities",
+          "status": "PASS",
+          "detail": "inf_count=0"
+        },
+        {
+          "check": "values within [0, 1]",
+          "status": "PASS",
+          "detail": "min=0.0 max=1.0 finite_cells=5167373"
+        },
+        {
+          "check": "features grid shape matches",
+          "status": "PASS",
+          "detail": "features=(3730, 3292) reference=(3730, 3292)"
+        },
+        {
+          "check": "features transform matches reference grid",
+          "status": "PASS",
+          "detail": "features=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0) reference=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+        },
+        {
+          "check": "features CRS matches reference grid",
+          "status": "PASS",
+          "detail": "features=EPSG:32611 reference=EPSG:32611"
+        },
+        {
+          "check": "no NaN inside footprint",
+          "status": "PASS",
+          "detail": "nan_inside=0 footprint_cells=5167373 mask=reference sample-submission mask"
+        },
+        {
+          "check": "NaN-only outside footprint",
+          "status": "PASS",
+          "detail": "finite_outside=0; only NaN is allowed outside under outside_policy='either'"
+        },
+        {
+          "check": "info: features band-1 mask disagrees with the authoritative mask",
+          "status": "INFO",
+          "detail": "in_reference_not_features=0 in_features_not_reference=0; the 12 organizer-scored owner artifacts all follow the reference mask (IR-67-FOOTPRINT-01)"
+        },
+        {
+          "check": "info: emitted cells (value > 0)",
+          "status": "INFO",
+          "detail": "emitted=38800"
+        }
+      ],
+      "skipped_checks_mean_unverified": false
+    },
+    "gems57_validate_geotiff_zeros": {
+      "file": "/home/user/GEMSDOE71/submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif",
+      "bytes": 309897,
+      "sha256": "0b08a50224d7ac16d8514fd7af99f90e9f179ebd0d3d6291d97c649cca88d8ad",
+      "meta": {
+        "crs": "EPSG:32611",
+        "shape": [
+          3730,
+          3292
+        ],
+        "dtype": "float32",
+        "count": 1,
+        "nodata": null,
+        "transform": [
+          100.0,
+          0.0,
+          243350.0,
+          0.0,
+          -100.0,
+          4508550.0
+        ],
+        "profile_compress": "deflate"
+      },
+      "band_description": [
+        null
+      ],
+      "n_finite": 12279160,
+      "n_nan": 0,
+      "n_infinite": 0,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.003159825224429369,
+      "emitted_positive_pixels": 38800,
+      "checks": {
+        "single_band": true,
+        "nonempty_positive_support": true,
+        "nodata_tag_absent": true,
+        "dtype_float32": true,
+        "dimensions_3730x3292": true,
+        "crs_epsg_32611": true,
+        "transform_matches_sample_submission": true,
+        "no_nan_anywhere": true,
+        "no_inf_anywhere": true,
+        "no_sentinel_values": true,
+        "range_0_1_guaranteed": true,
+        "min_ge_0": true,
+        "max_le_1": true,
+        "no_masked_pixels_inside_footprint": true,
+        "in_footprint_all_finite": true,
+        "in_footprint_range_0_1": true,
+        "outside_footprint_zero": true,
+        "zero_dots_on_mapped_catalogue": true
+      },
+      "all_checks_passed": true,
+      "validation_class": "local format/range preflight; not organizer acceptance or uniqueness clearance",
+      "on_catalogue_positive_pixels": 0,
+      "in_footprint_positive_pixels": 38800,
+      "footprint_fraction": 0.007508650914110516
+    },
+    "gems57_validate_geotiff_nan": {
+      "file": "/home/user/GEMSDOE71/submissions/gems71-hydro-conduit-38800-20261020T120000Z-nan.tif",
+      "bytes": 362389,
+      "sha256": "5f5047180a53e5ebbe4f4ab53cc24663b1a130a3d6ea8b2c1323c2172af1c10e",
+      "meta": {
+        "crs": "EPSG:32611",
+        "shape": [
+          3730,
+          3292
+        ],
+        "dtype": "float32",
+        "count": 1,
+        "nodata": null,
+        "transform": [
+          100.0,
+          0.0,
+          243350.0,
+          0.0,
+          -100.0,
+          4508550.0
+        ],
+        "profile_compress": "deflate"
+      },
+      "band_description": [
+        null
+      ],
+      "n_finite": 5167373,
+      "n_nan": 7111787,
+      "n_infinite": 0,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.00750865088775754,
+      "emitted_positive_pixels": 38800,
+      "checks": {
+        "single_band": true,
+        "nonempty_positive_support": true,
+        "nodata_tag_absent": true,
+        "dtype_float32": true,
+        "dimensions_3730x3292": true,
+        "crs_epsg_32611": true,
+        "transform_matches_sample_submission": true,
+        "no_nan_anywhere": false,
+        "no_inf_anywhere": true,
+        "no_sentinel_values": true,
+        "range_0_1_guaranteed": true,
+        "min_ge_0": true,
+        "max_le_1": true,
+        "no_masked_pixels_inside_footprint": true,
+        "in_footprint_all_finite": true,
+        "in_footprint_range_0_1": true,
+        "outside_footprint_zero": false,
+        "zero_dots_on_mapped_catalogue": true
+      },
+      "all_checks_passed": false,
+      "validation_class": "local format/range preflight; not organizer acceptance or uniqueness clearance",
+      "on_catalogue_positive_pixels": 0,
+      "in_footprint_positive_pixels": 38800,
+      "footprint_fraction": 0.007508650914110516
+    }
+  },
+  "uniqueness_audit": {
+    "n_registry_rasters_checked": 108,
+    "n_discrete_fault_detectors": 103,
+    "n_space_filling_calibration_lattices_or_surfaces": 5,
+    "max_abs_spearman_pre_placement_surface": 0.1046,
+    "max_abs_spearman_pre_placement_surface_match": "gems68-autoctx-40000-20261012T014104Z-surface-zeros.tif",
+    "max_abs_spearman_final_dots": 0.0524,
+    "max_abs_spearman_final_dots_match": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+    "max_3px_overlap_symmetric_discrete_detectors": 0.4687,
+    "max_3px_overlap_symmetric_discrete_match": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+    "max_3px_overlap_directed_discrete_detectors": 0.557,
+    "max_3px_overlap_directed_discrete_match": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+    "max_3px_overlap_symmetric_all_including_lattices": 0.56,
+    "max_3px_overlap_symmetric_all_match": "calib_r13lattice_00904.tif",
+    "rank_correlation_threshold": 0.9,
+    "dot_overlap_3px_threshold": 0.7,
+    "uniqueness_gate_passed": true,
+    "top_10_by_discrete_overlap": [
+      {
+        "raster_name": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 45000,
+        "ref_3px_footprint_coverage": 0.1773,
+        "abs_spearman_surface_pre_placement": 0.0633,
+        "abs_spearman_final_dots": 0.0524,
+        "dot_overlap_cand_in_ref3px": 0.557,
+        "dot_overlap_ref_in_cand3px": 0.3803,
+        "dot_overlap_3px_symmetric": 0.4687,
+        "dot_overlap_3px_max_directed": 0.557
+      },
+      {
+        "raster_name": "gems32-bayesopt-dilation-scarp-d28-20261004-zeros.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 45000,
+        "ref_3px_footprint_coverage": 0.1773,
+        "abs_spearman_surface_pre_placement": 0.0633,
+        "abs_spearman_final_dots": 0.0524,
+        "dot_overlap_cand_in_ref3px": 0.557,
+        "dot_overlap_ref_in_cand3px": 0.3803,
+        "dot_overlap_3px_symmetric": 0.4687,
+        "dot_overlap_3px_max_directed": 0.557
+      },
+      {
+        "raster_name": "gems64-h64-lidar-scarp-cv-20261011T220000Z.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 37654,
+        "ref_3px_footprint_coverage": 0.1679,
+        "abs_spearman_surface_pre_placement": 0.0554,
+        "abs_spearman_final_dots": 0.036,
+        "dot_overlap_cand_in_ref3px": 0.4471,
+        "dot_overlap_ref_in_cand3px": 0.3347,
+        "dot_overlap_3px_symmetric": 0.3909,
+        "dot_overlap_3px_max_directed": 0.4471
+      },
+      {
+        "raster_name": "gemsdoe65-gems65-sar2inv-a2-38k-20261011T220214Z-296a58fcf2a6-zeros.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 38000,
+        "ref_3px_footprint_coverage": 0.1901,
+        "abs_spearman_surface_pre_placement": 0.041,
+        "abs_spearman_final_dots": 0.0165,
+        "dot_overlap_cand_in_ref3px": 0.4441,
+        "dot_overlap_ref_in_cand3px": 0.277,
+        "dot_overlap_3px_symmetric": 0.3606,
+        "dot_overlap_3px_max_directed": 0.4441
+      },
+      {
+        "raster_name": "gems64-scarpcover-60000-98d317b7-zeros.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 60000,
+        "ref_3px_footprint_coverage": 0.2192,
+        "abs_spearman_surface_pre_placement": 0.0431,
+        "abs_spearman_final_dots": 0.0067,
+        "dot_overlap_cand_in_ref3px": 0.4416,
+        "dot_overlap_ref_in_cand3px": 0.2427,
+        "dot_overlap_3px_symmetric": 0.3422,
+        "dot_overlap_3px_max_directed": 0.4416
+      },
+      {
+        "raster_name": "calib_hedgev2_01563_sample.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 227507,
+        "ref_3px_footprint_coverage": 0.2836,
+        "abs_spearman_surface_pre_placement": 0.071,
+        "abs_spearman_final_dots": 0.0097,
+        "dot_overlap_cand_in_ref3px": 0.4398,
+        "dot_overlap_ref_in_cand3px": 0.2101,
+        "dot_overlap_3px_symmetric": 0.325,
+        "dot_overlap_3px_max_directed": 0.4398
+      },
+      {
+        "raster_name": "hedge_v2_01563.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 227507,
+        "ref_3px_footprint_coverage": 0.2836,
+        "abs_spearman_surface_pre_placement": 0.071,
+        "abs_spearman_final_dots": 0.0097,
+        "dot_overlap_cand_in_ref3px": 0.4398,
+        "dot_overlap_ref_in_cand3px": 0.2101,
+        "dot_overlap_3px_symmetric": 0.325,
+        "dot_overlap_3px_max_directed": 0.4398
+      },
+      {
+        "raster_name": "h52_coincidence8_80k.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 80000,
+        "ref_3px_footprint_coverage": 0.2386,
+        "abs_spearman_surface_pre_placement": 0.0335,
+        "abs_spearman_final_dots": 0.0114,
+        "dot_overlap_cand_in_ref3px": 0.4156,
+        "dot_overlap_ref_in_cand3px": 0.2238,
+        "dot_overlap_3px_symmetric": 0.3197,
+        "dot_overlap_3px_max_directed": 0.4156
+      },
+      {
+        "raster_name": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-nan.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 37654,
+        "ref_3px_footprint_coverage": 0.1742,
+        "abs_spearman_surface_pre_placement": 0.0339,
+        "abs_spearman_final_dots": 0.0206,
+        "dot_overlap_cand_in_ref3px": 0.3757,
+        "dot_overlap_ref_in_cand3px": 0.2544,
+        "dot_overlap_3px_symmetric": 0.3151,
+        "dot_overlap_3px_max_directed": 0.3757
+      },
+      {
+        "raster_name": "gems66-lidar02-sharpersist-stratified-37654dots-20261020T182135Z-zeros.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 37654,
+        "ref_3px_footprint_coverage": 0.1742,
+        "abs_spearman_surface_pre_placement": 0.0339,
+        "abs_spearman_final_dots": 0.0206,
+        "dot_overlap_cand_in_ref3px": 0.3757,
+        "dot_overlap_ref_in_cand3px": 0.2544,
+        "dot_overlap_3px_symmetric": 0.3151,
+        "dot_overlap_3px_max_directed": 0.3757
+      }
+    ],
+    "top_10_by_surface_spearman": [
+      {
+        "raster_name": "gems68-autoctx-40000-20261012T014104Z-surface-zeros.tif",
+        "is_space_filling_lattice_or_surface": true,
+        "ref_dots_ge_05": 2583687,
+        "ref_3px_footprint_coverage": 0.5308,
+        "abs_spearman_surface_pre_placement": 0.1046,
+        "abs_spearman_final_dots": 0.0241,
+        "dot_overlap_cand_in_ref3px": 0.688,
+        "dot_overlap_ref_in_cand3px": 0.1646,
+        "dot_overlap_3px_symmetric": 0.4263,
+        "dot_overlap_3px_max_directed": 0.688
+      },
+      {
+        "raster_name": "h69-relayramp-pullapart-35787-20261012T023411Z-0e22fe3c-nan.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 35787,
+        "ref_3px_footprint_coverage": 0.0116,
+        "abs_spearman_surface_pre_placement": 0.0771,
+        "abs_spearman_final_dots": 0.0191,
+        "dot_overlap_cand_in_ref3px": 0.0305,
+        "dot_overlap_ref_in_cand3px": 0.3962,
+        "dot_overlap_3px_symmetric": 0.2133,
+        "dot_overlap_3px_max_directed": 0.3962
+      },
+      {
+        "raster_name": "h69-relayramp-pullapart-35787-20261012T023411Z-0e22fe3c-zeros.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 35787,
+        "ref_3px_footprint_coverage": 0.0116,
+        "abs_spearman_surface_pre_placement": 0.0771,
+        "abs_spearman_final_dots": 0.0191,
+        "dot_overlap_cand_in_ref3px": 0.0305,
+        "dot_overlap_ref_in_cand3px": 0.3962,
+        "dot_overlap_3px_symmetric": 0.2133,
+        "dot_overlap_3px_max_directed": 0.3962
+      },
+      {
+        "raster_name": "calib_hedgev2_01563_sample.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 227507,
+        "ref_3px_footprint_coverage": 0.2836,
+        "abs_spearman_surface_pre_placement": 0.071,
+        "abs_spearman_final_dots": 0.0097,
+        "dot_overlap_cand_in_ref3px": 0.4398,
+        "dot_overlap_ref_in_cand3px": 0.2101,
+        "dot_overlap_3px_symmetric": 0.325,
+        "dot_overlap_3px_max_directed": 0.4398
+      },
+      {
+        "raster_name": "hedge_v2_01563.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 227507,
+        "ref_3px_footprint_coverage": 0.2836,
+        "abs_spearman_surface_pre_placement": 0.071,
+        "abs_spearman_final_dots": 0.0097,
+        "dot_overlap_cand_in_ref3px": 0.4398,
+        "dot_overlap_ref_in_cand3px": 0.2101,
+        "dot_overlap_3px_symmetric": 0.325,
+        "dot_overlap_3px_max_directed": 0.4398
+      },
+      {
+        "raster_name": "gems32-bayesopt-dilation-scarp-d28-20261004-nan.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 45000,
+        "ref_3px_footprint_coverage": 0.1773,
+        "abs_spearman_surface_pre_placement": 0.0633,
+        "abs_spearman_final_dots": 0.0524,
+        "dot_overlap_cand_in_ref3px": 0.557,
+        "dot_overlap_ref_in_cand3px": 0.3803,
+        "dot_overlap_3px_symmetric": 0.4687,
+        "dot_overlap_3px_max_directed": 0.557
+      },
+      {
+        "raster_name": "gems32-bayesopt-dilation-scarp-d28-20261004-zeros.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 45000,
+        "ref_3px_footprint_coverage": 0.1773,
+        "abs_spearman_surface_pre_placement": 0.0633,
+        "abs_spearman_final_dots": 0.0524,
+        "dot_overlap_cand_in_ref3px": 0.557,
+        "dot_overlap_ref_in_cand3px": 0.3803,
+        "dot_overlap_3px_symmetric": 0.4687,
+        "dot_overlap_3px_max_directed": 0.557
+      },
+      {
+        "raster_name": "19GEMSDOE__h19-5-powerlaw-budget-multiline.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 121131,
+        "ref_3px_footprint_coverage": 0.1961,
+        "abs_spearman_surface_pre_placement": 0.0561,
+        "abs_spearman_final_dots": 0.0146,
+        "dot_overlap_cand_in_ref3px": 0.3152,
+        "dot_overlap_ref_in_cand3px": 0.235,
+        "dot_overlap_3px_symmetric": 0.2751,
+        "dot_overlap_3px_max_directed": 0.3152
+      },
+      {
+        "raster_name": "calib_h161_01855.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 123939,
+        "ref_3px_footprint_coverage": 0.2086,
+        "abs_spearman_surface_pre_placement": 0.0561,
+        "abs_spearman_final_dots": 0.012,
+        "dot_overlap_cand_in_ref3px": 0.3476,
+        "dot_overlap_ref_in_cand3px": 0.2338,
+        "dot_overlap_3px_symmetric": 0.2907,
+        "dot_overlap_3px_max_directed": 0.3476
+      },
+      {
+        "raster_name": "calib_h195_01922.tif",
+        "is_space_filling_lattice_or_surface": false,
+        "ref_dots_ge_05": 121131,
+        "ref_3px_footprint_coverage": 0.1961,
+        "abs_spearman_surface_pre_placement": 0.0561,
+        "abs_spearman_final_dots": 0.0146,
+        "dot_overlap_cand_in_ref3px": 0.3152,
+        "dot_overlap_ref_in_cand3px": 0.235,
+        "dot_overlap_3px_symmetric": 0.2751,
+        "dot_overlap_3px_max_directed": 0.3152
+      }
+    ]
+  }
+}

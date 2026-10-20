@@ -1,0 +1,23 @@
+{
+  "file": "gems71-hydro-conduit-38800-20261020T120000Z-nan.tif",
+  "sha256": "5f5047180a53e5ebbe4f4ab53cc24663b1a130a3d6ea8b2c1323c2172af1c10e",
+  "shape_hw": [
+    3730,
+    3292
+  ],
+  "crs": "EPSG:32611",
+  "footprint_cells": 5167373,
+  "emitted_cells_gt0": 38800,
+  "min_inside": 0.0,
+  "max_inside": 1.0,
+  "nan_inside": 0,
+  "nan_outside_count": 7111787,
+  "outside_fill": null,
+  "finite_outside_count": 0,
+  "all_values_in_0_1": false,
+  "name": "gems71-hydro-conduit-38800-20261020T120000Z-nan",
+  "note": "H71 hydrothermal-structural conduit: GDR1391 2m-probe+paleo-sinter+demag+crossgrad+scarplet; k=38800 d>=3px; holdout DTI 0.0730",
+  "note_chars": 127,
+  "reference": "sample_submission.tif",
+  "receipt_kind": "local receipt written by submission_writer; NOT an organiser receipt"
+}

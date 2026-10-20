@@ -1,0 +1,13 @@
+# Virtual environments & Python caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local 1.4 GB dataset & feature cache (verified via scripts/verify_or_fetch_data.py)
+.cache/
+
+# Intermediate continuous surface GeoTIFF (~19 MB); primary crisp submission GeoTIFFs are tracked
+submissions/*-surface-*.tif

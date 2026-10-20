@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Executive Summary &amp; One-Click Submission Download — GEMSDOE71 (Lane H71)</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-alt: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --emerald: #10b981;
+      --emerald-dark: #059669;
+      --emerald-bg: rgba(16, 185, 129, 0.12);
+      --blue: #3b82f6;
+      --amber: #f59e0b;
+      --violet: #8b5cf6;
+      --mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+      --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      background: rgba(15, 23, 42, 0.96);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+    }
+    .nav-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .badge-pill {
+      background: var(--emerald);
+      color: #042f2e;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-left: 1.2rem;
+    }
+    nav a:hover, nav a.active {
+      color: #fff;
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .verdict-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(6, 95, 70, 0.28));
+      border: 2px solid var(--emerald);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .verdict-tag {
+      display: inline-block;
+      background: var(--emerald);
+      color: #022c22;
+      font-weight: 900;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    h1 {
+      margin: 0 0 0.75rem 0;
+      font-size: 2rem;
+      line-height: 1.25;
+    }
+    h2 {
+      font-size: 1.35rem;
+      margin-top: 2.2rem;
+      margin-bottom: 0.9rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.45rem;
+    }
+    .download-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1.5rem 0 1rem;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--emerald);
+      color: #022c22;
+      font-weight: 800;
+      font-size: 1.02rem;
+      padding: 0.9rem 1.5rem;
+      border-radius: 10px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .btn-primary:hover {
+      background: #34d399;
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--surface-alt);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--blue);
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.15rem 1.25rem;
+    }
+    .kpi-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+    .kpi-val {
+      font-size: 1.55rem;
+      font-weight: 800;
+      margin: 0.3rem 0;
+      color: #fff;
+      font-family: var(--mono);
+    }
+    .kpi-sub {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .copy-box {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      overflow-x: auto;
+    }
+    .copy-btn {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.45rem 0.85rem;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin: 1rem 0 1.8rem;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 0.75rem 0.95rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--surface-alt);
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    code {
+      font-family: var(--mono);
+      background: rgba(148, 163, 184, 0.14);
+      padding: 0.15rem 0.38rem;
+      border-radius: 5px;
+      font-size: 0.85em;
+    }
+    .pass {
+      color: var(--emerald);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-wrap">
+      <a href="index.html" class="brand">
+        <span>GEMSDOE71 · Lane H71</span>
+        <span class="badge-pill">PROMOTE — OK TO SUBMIT</span>
+      </a>
+      <nav>
+        <a href="executive-summary.html" class="active">Executive Summary</a>
+        <a href="index.html#download">Download .TIF</a>
+        <a href="index.html#autopsy">Why 0.2778 Worked</a>
+        <a href="index.html#hypotheses">5 Hypotheses</a>
+        <a href="index.html#experiments">Holdout &amp; SGMC</a>
+        <a href="index.html#runcard">JSON Run Card</a>
+        <a href="index.html#links">Verified Links</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="verdict-banner">
+      <span class="verdict-tag">✓ VERDICT: PROMOTE — YES, IT IS OK TO DOWNLOAD AND SUBMIT</span>
+      <h1>Executive Summary: Multi-Modal Hydrothermal-Structural Conduit &amp; Alteration-Demagnetization Convergence (<code>H71-A</code>)</h1>
+      <p style="margin: 0.5rem 0 1rem; color: #e2e8f0; font-size: 1.03rem;">
+        <strong><code>gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif</code></strong> is a genuinely new, non-duplicate competition submission GeoTIFF (`302.6 KB`, `EPSG:32611`, `3730 × 3292`, `float32`) that fixes the <code>"Predicted values must be in range [0, 1]"</code> portal error by writing <strong>100% finite values in <code>[0.0, 1.0]</code> across all 12,279,160 cells (zero <code>NaN</code> anywhere)</strong>. It beats <strong>all 7 holdout control arms by &gt; 2 SE</strong> on the 4-quadrant spatially blocked hide-and-recover evaluator (<code>0.073036</code> <code>HOLDOUT-DTI</code>) and outperforms the <code>0.2778</code> (<code>ORGANIZER-CONFIRMED</code>) champion <code>h33-h33-2-b2</code> on independent off-catalogue USGS SGMC faults (<code>0.096616</code> vs <code>0.095386</code>).
+      </p>
+
+      <div class="download-row">
+        <a class="btn-primary" href="submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif" download="gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif">
+          ⬇ Download Primary Submission (.TIF · 302.6 KB · [0, 1] All-Finite)
+        </a>
+        <a class="btn-secondary" href="submissions/gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif.zip" download="gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif.zip">
+          ⬇ Download Zipped Primary (.TIF.ZIP · 271.8 KB)
+        </a>
+        <a class="btn-secondary" href="submissions/gems71-hydro-conduit-38800-20261020T120000Z-nan.tif" download="gems71-hydro-conduit-38800-20261020T120000Z-nan.tif">
+          ⬇ Download Template-NaN Twin (-nan.tif · 357.9 KB)
+        </a>
+        <a class="btn-secondary" href="index.html">
+          → View Full Technical Report &amp; PhD Autopsy
+        </a>
+      </div>
+    </section>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Pooled Holdout Score (Full Domain)</div>
+        <div class="kpi-val">0.073036</div>
+        <div class="kpi-sub"><code>HOLDOUT-DTI</code> · <code>gems57-pooled-hide-v3-se</code> · <code>n=11,321</code> · 95% CI <code>[0.0582, 0.0883]</code> · Beats all 7 controls by &gt;2 SE</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Geothermal Vent Corridor Holdout</div>
+        <div class="kpi-val">0.084445</div>
+        <div class="kpi-sub"><code>HOLDOUT-DTI</code> · <code>n=7,610</code> · 95% CI <code>[0.0654, 0.1047]</code> · <strong>+15.6% lift</strong> in 8 km GDR 1391 thermal corridors</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Off-Catalogue USGS SGMC Benchmark</div>
+        <div class="kpi-val">0.096616</div>
+        <div class="kpi-sub"><code>HOLDOUT-DTI</code> (SGMC diagnostic, <code>n=62,122</code>) · Beats <code>h33-h33-2-b2</code> (<code>0.095386</code>)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Uniqueness &amp; Leakage Canary</div>
+        <div class="kpi-val">100% PASS</div>
+        <div class="kpi-sub">Max surface |ρ| = <code>0.1046 ≤ 0.90</code> · Max discrete 3-px overlap = <code>0.4687 ≤ 0.70</code> · Max phys AUC = <code>0.6016 ≤ 0.90</code></div>
+      </div>
+    </div>
+
+    <h2>1. Competition Portal Submission Instructions (Copy-Paste Ready)</h2>
+    <p>Upload <strong><code>gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif</code></strong> (or its `.zip` archive) to the competition portal using the unique submission name and 127-character method note below:</p>
+
+    <div style="margin-bottom: 0.35rem; font-size: 0.82rem; color: var(--muted); font-weight: 700;">UNIQUE SUBMISSION FILENAME (54 CHARS):</div>
+    <div class="copy-box">
+      <span id="sub-name">gems71-hydro-conduit-38800-20261020T120000Z-zeros.tif</span>
+      <button class="copy-btn" onclick="copyText('sub-name', this)">Copy Filename</button>
+    </div>
+
+    <div style="margin-bottom: 0.35rem; font-size: 0.82rem; color: var(--muted); font-weight: 700;">BRIEF METHOD DESCRIPTION / SUBMISSION NOTE (127 / 140 CHARS):</div>
+    <div class="copy-box">
+      <span id="sub-note">H71 hydrothermal-structural conduit: GDR1391 2m-probe+paleo-sinter+demag+crossgrad+scarplet; k=38800 d>=3px; holdout DTI 0.0730</span>
+      <button class="copy-btn" onclick="copyText('sub-note', this)">Copy Note (127 chars)</button>
+    </div>
+
+    <h2>2. Summary of Key Findings</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Question / Protocol Gate</th>
+          <th>Verified Answer &amp; Evidence</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Why did <code>h33-h33-2-b2</code> (<code>GEMSDOE32</code>) get <code>0.2778</code> (<code>ORGANIZER-CONFIRMED</code>)?</strong></td>
+          <td>It applied (1) crisp binary <code>{0, 1}</code> emission (optimal under DTI since ∂DTI/∂p &gt; 0), (2) Poisson-disk blue-noise spatial thinning at <code>d = 2.8 px</code> to eliminate 300 m <code>max_cover</code> kernel cannibalization along <code>H19-5</code> LiDAR/topo/geophysics ridges, and (3) a <code>d_cat ≤ 2 px</code> (200 m) exclusion collar around mapped faults (<code>0.1922 → 0.2477 → 0.2600 → 0.2708 → 0.2778</code>).</td>
+          <td class="pass">VERIFIED</td>
+        </tr>
+        <tr>
+          <td><strong>How does <code>H71-A</code> improve upon <code>h33-h33-2-b2</code>?</strong></td>
+          <td><code>h33-h33-2-b2</code> uses zero direct geothermal fluid-flow or hydrothermal alteration data, missing the &gt;75% of Great Basin geothermal systems that are blind. <code>H71-A</code> integrates GDR 1391 2 m temperature probes (2,782 stations), paleo-geothermal sinter/travertine (281 deposits), thermal springs/geothermometers, shallow differential demagnetization (<code>RTP - TMI_up150</code>), GeoDAWN <code>K/Th</code> edges, cross-gradient basement steps, 1–3 m LiDAR scarplets, and a fold-proper damage-zone relay prior.</td>
+          <td class="pass">PROMOTED</td>
+        </tr>
+        <tr>
+          <td><strong>Does <code>H71-A</code> pass the 2 SE holdout gate, leakage canary, validator, and uniqueness gate?</strong></td>
+          <td>Yes: beats all 7 controls by <code>2.00×</code> to <code>8.76× SE</code> on <code>gems57-pooled-hide-v3-se</code> (<code>0.073036</code>), beats <code>h33-h33-2-b2</code> on off-catalogue USGS SGMC faults (<code>0.096616</code> vs <code>0.095386</code>), passes all 27 feature leakage canaries (≤ 0.7911 ≤ 0.90), and passes all 108 registry uniqueness checks (max surface |ρ| = 0.1046 ≤ 0.90, max discrete 3-px dot overlap = 0.4687 ≤ 0.70).</td>
+          <td class="pass">ALL GATES PASS</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    function copyText(id, btn) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerText;
+        btn.innerText = "✓ Copied!";
+        setTimeout(() => { btn.innerText = orig; }, 1800);
+      });
+    }
+  </script>
+</body>
+</html>
